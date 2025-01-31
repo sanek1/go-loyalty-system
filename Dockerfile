@@ -16,4 +16,3 @@ COPY --from=builder /app/bin/app /app
 COPY  config/config.yaml config.yaml
 
 CMD ["./app"]
-
