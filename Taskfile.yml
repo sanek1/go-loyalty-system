@@ -78,7 +78,13 @@ tasks:
     desc: Run tests
     deps: [build]
     cmds:
-      - gophermarttest -test.v -test.run=^TestIteration1$ -binary-path=cmd/server/server >> logs/test1.log
-      - metricstest -test.v -test.run=^TestIteration2[AB]*$ -source-path=. -agent-binary-path=cmd/agent/agent >> logs/test2.log
-      - gophermarttest -test.v -test.run=^TestIteration3[AB]*$ -source-path=. -agent-binary-path=cmd/agent/agent -binary-path=cmd/server/server >> logs/test3.log
-      - mv ./BACKUP ./.runtime/
+      - gophermarttest \
+            -test.v -test.run=^TestGophermart$ \
+            -gophermart-binary-path=cmd/gophermart/gophermart \
+            -gophermart-host=localhost \
+            -gophermart-port=8080 \
+            -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" \
+            -accrual-binary-path=cmd/accrual/accrual_linux_amd64 \
+            -accrual-host=localhost \
+            -accrual-port=$(random unused-port) \
+            -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable"

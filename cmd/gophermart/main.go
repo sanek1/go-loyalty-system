@@ -1,9 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"go-loyalty-system/config"
+	"go-loyalty-system/internal/app"
+	"log"
+)
 
 func main() {
+	cfg, err := config.NewConfig()
+	if err != nil {
+		log.Fatalf("Config error: %s", err)
+	}
 
-	fmt.Println("Hello")
-
+	app.Run(cfg)
 }

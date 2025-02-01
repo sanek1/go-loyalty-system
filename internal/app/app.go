@@ -1,10 +1,11 @@
-// Package app configures and runs application.
 package app
 
 import (
 	"context"
 	"go-loyalty-system/config"
-	v1 "go-loyalty-system/internal/controller/v1"
+	v1 "go-loyalty-system/internal/controller/http"
+	"go-loyalty-system/internal/usecase"
+	"go-loyalty-system/internal/usecase/repo"
 	"go-loyalty-system/pkg/httpserver"
 	"go-loyalty-system/pkg/logging"
 	"go-loyalty-system/pkg/postgres"
@@ -16,32 +17,32 @@ import (
 	"go.uber.org/zap"
 )
 
-// Run creates objects via constructors.
 func Run(cfg *config.Config) {
-	//l := logger.New(cfg.Log.Level)
 	ctx := context.Background()
 	l, err := logging.NewZapLogger(zap.InfoLevel)
 	if err != nil {
 		panic(err)
 	}
 
+	// init db
+	initPostgres()
+
 	// Repository
-	pg, err := postgres.New(cfg.PG.URL, postgres.MaxPoolSize(cfg.PG.PoolMax))
+	pg, err := postgres.NewPostgres(cfg.PG.URL, postgres.MaxPoolSize(cfg.PG.PoolMax))
 	if err != nil {
 		l.FatalCtx(ctx, "app - Run - postgres.New: %w", zap.Error(err))
 	}
 	defer pg.Close()
 
-	// // Use case
-	// translationUseCase := usecase.New(
-	// 	repo.New(pg),
-	// 	//webapi.New(),
-	// )
+	// Use case
+	gophermartUseCase := usecase.NewGopherMart(
+		repo.NewUserRepo(pg, l),
+	)
 
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler)
-	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
+	v1.NewRouter(handler, *gophermartUseCase)
+	httpServer := httpserver.NewServer(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)
@@ -55,9 +56,7 @@ func Run(cfg *config.Config) {
 	}
 
 	// Shutdown
-	err = httpServer.Shutdown()
-	if err != nil {
+	if err = httpServer.Shutdown(); err != nil {
 		l.ErrorCtx(ctx, "app - Run - httpServer.Shutdown: %w", zap.Error(err))
 	}
-
 }
