@@ -1,11 +1,13 @@
 package http
 
 import (
+	"go-loyalty-system/config"
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
 	"net/http"
 
 	_ "go-loyalty-system/cmd/gophermart/docs"
+	"go-loyalty-system/internal/controller/http/middleware"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -13,7 +15,8 @@ import (
 )
 
 type gophermartRoutes struct {
-	u usecase.UserUseCase
+	u   usecase.UserUseCase
+	cfg *config.Config
 }
 type userResponse struct {
 	Users []entity.User `json:"Users"`
@@ -25,10 +28,15 @@ type userResponse struct {
 //POST /api/user/orders загрузка пользователем номера заказа для расчёта
 //GET /api/user/orders получение списка загруженных пользователем номеров заказов, статусов их обработки и информации о начислениях
 
-func NewRouter(handler *gin.Engine, u usecase.UserUseCase) {
-	r := &gophermartRoutes{u}
+func NewRouter(handler *gin.Engine, u usecase.UserUseCase, config *config.Config) {
+	r := &gophermartRoutes{
+		u:   u,
+		cfg: config,
+	}
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
+	handler.Use(middleware.Authorize(config))
+	handler.Use(middleware.Authenticate(u))
 
 	// Swagger
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
@@ -38,12 +46,14 @@ func NewRouter(handler *gin.Engine, u usecase.UserUseCase) {
 			"message": "pong",
 		})
 	})
-	handler.GET("/GetUser", r.getUser)
+	handler.GET("/GetUser", middleware.Authorize(config), r.getUser)
 	handler.POST("/user/register", r.registerUser)
 }
 
+
+
 func (r *gophermartRoutes) getUser(c *gin.Context) {
-	u, err := r.u.GetUser(c.Request.Context())
+	u, err := r.u.GetUsers(c.Request.Context())
 	if err != nil {
 		errorResponse(c, http.StatusInternalServerError, "database problems")
 		return

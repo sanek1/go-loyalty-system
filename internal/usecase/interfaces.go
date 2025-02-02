@@ -9,7 +9,8 @@ import (
 
 type (
 	GopherMartRepo interface {
-		GetUser(context.Context) ([]entity.User, error)
+		GetUsers(context.Context) ([]entity.User, error)
+		GetUserByEmail(ctx context.Context, email string) (*entity.User, error) 
 		RegisterUser(ctx context.Context, u entity.User) (error)
 	}
 )

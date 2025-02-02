@@ -41,7 +41,7 @@ func Run(cfg *config.Config) {
 
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler, *gophermartUseCase)
+	v1.NewRouter(handler, *gophermartUseCase, cfg)
 	httpServer := httpserver.NewServer(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal

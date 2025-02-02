@@ -14,6 +14,7 @@ type (
 		HTTP `yaml:"http"`
 		Log  `yaml:"logger"`
 		PG   `yaml:"postgres"`
+		Jwt  `yaml:"jwt"`
 	}
 
 	App struct {
@@ -33,6 +34,10 @@ type (
 		PoolMax int    `env-required:"true" yaml:"pool_max" env:"PG_POOL_MAX"`
 		URL     string `env-required:"true"                 env:"PG_URL"`
 	}
+
+	Jwt struct {
+		EncryptionKey string `json:"encryption_key"`
+	}
 )
 
 func NewConfig() (*Config, error) {
@@ -49,6 +54,7 @@ func NewConfig() (*Config, error) {
 	if key := os.Getenv("PG_URL"); key != "" {
 		cfg.URL = key
 	}
+	cfg.Jwt.EncryptionKey = os.Getenv("JWT_ENCRYPTION_KEY")
 
 	return cfg, nil
 }

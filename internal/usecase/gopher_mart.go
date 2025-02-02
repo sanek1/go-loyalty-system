@@ -17,8 +17,17 @@ func NewGopherMart(r GopherMartRepo) *UserUseCase {
 	}
 }
 
-func (uc *UserUseCase) GetUser(ctx context.Context) ([]entity.User, error) {
-	users, err := uc.repo.GetUser(ctx)
+func (uc *UserUseCase) GetUserByEmail(ctx context.Context, email string) (*entity.User, error) {
+	user, err := uc.repo.GetUserByEmail(ctx, email)
+	if err != nil {
+		return nil, fmt.Errorf("TranslationUseCase - History - s.repo.GetHistory: %w", err)
+	}
+
+	return user, nil
+}
+
+func (uc *UserUseCase) GetUsers(ctx context.Context) ([]entity.User, error) {
+	users, err := uc.repo.GetUsers(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("TranslationUseCase - History - s.repo.GetHistory: %w", err)
 	}

@@ -24,7 +24,32 @@ func NewUserRepo(pg *postgres.Postgres, l *logging.ZapLogger) *GopherMartRepo {
 	}
 }
 
-func (g *GopherMartRepo) GetUser(ctx context.Context) ([]entity.User, error) {
+func (g *GopherMartRepo) GetUserByEmail(ctx context.Context, email string) (*entity.User, error) {
+	sql, _, err := g.pg.Builder.
+		Select("login, email").
+		From("users").
+		Where("email =?", email).
+		ToSql()
+	if err != nil {
+		g.Logger.ErrorCtx(ctx, "TranslationRepo - GetUser by email - r.Builder: %w", zap.Error(err))
+		return nil, err
+	}
+	row, err := g.pg.Pool.Query(ctx, sql)
+	if err != nil {
+		g.Logger.ErrorCtx(ctx, "Error retrieving user by email: %w", zap.Error(err))
+		return nil, err
+	}
+	defer row.Close()
+	user := &entity.User{}
+	err = row.Scan(&user.Login, &user.Email)
+	if err != nil {
+		g.Logger.ErrorCtx(ctx, "Error scanning user row: %w", zap.Error(err))
+		return nil, err
+	}
+	return user, nil
+}
+
+func (g *GopherMartRepo) GetUsers(ctx context.Context) ([]entity.User, error) {
 	sql, _, err := g.pg.Builder.
 		Select("login, email").
 		From("users").
