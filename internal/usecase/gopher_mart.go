@@ -41,3 +41,10 @@ func (uc *UserUseCase) RegisterUser(ctx context.Context, u entity.User) error {
 	}
 	return nil
 }
+
+func (uc *UserUseCase) CreateToken(ctx context.Context, t *entity.Token) error {
+	if err := uc.repo.CreateToken(ctx, t); err != nil {
+		return fmt.Errorf("TranslationUseCase - History - s.repo.GetHistory: %w", err)
+	}
+	return nil
+}

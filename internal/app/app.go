@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-loyalty-system/config"
 	v1 "go-loyalty-system/internal/controller/http"
+	"go-loyalty-system/internal/controller/http/security"
 	"go-loyalty-system/internal/usecase"
 	"go-loyalty-system/internal/usecase/repo"
 	"go-loyalty-system/pkg/httpserver"
@@ -39,9 +40,12 @@ func Run(cfg *config.Config) {
 		repo.NewUserRepo(pg, l),
 	)
 
+	// middleware
+	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase)
+
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler, *gophermartUseCase, cfg)
+	v1.NewRouter(handler, *gophermartUseCase, cfg, j)
 	httpServer := httpserver.NewServer(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal

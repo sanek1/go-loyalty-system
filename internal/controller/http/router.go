@@ -2,11 +2,12 @@ package http
 
 import (
 	"go-loyalty-system/config"
-	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
 	"net/http"
 
 	_ "go-loyalty-system/cmd/gophermart/docs"
+	"go-loyalty-system/internal/controller/http/handlers"
+	"go-loyalty-system/internal/controller/http/security"
 	"go-loyalty-system/internal/controller/http/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -14,76 +15,47 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-type gophermartRoutes struct {
-	u   usecase.UserUseCase
-	cfg *config.Config
-}
-type userResponse struct {
-	Users []entity.User `json:"Users"`
-	User  entity.User   `json:"User"`
-}
-
 //POST /api/user/register регистрация пользователя;
 //POST /api/user/login аутентификация пользователя
 //POST /api/user/orders загрузка пользователем номера заказа для расчёта
 //GET /api/user/orders получение списка загруженных пользователем номеров заказов, статусов их обработки и информации о начислениях
 
-func NewRouter(handler *gin.Engine, u usecase.UserUseCase, config *config.Config) {
-	r := &gophermartRoutes{
-		u:   u,
-		cfg: config,
+type GopherMartRoutes struct {
+	u       usecase.UserUseCase
+	cfg     *config.Config
+	handler *gin.Engine
+	token   *security.TokenModel
+}
+
+func NewRouter(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel) {
+
+	g := &GopherMartRoutes{
+		handler: handler,
+		u:       u,
+		cfg:     config,
+		token:   token,
 	}
-	handler.Use(gin.Logger())
-	handler.Use(gin.Recovery())
-	handler.Use(middleware.Authorize(config))
-	handler.Use(middleware.Authenticate(u))
+	h := handlers.NewHandler(handler, u, config,token)
+
+	g.InitRouting(*h)
+
+}
+
+func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
+
+	g.handler.Use(gin.Logger())
+	g.handler.Use(gin.Recovery())
+	g.handler.Use(middleware.Authorize(g.cfg))
+	g.handler.Use(middleware.Authenticate(g.u))
 
 	// Swagger
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
-	handler.GET("/swagger/*any", swaggerHandler)
-	handler.GET("/ping", func(c *gin.Context) {
+	g.handler.GET("/swagger/*any", swaggerHandler)
+	g.handler.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
-	handler.GET("/GetUser", middleware.Authorize(config), r.getUser)
-	handler.POST("/user/register", r.registerUser)
-}
-
-
-
-func (r *gophermartRoutes) getUser(c *gin.Context) {
-	u, err := r.u.GetUsers(c.Request.Context())
-	if err != nil {
-		errorResponse(c, http.StatusInternalServerError, "database problems")
-		return
-	}
-	c.JSON(http.StatusOK, userResponse{Users: u})
-}
-
-func (r *gophermartRoutes) registerUser(c *gin.Context) {
-	var request userRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		// TODO: log
-		errorResponse(c, http.StatusBadRequest, "invalid request body")
-
-		return
-	}
-	err := r.u.RegisterUser(
-		c.Request.Context(),
-		entity.User{
-			Login: request.Login,
-			Email: request.Email,
-		},
-	)
-	if err != nil {
-		errorResponse(c, http.StatusInternalServerError, "database problems")
-		return
-	}
-	c.JSON(http.StatusOK, request)
-}
-
-type userRequest struct {
-	Login string `json:"login"       binding:"required" `
-	Email string `json:"email"  binding:"required" `
+	g.handler.GET("/GetUser", middleware.Authorize(g.cfg), h.GetUsers)
+	g.handler.POST("/user/register", h.RegisterUser)
 }

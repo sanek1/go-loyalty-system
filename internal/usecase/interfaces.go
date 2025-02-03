@@ -12,5 +12,8 @@ type (
 		GetUsers(context.Context) ([]entity.User, error)
 		GetUserByEmail(ctx context.Context, email string) (*entity.User, error) 
 		RegisterUser(ctx context.Context, u entity.User) (error)
+
+		CreateToken(ctx context.Context, u *entity.Token) (error)
+
 	}
 )
