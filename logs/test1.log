@@ -1,253 +1,6 @@
---- FAIL: TestGophermart (20.41s)
-    --- FAIL: TestGophermart/TestEndToEnd (20.05s)
-        --- FAIL: TestGophermart/TestEndToEnd/await_order_processed (20.02s)
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-            gophermart_e2e_test.go:181: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 400
-                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
-            gophermart_e2e_test.go:190: Оригинальный запрос:
-                
-                GET /api/user/orders HTTP/1.1
-                Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
+--- FAIL: TestGophermart (20.42s)
+    --- FAIL: TestGophermart/TestEndToEnd (20.09s)
+        --- FAIL: TestGophermart/TestEndToEnd/await_order_processed (20.01s)
             gophermart_e2e_test.go:180: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
@@ -271,7 +24,7 @@
                 
                 GET /api/user/orders HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
             gophermart_e2e_test.go:166: Не удалось дождаться окончания расчета начисления
@@ -303,7 +56,7 @@
                 
                 GET /api/user/balance HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
         --- FAIL: TestGophermart/TestEndToEnd/withdraw_balance (0.00s)
@@ -321,13 +74,13 @@
                 Host: localhost:8080
                 Accept: application/json
                 Content-Type: application/json
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
                 {
-                			"order": "443204580163",
-                    		"sum": 327.23
+                			"order": "2115475",
+                    		"sum": 301.76
                 		}
                 
         --- FAIL: TestGophermart/TestEndToEnd/recheck_balance (0.00s)
@@ -342,20 +95,20 @@
             gophermart_e2e_test.go:289: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:289
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Max difference between 402.75113 and 0 allowed is 0.01, but difference was 402.7511291503906
+                	Error:      	Max difference between 428.21887 and 0 allowed is 0.01, but difference was 428.2188720703125
                 	Test:       	TestGophermart/TestEndToEnd/recheck_balance
                 	Messages:   	Баланс пользователя не соответствует ожидаемому
             gophermart_e2e_test.go:290: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:290
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Max difference between 327.22885 and 0 allowed is 0.01, but difference was 327.2288513183594
+                	Error:      	Max difference between 301.7611 and 0 allowed is 0.01, but difference was 301.7611083984375
                 	Test:       	TestGophermart/TestEndToEnd/recheck_balance
                 	Messages:   	Списанная сумма не соответствует ожидаемой
             gophermart_e2e_test.go:294: Оригинальный запрос:
                 
                 GET /api/user/balance HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
         --- FAIL: TestGophermart/TestEndToEnd/check_withdrawals (0.00s)
@@ -373,10 +126,10 @@
                 Host: localhost:8080
                 Accept: application/json
                 Content-Type: application/json
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MTgsImlkIjoiMTU0IiwibG9naW4iOiJLaDJQTExZIiwic3ViIjoiIiwidG9rZW4iOiI2MDNjYWZjNC01MWRlLTRhYzEtYTk2Ni0xMzU1MWIxZmQ4OGUifQ.50E6iLT6pAraDT-PbQ_ZXJDHH1AMyuFTq4R-1WpwAuM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
-    --- FAIL: TestGophermart/TestUserAuth (0.02s)
+    --- FAIL: TestGophermart/TestUserAuth (0.01s)
         --- FAIL: TestGophermart/TestUserAuth/login_user (0.00s)
             gophermart_auth_test.go:72: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:72
@@ -395,8 +148,8 @@
                 
                 
                 			{
-                				"login": "J2aL6B",
-                				"password": "mtHCtballL30ePc39y"
+                				"login": "sgC9y",
+                				"password": "numvXzAAIvHJHn8BQO"
                 			}
                 		
                 
@@ -415,7 +168,7 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MzgsImlkIjoiMTU2IiwibG9naW4iOiJ2TTlYd3B1Y0pIRCIsInN1YiI6IiIsInRva2VuIjoiMmM0MjQ5MjQtYmJiNS00ZWIxLThkNTUtMzU2ZDRkMDEzNTUwIn0.qGrS1abrxgs9oLOSkXFtQMRNrw72q9DhcRmPfj0YCSo
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
@@ -435,32 +188,24 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MzgsImlkIjoiMTU2IiwibG9naW4iOiJ2TTlYd3B1Y0pIRCIsInN1YiI6IiIsInRva2VuIjoiMmM0MjQ5MjQtYmJiNS00ZWIxLThkNTUtMzU2ZDRkMDEzNTUwIn0.qGrS1abrxgs9oLOSkXFtQMRNrw72q9DhcRmPfj0YCSo
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
-                30412806546
+                531640
                 
         --- FAIL: TestGophermart/TestUserOrders/orders_list (0.00s)
-            gophermart_orders_test.go:165: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:165
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Not equal: 
-                	            	expected: 200
-                	            	actual  : 400
-                	Test:       	TestGophermart/TestUserOrders/orders_list
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
             gophermart_orders_test.go:172: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:172
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	"[]" should have 1 item(s), but has 0
+                	Error:      	"[{  %!s(float32=0) 2025-02-11 23:11:28.542411 +0000 UTC} {  %!s(float32=0) 2025-02-11 23:11:28.540838 +0000 UTC} {  %!s(float32=0) 2025-02-11 23:11:28.539784 +0000 UTC}]" should have 1 item(s), but has 3
                 	Test:       	TestGophermart/TestUserOrders/orders_list
                 	Messages:   	Ожидаем отличное от полученного кол-во заказов
             gophermart_orders_test.go:181: Оригинальный запрос:
                 
                 GET /api/user/orders HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MzgsImlkIjoiMTU2IiwibG9naW4iOiJ2TTlYd3B1Y0pIRCIsInN1YiI6IiIsInRva2VuIjoiMmM0MjQ5MjQtYmJiNS00ZWIxLThkNTUtMzU2ZDRkMDEzNTUwIn0.qGrS1abrxgs9oLOSkXFtQMRNrw72q9DhcRmPfj0YCSo
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
         --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.01s)
@@ -477,18 +222,18 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDQ4MzgsImlkIjoiMTU3IiwibG9naW4iOiJVZUZPd1RrZnAiLCJzdWIiOiIiLCJ0b2tlbiI6ImY1M2I5MjhkLTgzYTAtNDRmZi04ZmJmLWFkZWQ4MDhlYTYwNyJ9.RQgTx4lxF3QU83AQP7DvXvSAbk0VGGYRENg1ZL9fhJA
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg1IiwibG9naW4iOiJJeHp4WGhWaEZXIiwic3ViIjoiIiwidG9rZW4iOiJmZDdiYzZmOS0yMTZlLTRkZDMtOTY5NC03MzY4MjlkOTQzYTQifQ.VUwqWB2dI8HUn_QQo3F2zNOUY5W3jsPVnexr-6TfgvM
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
-                30412806546
+                531640
                 
     gophermart_suite_test.go:105: останавливаем процесс gophermart
     gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
     gophermart_suite_test.go:108: останавливаем процесс accrual
     gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
---- FAIL: TestAccrual (1.12s)
-    --- FAIL: TestAccrual/TestEndToEnd (1.00s)
+--- FAIL: TestAccrual (1.14s)
+    --- FAIL: TestAccrual/TestEndToEnd (1.02s)
         --- FAIL: TestAccrual/TestEndToEnd/register_mechanics (0.00s)
             accrual_suite_test.go:359: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\accrual_suite_test.go:359

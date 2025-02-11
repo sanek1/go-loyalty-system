@@ -59,3 +59,7 @@ func (uc *UserUseCase) CreateToken(ctx context.Context, t *entity.Token) error {
 func (uc *UserUseCase) GetUserBalance(ctx context.Context, userID string) (*entity.Balance, error) {
 	return uc.repo.GetBalance(ctx, userID)
 }
+
+func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
+	return uc.repo.GetUserOrders(ctx, userID)
+}

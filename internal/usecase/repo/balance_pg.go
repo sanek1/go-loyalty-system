@@ -24,3 +24,56 @@ func (g *GopherMartRepo) GetBalance(ctx context.Context, userID string) (*entity
 
 	return &balance, nil
 }
+
+// func (uc *GopherMartRepo) WithdrawBalance(ctx context.Context, userID uint, amount float64, orderNumber string) error {
+//     // Начинаем транзакцию
+//     tx, err := uc.repo.BeginTx(ctx)
+//     if err != nil {
+//         return fmt.Errorf("failed to begin transaction: %w", err)
+//     }
+//     defer tx.Rollback()
+
+//     // Проверяем баланс
+//     balance, err := uc.repo.GetBalanceTx(ctx, tx, userID)
+//     if err != nil {
+//         return fmt.Errorf("failed to get balance: %w", err)
+//     }
+
+//     if balance.Current < amount {
+//         return entity.ErrInsufficientFunds
+//     }
+
+//     // Создаем запись о списании
+//     withdrawal := entity.Withdrawal{
+//         UserID:      userID,
+//         OrderNumber: orderNumber,
+//         Amount:      amount,
+//         ProcessedAt: time.Now(),
+//     }
+
+//     if err := uc.repo.CreateWithdrawalTx(ctx, tx, withdrawal); err != nil {
+//         return fmt.Errorf("failed to create withdrawal: %w", err)
+//     }
+
+//     // Обновляем баланс
+//     if err := uc.repo.UpdateBalanceTx(ctx, tx, userID, -amount); err != nil {
+//         return fmt.Errorf("failed to update balance: %w", err)
+//     }
+
+//     // Подтверждаем транзакцию
+//     if err := tx.Commit(); err != nil {
+//         return fmt.Errorf("failed to commit transaction: %w", err)
+//     }
+
+//     return nil
+// }
+
+// func (uc *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
+//     withdrawals, err := uc.repo.GetWithdrawals(ctx, userID)
+//     if err != nil {
+//         uc.logger.Error("failed to get withdrawals", err)
+//         return nil, fmt.Errorf("failed to get withdrawals: %w", err)
+//     }
+
+//     return withdrawals, nil
+// }

@@ -9,11 +9,23 @@ import (
 
 type (
 	GopherMartRepo interface {
-		GetUsers(context.Context) ([]entity.User, error)
-		GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
-		RegisterUser(ctx context.Context, u entity.User) error
-		SetOrders(ctx context.Context, userID uint, o entity.Order) error
-		CreateToken(ctx context.Context, u *entity.Token) error
-		GetBalance(ctx context.Context, userID string) (*entity.Balance, error)
+		OrderUseCase
+		BalanceUseCase
+		AuthUseCase
 	}
 )
+
+type OrderUseCase interface {
+	SetOrders(ctx context.Context, userID uint, order entity.Order) error
+	GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error)
+}
+type BalanceUseCase interface {
+	GetBalance(ctx context.Context, userID string) (*entity.Balance, error)
+}
+
+type AuthUseCase interface {
+	RegisterUser(ctx context.Context, u entity.User) error
+	CreateToken(ctx context.Context, u *entity.Token) error
+	GetUsers(context.Context) ([]entity.User, error)
+	GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
+}

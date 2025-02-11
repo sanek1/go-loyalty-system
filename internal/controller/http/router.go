@@ -61,7 +61,7 @@ func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.POST("/api/user/register", h.RegisterUser)
 
 	g.handler.POST("/api/user/orders", g.a.Authorize(g.cfg), h.SetOrdersHandler())
-	g.handler.GET("/api/user/orders", g.a.Authorize(g.cfg), h.LoginUserHandler())
+	g.handler.GET("/api/user/orders", g.a.Authorize(g.cfg), h.GetOrders)
 
 	g.handler.GET("/api/user/balance", g.a.Authorize(g.cfg), h.GetUserBalance)
 }
