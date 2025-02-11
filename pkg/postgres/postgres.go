@@ -18,7 +18,7 @@ const (
 )
 
 type Postgres struct {
-	maxPoolSize  int
+	maxPoolSize  int32
 	connAttempts int
 	connTimeout  time.Duration
 
@@ -45,7 +45,7 @@ func NewPostgres(url string, opts ...Option) (*Postgres, error) {
 		return nil, fmt.Errorf("postgres - NewPostgres - pgxpool.ParseConfig: %w", err)
 	}
 
-	poolConfig.MaxConns = int32(pg.maxPoolSize)
+	poolConfig.MaxConns = pg.maxPoolSize
 
 	for pg.connAttempts > 0 {
 		pg.Pool, err = pgxpool.ConnectConfig(context.Background(), poolConfig)

@@ -64,7 +64,7 @@ tasks:
     desc: Clear temporary files and directories
     cmds:
       - mkdir -p ./.runtime
-      - rm -f ./.runtime/{agent,server,BACKUP,test.log}
+      - rm -f ./logs/{test1.log}
 
   build:
     desc: Build the project
@@ -72,19 +72,14 @@ tasks:
     cmds:
       - go fmt ./...
       - go vet ./...
-      - go build -o ./.runtime/gophermart cmd/gophermart/main.go
+      - go build -o ./.runtime/gophermart.exe cmd/gophermart/main.go
 
   test:
     desc: Run tests
     deps: [build]
     cmds:
-      - gophermarttest \
-            -test.v -test.run=^TestGophermart$ \
-            -gophermart-binary-path=cmd/gophermart/gophermart \
-            -gophermart-host=localhost \
-            -gophermart-port=8080 \
-            -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" \
-            -accrual-binary-path=cmd/accrual/accrual_linux_amd64 \
-            -accrual-host=localhost \
-            -accrual-port=$(random unused-port) \
-            -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable"
+      - gophermarttest.exe  -gophermart-binary-path=./.runtime/gophermart.exe -gophermart-host=localhost -gophermart-port=8080 -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" -accrual-binary-path=./cmd/accrual/accrual_windows_amd64  -accrual-host=localhost -accrual-port=8081 -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" >> logs/test1.log
+
+
+
+

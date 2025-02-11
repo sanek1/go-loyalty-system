@@ -5,6 +5,7 @@ import (
 	"go-loyalty-system/internal/controller/http/security"
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
+	"go-loyalty-system/pkg/logging"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,7 @@ type GopherMartRoutes struct {
 	cfg     *config.Config
 	handler *gin.Engine
 	token   *security.TokenModel
+	l       *logging.ZapLogger
 }
 
 type userResponse struct {
@@ -22,15 +24,26 @@ type userResponse struct {
 }
 
 type userRequest struct {
-	Login string `json:"login"       binding:"required" `
-	Email string `json:"email"  binding:"required" `
+	Login string `json:"login"  binding:"required" `
+	// Email    string `json:"email"`
+	Password string `json:"password" binding:"required,min=8"`
 }
 
-func NewHandler(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel) *GopherMartRoutes {
+type orderRequest struct {
+	OrderNumber string `json:"OrderNumber"  `
+}
+
+// type orderResponse struct {
+// 	Users []entity.Order `json:"Orders"`
+// 	User  entity.Order   `json:"Order"`
+// }
+
+func NewHandler(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel, l *logging.ZapLogger) *GopherMartRoutes {
 	return &GopherMartRoutes{
 		handler: handler,
 		u:       u,
 		cfg:     config,
 		token:   token,
+		l:       l,
 	}
 }

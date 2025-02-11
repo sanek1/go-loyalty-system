@@ -2,103 +2,52 @@ package repo
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
 
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/pkg/logging"
 	"go-loyalty-system/pkg/postgres"
 
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
 
 const _defaultEntityCap = 64
+const GopherMartRepoName = "GopherMartRepo"
 
 type GopherMartRepo struct {
 	pg     *postgres.Postgres
 	Logger *logging.ZapLogger
+	redis  *redis.Client
 }
 
-func NewUserRepo(pg *postgres.Postgres, l *logging.ZapLogger) *GopherMartRepo {
+func NewUserRepo(pg *postgres.Postgres, redis *redis.Client, l *logging.ZapLogger) *GopherMartRepo {
 	return &GopherMartRepo{
 		pg:     pg,
 		Logger: l,
+		redis:  redis,
 	}
 }
 
-func (g *GopherMartRepo) GetUserByEmail(ctx context.Context, email string) (*entity.User, error) {
-	sql, _, err := g.pg.Builder.
-		Select("login, email").
-		From("users").
-		Where("email =?", email).
-		ToSql()
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "TranslationRepo - GetUser by email - r.Builder: %w", zap.Error(err))
-		return nil, err
+func (g *GopherMartRepo) logAndReturnError(ctx context.Context, method string, err error) error {
+	msg := fmt.Sprintf("%s - %s: %v", "GopherMartRepoName", method, err)
+	g.Logger.ErrorCtx(ctx, msg, zap.Error(err))
+	return err
+}
+
+func (g *GopherMartRepo) GetCurrentUser(id uint) (user *entity.User, err error) {
+	ctx := context.Background()
+	var item []byte
+	if item, err = g.redis.Get(ctx, fmt.Sprint(id)).Bytes(); err != nil {
+		if err == redis.Nil {
+			return nil, http.ErrNoCookie
+		}
+		return nil, g.logAndReturnError(ctx, "GetCurrentUser - redis", err)
 	}
-	row, err := g.pg.Pool.Query(ctx, sql)
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "Error retrieving user by email: %w", zap.Error(err))
-		return nil, err
-	}
-	defer row.Close()
-	user := &entity.User{}
-	err = row.Scan(&user.Login, &user.Email)
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "Error scanning user row: %w", zap.Error(err))
-		return nil, err
+	if err = json.Unmarshal(item, &user); err != nil {
+		return nil, g.logAndReturnError(ctx, "GetCurrentUser - json.Unmarshal", err)
 	}
 	return user, nil
-}
-
-func (g *GopherMartRepo) GetUsers(ctx context.Context) ([]entity.User, error) {
-	sql, _, err := g.pg.Builder.
-		Select("login, email").
-		From("users").
-		ToSql()
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "TranslationRepo - GetUser - r.Builder: %w", zap.Error(err))
-		return nil, err
-	}
-
-	rows, err := g.pg.Pool.Query(ctx, sql)
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "TranslationRepo - GetUser - r.Pool.Query: %w", zap.Error(err))
-		return nil, err
-	}
-	defer rows.Close()
-
-	entities := make([]entity.User, 0, _defaultEntityCap)
-
-	for rows.Next() {
-		e := entity.User{}
-
-		err = rows.Scan(&e.Login, &e.Email)
-		if err != nil {
-			g.Logger.ErrorCtx(ctx, "TranslationRepo - GetUser - rows.Scan: %w", zap.Error(err))
-			return nil, err
-		}
-
-		entities = append(entities, e)
-	}
-
-	return entities, nil
-}
-
-func (g *GopherMartRepo) RegisterUser(ctx context.Context, u entity.User) error {
-	sql, args, err := g.pg.Builder.
-		Insert("users").
-		Columns("login, email").
-		Values(u.Login, u.Email).
-		ToSql()
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "TranslationRepo - RegisterUser - r.Builder: %w", zap.Error(err))
-		return err
-	}
-
-	_, err = g.pg.Pool.Exec(ctx, sql, args...)
-	if err != nil {
-		g.Logger.ErrorCtx(ctx, "TranslationRepo - RegisterUser - r.Pool.Exec: %w", zap.Error(err))
-		return err
-	}
-
-	return nil
 }

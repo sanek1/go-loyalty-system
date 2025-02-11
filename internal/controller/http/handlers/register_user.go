@@ -7,24 +7,42 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r *GopherMartRoutes) RegisterUser(c *gin.Context) {
+const (
+	time = 3600
+)
+
+func (g *GopherMartRoutes) RegisterUser(c *gin.Context) {
 	var request userRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
-		// TODO: log
-		errorResponse(c, http.StatusBadRequest, "invalid request body")
-
+		g.ErrorResponse(c, http.StatusBadRequest, "invalid request body")
 		return
 	}
-	err := r.u.RegisterUser(
+	err := g.u.RegisterUser(
 		c.Request.Context(),
 		entity.User{
 			Login: request.Login,
-			Email: request.Email,
+			//Email:    request.Email,
+			Password: request.Password,
 		},
 	)
 	if err != nil {
-		errorResponse(c, http.StatusInternalServerError, "database problems")
+		g.ErrorResponse(c, http.StatusInternalServerError, "database problems")
 		return
 	}
-	c.JSON(http.StatusOK, request)
+	c.Set("Accept", "application/json")
+	c.Set("Content-Type", "application/json")
+
+	user, _ := g.u.GetUserByEmail(c.Request.Context(), entity.User{
+		Login: request.Login,
+		//Email:    request.Email,
+		Password: request.Password,
+	})
+	token, err := g.token.GenerateToken(user)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err})
+		return
+	}
+	c.SetCookie("token", token, time, "/", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }

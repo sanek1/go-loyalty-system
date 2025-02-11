@@ -2,10 +2,14 @@ package security
 
 import (
 	"context"
+	"encoding/json"
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
+	"strconv"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 
 	"time"
 )
@@ -13,51 +17,61 @@ import (
 type TokenModel struct {
 	EncryptionKey string `yaml:"jwt"`
 	u             usecase.UserUseCase
+	redis         *redis.Client
 }
 
-func NewJwtToken(key string, u usecase.UserUseCase) *TokenModel {
+func NewJwtToken(key string, u usecase.UserUseCase, redis *redis.Client) *TokenModel {
 	return &TokenModel{
 		EncryptionKey: key,
 		u:             u,
+		redis:         redis,
 	}
 }
 
+//	type Claims struct {
+//	    UserID uint   `json:"user_id"`
+//	    jwt.StandardClaims
+//	}
+const (
+	sessionTimeRedis = 5
+)
+
 func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
-
-	// Generate a new v4 UUID as identifier for token. This value will be used as primary key
-	//tokenID :=
-
-	// Define the JWT claims
+	tokenID := uuid.New()
 	claims := jwt.MapClaims{
 		"sub":    user.Email,
+		"login":  user.Login,
 		"access": user.Access,
-		//"id":     tokenID,                          // PK utilized to query table 'tokens'
-		"exp": time.Now().Add(time.Hour).Unix(), // Token expires in 1 hour
+		"id":     strconv.FormatUint(uint64(user.ID), 10),
+		"token":  tokenID,                          // PK utilized to query table 'tokens'
+		"exp":    time.Now().Add(time.Hour).Unix(), // Token expires in 1 hour
 	}
 
-	// CreateToken the JWT token with the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Sign the token with our encryption key derived from JWT configuration
 	tokenString, err := token.SignedString([]byte(j.EncryptionKey))
 	if err != nil {
 		return "", err
 	}
 
-	// Insert struct containing necessary metadata in order to query tokens based from claims
-	err = j.persistToken(user)
-
+	err = j.persistToken(user, tokenID)
 	if err != nil {
 		return "", err
 	}
 
+	// Сохранение сессии в Redis
+	ctx := context.Background()
+	data, _ := json.Marshal(user)
+	j.redis.Set(ctx, strconv.FormatUint(uint64(user.ID), 10), data, sessionTimeRedis*time.Minute)
+
 	return tokenString, nil
 }
 
-func (j TokenModel) persistToken(user *entity.User) error {
+func (j TokenModel) persistToken(user *entity.User, tokenID uuid.UUID) error {
 	ctx := context.Background()
 	tokenStruct := entity.Token{
 		CreationDate: time.Now(),
+		ID:           tokenID,
 		UserID:       user.ID,
 	}
 

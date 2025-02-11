@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-loyalty-system/config"
 	v1 "go-loyalty-system/internal/controller/http"
+	"go-loyalty-system/internal/controller/http/middleware"
 	"go-loyalty-system/internal/controller/http/security"
 	"go-loyalty-system/internal/usecase"
 	"go-loyalty-system/internal/usecase/repo"
@@ -28,6 +29,10 @@ func Run(cfg *config.Config) {
 	// init db
 	initPostgres()
 
+	// init redis
+	redis := initRedis(ctx, l)
+	a := middleware.NewAuthorizer(l)
+
 	// Repository
 	pg, err := postgres.NewPostgres(cfg.PG.URL, postgres.MaxPoolSize(cfg.PG.PoolMax))
 	if err != nil {
@@ -37,15 +42,15 @@ func Run(cfg *config.Config) {
 
 	// Use case
 	gophermartUseCase := usecase.NewGopherMart(
-		repo.NewUserRepo(pg, l),
+		repo.NewUserRepo(pg, redis, l),
 	)
 
 	// middleware
-	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase)
+	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase, redis)
 
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler, *gophermartUseCase, cfg, j)
+	v1.NewRouter(handler, *gophermartUseCase, cfg, j, a, l)
 	httpServer := httpserver.NewServer(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal

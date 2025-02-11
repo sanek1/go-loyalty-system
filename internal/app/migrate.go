@@ -17,9 +17,9 @@ const (
 )
 
 func initPostgres() {
-	databaseURL, ok := os.LookupEnv("PG_URL")
+	databaseURL, ok := os.LookupEnv("DATABASE_URI")
 	if !ok || databaseURL == "" {
-		log.Fatalf("migrate: environment variable not declared: PG_URL")
+		log.Fatalf("migrate: environment variable not declared: DATABASE_URI")
 	}
 
 	var (
