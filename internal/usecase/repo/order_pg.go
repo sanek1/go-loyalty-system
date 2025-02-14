@@ -11,16 +11,6 @@ import (
 )
 
 func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
-	if err := g.validateOrder(o); err != nil {
-        return fmt.Errorf("order validation failed: %w", err)
-    }
-
-
-	// user, err := g.GetUserByID(ctx, entity.User{ID: userID})
-	// if err != nil {
-	// 	return g.logAndReturnError(ctx, "SetOrders - r.GetUser", err)
-	// }
-
 	sql, args, err := g.pg.Builder.
 		Insert("orders").
 		Columns("user_id", "status_id, creation_date", "uploaded_at", "number").
@@ -42,11 +32,15 @@ func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Or
 func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
 	query := `
         SELECT 
-            id,
-            status_id,
-            uploaded_at
-        FROM orders
-        WHERE user_id = $1
+            o.number,
+            s.status,
+			a.accrual,
+            o.uploaded_at
+        FROM orders as o
+		left join statuses as s ON o.status_id = s.id 
+		left join withdrawals as w ON o.id = w.orders_id 
+		left join accrual as a ON w.id = a.withdrawals_id 
+        WHERE o.user_id = $1
         ORDER BY uploaded_at DESC
     `
 
@@ -63,17 +57,13 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 
 		err := rows.Scan(
 			&order.Number,
-			&order.StatusID,
-			//&accrual,
+			&order.Status,
+			&order.Accrual,
 			&order.UploadedAt,
 		)
 		if err != nil {
 			return nil, g.logAndReturnError(ctx, "GopherMartRepo - GetUserOrders - Scan", err)
 		}
-
-		// if accrual.Valid {
-		// 	order.Accrual = &accrual.Float64
-		// }
 
 		orders = append(orders, order)
 	}
@@ -85,19 +75,78 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 	return orders, nil
 }
 
-func (g *GopherMartRepo) validateOrder(order entity.Order) error {
+func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (exists bool, existingUserID uint, err error) {
+	query := `
+        SELECT user_id 
+        FROM orders 
+        WHERE number = $1 
+        LIMIT 1
+    `
+
+	err = g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&existingUserID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return false, 0, nil
+		}
+		return false, 0, fmt.Errorf("failed to check order existence: %w", err)
+	}
+
+	exists = true
+	return exists, existingUserID, nil
+}
+
+func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error) {
+	query := `
+		SELECT 
+			o.id,
+			o.number,
+			s.status,
+			a.accrual,
+			o.uploaded_at
+		FROM orders as o
+		left join statuses as s ON o.status_id = s.id 
+		left join withdrawals as w ON o.id = w.orders_id 
+		left join accrual as a ON w.id = a.withdrawals_id 
+		WHERE o.number = $1
+	`
+
+	row := g.pg.Pool.QueryRow(ctx, query, orderNumber)
+
+	order := &entity.OrderResponse{}
+	err := row.Scan(
+		&order.ID,
+		&order.Number,
+		&order.Status,
+		&order.Accrual,
+		&order.UploadedAt,
+	)
+	if err != nil {
+		return nil, g.logAndReturnError(ctx, "GopherMartRepo - GetOrderByNumber - QueryRow", err)
+	}
+
+	return order, nil
+}
+
+func (g *GopherMartRepo) ValidateOrder(order entity.Order) error {
+	if len(order.Number) < 5 || len(order.Number) > 20 {
+		return entity.ErrInvalidOrder
+	}
 	if order.Number == "" {
 		return entity.ErrInvalidOrder
+	}
+	for _, r := range order.Number {
+		if r < '0' || r > '9' {
+			return entity.ErrInvalidOrder
+		}
 	}
 
 	exists, err := g.OrderExists(context.Background(), order.Number)
 	if err != nil {
-		return fmt.Errorf("failed to check order existence: %w", err)
+		return entity.FailedToCheckOrder
 	}
 	if exists {
 		return entity.ErrOrderExists
 	}
-
 	return nil
 }
 

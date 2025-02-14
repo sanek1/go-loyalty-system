@@ -2,12 +2,10 @@ package security
 
 import (
 	"context"
-	"encoding/json"
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
 	"strconv"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 
@@ -17,14 +15,12 @@ import (
 type TokenModel struct {
 	EncryptionKey string `yaml:"jwt"`
 	u             usecase.UserUseCase
-	redis         *redis.Client
 }
 
-func NewJwtToken(key string, u usecase.UserUseCase, redis *redis.Client) *TokenModel {
+func NewJwtToken(key string, u usecase.UserUseCase) *TokenModel {
 	return &TokenModel{
 		EncryptionKey: key,
 		u:             u,
-		redis:         redis,
 	}
 }
 
@@ -60,9 +56,9 @@ func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 	}
 
 	// Сохранение сессии в Redis
-	ctx := context.Background()
-	data, _ := json.Marshal(user)
-	j.redis.Set(ctx, strconv.FormatUint(uint64(user.ID), 10), data, sessionTimeRedis*time.Minute)
+	// ctx := context.Background()
+	// data, _ := json.Marshal(user)
+	// j.redis.Set(ctx, strconv.FormatUint(uint64(user.ID), 10), data, sessionTimeRedis*time.Minute)
 
 	return tokenString, nil
 }

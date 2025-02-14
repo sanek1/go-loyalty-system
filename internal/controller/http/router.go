@@ -64,4 +64,5 @@ func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.GET("/api/user/orders", g.a.Authorize(g.cfg), h.GetOrders)
 
 	g.handler.GET("/api/user/balance", g.a.Authorize(g.cfg), h.GetUserBalance)
+	g.handler.POST("/api/user/balance/withdraw", g.a.Authorize(g.cfg), h.WithdrawBalance)
 }

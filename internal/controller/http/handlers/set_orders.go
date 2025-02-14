@@ -1,73 +1,53 @@
 package handlers
 
 import (
+	"errors"
 	"go-loyalty-system/internal/entity"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
 	var request orderRequest
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		g.ErrorResponse(c, http.StatusBadRequest, "invalid userId")
+		g.ErrorResponse(c, http.StatusBadRequest, "invalid userId", err)
 		return
 	}
 	request.OrderNumber = string(body)
 	defer c.Request.Body.Close()
 
-	userIDStr, exists := c.Get("userID")
-	if !exists {
-		g.l.ErrorCtx(c.Request.Context(), "userID not found in context")
-		g.ErrorResponse(c, http.StatusUnauthorized, "unauthorized")
+	if request.OrderNumber == "" {
+		g.ErrorResponse(c, http.StatusBadRequest, "empty order number", nil)
 		return
 	}
-	userIDString, ok := userIDStr.(string)
-	if !ok {
-		g.l.ErrorCtx(c.Request.Context(), "failed to convert userID to string")
-		g.ErrorResponse(c, http.StatusInternalServerError, "internal server error")
-		return
-	}
-	userID64, err := strconv.ParseUint(userIDString, 10, 64)
+
+	userID, err := strconv.ParseUint(c.MustGet("userID").(string), 10, 64)
 	if err != nil {
-		g.l.ErrorCtx(c.Request.Context(), "failed to parse userID")
-		g.ErrorResponse(c, http.StatusInternalServerError, "internal server error")
+		g.ErrorResponse(c, http.StatusInternalServerError, "failed to parse userID", err)
 		return
 	}
-	userID := uint(userID64)
 
-	g.l.InfoCtx(c.Request.Context(), "userID 2 ->"+userIDStr.(string))
-
-	err = g.u.SetOrders(
-		c.Request.Context(),
-		userID,
-		entity.Order{
-			Number: request.OrderNumber,
-		},
-	)
+	// Сохраняем заказ
+	err = g.u.SetOrders(c.Request.Context(), uint(userID), entity.Order{Number: request.OrderNumber})
 	if err != nil {
-		g.ErrorResponse(c, http.StatusInternalServerError, "database problems2"+err.Error())
+		switch {
+		case errors.Is(err, entity.ErrInvalidOrder):
+			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number format", err)
+		case errors.Is(err, entity.ErrOrderExistsThisUser):
+			g.ErrorResponse(c, http.StatusOK, "order already uploaded by this user", err)
+		case errors.Is(err, entity.ErrOrderExistsOtherUser):
+			g.ErrorResponse(c, http.StatusConflict, "order already uploaded by another user", err)
+		default:
+			g.l.ErrorCtx(c.Request.Context(), "failed to process order", zap.Error(err))
+			g.ErrorResponse(c, http.StatusInternalServerError, "internal server error", err)
+		}
 		return
 	}
-
-	// // Сохраняем заказ
-	// if err := r.u.SetOrders(c.Request.Context(),uid, entity.Order{
-	// 	Number: request.OrderNumber,
-	// },); err != nil {
-	// 	switch {
-	// 	case errors.Is(err, entity.ErrOrderExists):
-	// 		r.ErrorResponse(c, http.StatusConflict, "order already exists")
-	// 	case errors.Is(err, entity.ErrInvalidOrder):
-	// 		r.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number")
-	// 	default:
-	// 		r.l.ErrorCtx(c.Request.Context(), "failed to set order", err)
-	// 		r.ErrorResponse(c, http.StatusInternalServerError, "internal server error")
-	// 	}
-	// 	return
-	// }
 	c.JSON(http.StatusAccepted, request)
 }
 

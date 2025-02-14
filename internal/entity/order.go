@@ -26,15 +26,23 @@ const (
 )
 
 const (
-    OrderStatusNewID        OrderStatusID = 1
-    OrderStatusProcessingID OrderStatusID = 2
-    OrderStatusInvalidID    OrderStatusID = 3
-    OrderStatusProcessedID  OrderStatusID = 4
+	OrderStatusNewID        OrderStatusID = 1
+	OrderStatusProcessingID OrderStatusID = 2
+	OrderStatusInvalidID    OrderStatusID = 3
+	OrderStatusProcessedID  OrderStatusID = 4
 )
 
 type OrderResponse struct {
-	Number     int       `json:"id"`
-	StatusID   int       `json:"status_id"`
-	Accrual    *float64  `json:"accrual,omitempty"`
+	ID         uint      `json:"id"`
+	Number     int       `json:"number"`
+	Status     string    `json:"status"`
+	Accrual    *float64  `json:"accrual"`
+	UploadedAt time.Time `json:"uploaded_at"`
+}
+
+type OrderResponseDto struct {
+	Number     int       `json:"number"`
+	Status     string    `json:"status"`
+	Accrual    *float64  `json:"accrual"`
 	UploadedAt time.Time `json:"uploaded_at"`
 }

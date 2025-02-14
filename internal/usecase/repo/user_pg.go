@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"go-loyalty-system/internal/entity"
+	"math/rand"
 
 	"go.uber.org/zap"
 )
@@ -23,6 +24,19 @@ func (g *GopherMartRepo) GetUserByEmail(ctx context.Context, u entity.User) (*en
 func (g *GopherMartRepo) GetUserByID(ctx context.Context, u entity.User) (*entity.User, error) {
 	const query = `SELECT id, login, password, email FROM users WHERE id = $1 `
 	row := g.pg.Pool.QueryRow(ctx, query, u.ID)
+
+	user := &entity.User{}
+	err := row.Scan(&user.ID, &user.Login, &user.Password, &user.Email)
+	if err != nil {
+		g.Logger.ErrorCtx(ctx, "Error scanning user row: %w", zap.Error(err))
+		return nil, err
+	}
+	return user, nil
+}
+
+func (g *GopherMartRepo) GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error) {
+	const query = `SELECT id, login, password, email FROM users WHERE login = $1 `
+	row := g.pg.Pool.QueryRow(ctx, query, u.Login)
 
 	user := &entity.User{}
 	err := row.Scan(&user.ID, &user.Login, &user.Password, &user.Email)
@@ -75,5 +89,29 @@ func (g *GopherMartRepo) RegisterUser(ctx context.Context, u entity.User) error 
 	if err != nil {
 		return g.logAndReturnError(ctx, "RegisterUser", err)
 	}
+	_ = g.SetBalance(ctx, u)
 	return nil
+}
+
+func (g *GopherMartRepo) SetBalance(ctx context.Context, u entity.User) error {
+	user, _ := g.GetUserByLogin(ctx, u)
+	if user == nil {
+		return nil
+	}
+	sql, args, err := g.pg.Builder.
+		Insert("balance").
+		Columns("user_id, current_balance, withdrawn").
+		Values(user.ID, rand.Float64()*100, 0).
+		ToSql()
+	if err != nil {
+		return g.logAndReturnError(ctx, "SetBalance", err)
+	}
+
+	_, err = g.pg.Pool.Exec(ctx, sql, args...)
+	if err != nil {
+		return g.logAndReturnError(ctx, "SetBalance", err)
+	}
+
+	return nil
+
 }

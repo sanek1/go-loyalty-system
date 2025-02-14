@@ -10,20 +10,17 @@ import (
 func (g *GopherMartRoutes) LoginUser(c *gin.Context) {
 	var request userRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
-		// TODO: log
-		g.ErrorResponse(c, http.StatusBadRequest, "invalid request body")
+		g.ErrorResponse(c, http.StatusBadRequest, "invalid request body", err)
 
 		return
 	}
-	user, err := g.u.GetUserByEmail(c.Request.Context(), entity.User{
-		Login: request.Login,
-		//Email:    request.Email,
+	user, err := g.u.GetUserByLogin(c.Request.Context(), entity.User{
+		Login:    request.Login,
 		Password: request.Password,
 	})
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err})
-		g.ErrorResponse(c, http.StatusUnauthorized, "StatusUnauthorized")
+		g.ErrorResponse(c, http.StatusUnauthorized, "StatusUnauthorized", err)
 		return
 	}
 

@@ -29,6 +29,7 @@ CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
   status_id INTEGER NOT NULL REFERENCES statuses(id),
+  --accrual_id INTEGER NOT NULL REFERENCES accrual(id),
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   number BIGINT NOT NULL,
   uploaded_at TIMESTAMP
@@ -36,3 +37,34 @@ CREATE TABLE orders (
 
 CREATE INDEX idx_orders_user_id ON orders(user_id);
 CREATE INDEX idx_orders_status_id ON orders(status_id);
+
+CREATE TABLE balance (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  current_balance DECIMAL NOT NULL,
+  withdrawn DECIMAL NULL
+);
+
+CREATE TABLE accrual_statuses (
+  id SERIAL PRIMARY KEY,
+  status VARCHAR(20) NOT NULL
+);
+
+INSERT INTO accrual_statuses (status) VALUES ('REGISTERED'), ('INVALID'), ('PROCESSING'), ('PROCESSED'); 
+
+
+
+CREATE table withdrawals (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  orders_id INTEGER NOT NULL REFERENCES orders(id),
+  amount DECIMAL NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE accrual (
+  id SERIAL PRIMARY KEY,
+  withdrawals_id INTEGER NOT NULL REFERENCES withdrawals(id),
+  accrual_statuses_id INTEGER NOT NULL REFERENCES accrual_statuses(id),
+  accrual DECIMAL  NULL
+);

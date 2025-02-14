@@ -1,6 +1,273 @@
---- FAIL: TestGophermart (20.42s)
-    --- FAIL: TestGophermart/TestEndToEnd (20.09s)
+--- FAIL: TestGophermart (21.40s)
+    --- FAIL: TestGophermart/TestEndToEnd (20.27s)
+        --- FAIL: TestGophermart/TestEndToEnd/order_upload (0.01s)
+            gophermart_e2e_test.go:146: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:146
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	Not equal: 
+                	            	expected: 202
+                	            	actual  : 500
+                	Test:       	TestGophermart/TestEndToEnd/order_upload
+                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+            gophermart_e2e_test.go:152: Оригинальный запрос:
+                
+                POST /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Content-Type: text/plain
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+                
+                843645542361103
+                
         --- FAIL: TestGophermart/TestEndToEnd/await_order_processed (20.01s)
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+            gophermart_e2e_test.go:184: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+            gophermart_e2e_test.go:190: Оригинальный запрос:
+                
+                GET /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
             gophermart_e2e_test.go:180: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
@@ -24,17 +291,11 @@
                 
                 GET /api/user/orders HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
             gophermart_e2e_test.go:166: Не удалось дождаться окончания расчета начисления
         --- FAIL: TestGophermart/TestEndToEnd/check_balance (0.00s)
-            gophermart_e2e_test.go:219: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:219
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	[]int{200, 204} does not contain 500
-                	Test:       	TestGophermart/TestEndToEnd/check_balance
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/balance'
             gophermart_e2e_test.go:231: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:231
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
@@ -56,16 +317,16 @@
                 
                 GET /api/user/balance HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
-        --- FAIL: TestGophermart/TestEndToEnd/withdraw_balance (0.00s)
+        --- FAIL: TestGophermart/TestEndToEnd/withdraw_balance (0.05s)
             gophermart_e2e_test.go:260: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:260
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
                 	Error:      	Not equal: 
                 	            	expected: 200
-                	            	actual  : 404
+                	            	actual  : 402
                 	Test:       	TestGophermart/TestEndToEnd/withdraw_balance
                 	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/balance/withdraw'
             gophermart_e2e_test.go:266: Оригинальный запрос:
@@ -74,41 +335,33 @@
                 Host: localhost:8080
                 Accept: application/json
                 Content-Type: application/json
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
                 {
-                			"order": "2115475",
-                    		"sum": 301.76
+                			"order": "74838714173",
+                    		"sum": 145.82
                 		}
                 
         --- FAIL: TestGophermart/TestEndToEnd/recheck_balance (0.00s)
-            gophermart_e2e_test.go:280: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:280
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Not equal: 
-                	            	expected: 200
-                	            	actual  : 500
-                	Test:       	TestGophermart/TestEndToEnd/recheck_balance
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/balance'
             gophermart_e2e_test.go:289: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:289
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Max difference between 428.21887 and 0 allowed is 0.01, but difference was 428.2188720703125
+                	Error:      	Max difference between 584.1603 and 0 allowed is 0.01, but difference was 584.1602783203125
                 	Test:       	TestGophermart/TestEndToEnd/recheck_balance
                 	Messages:   	Баланс пользователя не соответствует ожидаемому
             gophermart_e2e_test.go:290: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:290
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Max difference between 301.7611 and 0 allowed is 0.01, but difference was 301.7611083984375
+                	Error:      	Max difference between 145.8197 and 0 allowed is 0.01, but difference was 145.8197021484375
                 	Test:       	TestGophermart/TestEndToEnd/recheck_balance
                 	Messages:   	Списанная сумма не соответствует ожидаемой
             gophermart_e2e_test.go:294: Оригинальный запрос:
                 
                 GET /api/user/balance HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
         --- FAIL: TestGophermart/TestEndToEnd/check_withdrawals (0.00s)
@@ -126,7 +379,7 @@
                 Host: localhost:8080
                 Accept: application/json
                 Content-Type: application/json
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyNjgsImlkIjoiMTgyIiwibG9naW4iOiJkRTJSbFVvcThiNCIsInN1YiI6IiIsInRva2VuIjoiN2FjMzgxMDQtYzAzZi00ODg3LTg5ZjktNWM2ZDk0ZDNiMWRhIn0.73kY-TonIcpJKyL1Q8QekaDg9XqylA9nuzcdeU-6U_U
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNTYsImlkIjoiMTQiLCJsb2dpbiI6IllvSnBsQUI4RDBTIiwic3ViIjoiIiwidG9rZW4iOiJlMjU3NDVmZC0zMzBmLTRhNDUtODhlMC1kYWRkODViNjQ5ZWYifQ.O68c9rKRSip_gJcrohlxlk143paeC6LLiG9SrNPYwgs
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
     --- FAIL: TestGophermart/TestUserAuth (0.01s)
@@ -148,19 +401,19 @@
                 
                 
                 			{
-                				"login": "sgC9y",
-                				"password": "numvXzAAIvHJHn8BQO"
+                				"login": "DHJ0dNL4J",
+                				"password": "cmdyyzOYmfJJJc6d"
                 			}
                 		
                 
-    --- FAIL: TestGophermart/TestUserOrders (0.02s)
+    --- FAIL: TestGophermart/TestUserOrders (0.01s)
         --- FAIL: TestGophermart/TestUserOrders/bad_order_upload (0.00s)
             gophermart_orders_test.go:106: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:106
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
                 	Error:      	Not equal: 
                 	            	expected: 422
-                	            	actual  : 202
+                	            	actual  : 500
                 	Test:       	TestGophermart/TestUserOrders/bad_order_upload
                 	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
             gophermart_orders_test.go:112: Оригинальный запрос:
@@ -168,11 +421,31 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNzYsImlkIjoiMTYiLCJsb2dpbiI6IktpM0ZDWU54Iiwic3ViIjoiIiwidG9rZW4iOiJmYTg1NzhiZi1hMDA4LTRlOWQtYmZhYi00MWM4ZmFmODkwYjIifQ.QNFOHSZaAEivwxrtA3al8w_ZLIMLullQEegcmJhzEz0
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
                 12345678902
+                
+        --- FAIL: TestGophermart/TestUserOrders/order_upload (0.00s)
+            gophermart_orders_test.go:126: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:126
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	Not equal: 
+                	            	expected: 202
+                	            	actual  : 500
+                	Test:       	TestGophermart/TestUserOrders/order_upload
+                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+            gophermart_orders_test.go:132: Оригинальный запрос:
+                
+                POST /api/user/orders HTTP/1.1
+                Host: localhost:8080
+                Content-Type: text/plain
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNzYsImlkIjoiMTYiLCJsb2dpbiI6IktpM0ZDWU54Iiwic3ViIjoiIiwidG9rZW4iOiJmYTg1NzhiZi1hMDA4LTRlOWQtYmZhYi00MWM4ZmFmODkwYjIifQ.QNFOHSZaAEivwxrtA3al8w_ZLIMLullQEegcmJhzEz0
+                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+                
+                
+                42237820817169
                 
         --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_same_user (0.00s)
             gophermart_orders_test.go:146: 
@@ -180,7 +453,7 @@
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
                 	Error:      	Not equal: 
                 	            	expected: 200
-                	            	actual  : 202
+                	            	actual  : 500
                 	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_same_user
                 	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
             gophermart_orders_test.go:152: Оригинальный запрос:
@@ -188,33 +461,47 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNzYsImlkIjoiMTYiLCJsb2dpbiI6IktpM0ZDWU54Iiwic3ViIjoiIiwidG9rZW4iOiJmYTg1NzhiZi1hMDA4LTRlOWQtYmZhYi00MWM4ZmFmODkwYjIifQ.QNFOHSZaAEivwxrtA3al8w_ZLIMLullQEegcmJhzEz0
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
-                531640
+                42237820817169
                 
         --- FAIL: TestGophermart/TestUserOrders/orders_list (0.00s)
+            gophermart_orders_test.go:165: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:165
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	Not equal: 
+                	            	expected: 200
+                	            	actual  : 204
+                	Test:       	TestGophermart/TestUserOrders/orders_list
+                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+            gophermart_orders_test.go:168: 
+                	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:168
+                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+                	Error:      	"" does not contain "application/json"
+                	Test:       	TestGophermart/TestUserOrders/orders_list
+                	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
             gophermart_orders_test.go:172: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:172
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	"[{  %!s(float32=0) 2025-02-11 23:11:28.542411 +0000 UTC} {  %!s(float32=0) 2025-02-11 23:11:28.540838 +0000 UTC} {  %!s(float32=0) 2025-02-11 23:11:28.539784 +0000 UTC}]" should have 1 item(s), but has 3
+                	Error:      	"[]" should have 1 item(s), but has 0
                 	Test:       	TestGophermart/TestUserOrders/orders_list
                 	Messages:   	Ожидаем отличное от полученного кол-во заказов
             gophermart_orders_test.go:181: Оригинальный запрос:
                 
                 GET /api/user/orders HTTP/1.1
                 Host: localhost:8080
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg0IiwibG9naW4iOiJZMFA1SHJ4Iiwic3ViIjoiIiwidG9rZW4iOiI2NzA4OTdiOS00ODIwLTQxN2EtOGJhMi04MWIzYmRiMjk2ZWUifQ.Ti7z5Gu-nCnimAWp-bryoAuztCbVNeaAf_IPn84BXR8
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNzYsImlkIjoiMTYiLCJsb2dpbiI6IktpM0ZDWU54Iiwic3ViIjoiIiwidG9rZW4iOiJmYTg1NzhiZi1hMDA4LTRlOWQtYmZhYi00MWM4ZmFmODkwYjIifQ.QNFOHSZaAEivwxrtA3al8w_ZLIMLullQEegcmJhzEz0
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
-        --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.00s)
             gophermart_orders_test.go:236: 
                 	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:236
                 	            				C:\golang\yandex\go-loyalty-system\suite.go:91
                 	Error:      	Not equal: 
                 	            	expected: 409
-                	            	actual  : 202
+                	            	actual  : 500
                 	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
                 	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
             gophermart_orders_test.go:242: Оригинальный запрос:
@@ -222,83 +509,17 @@
                 POST /api/user/orders HTTP/1.1
                 Host: localhost:8080
                 Content-Type: text/plain
-                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3MzkzMDgyODgsImlkIjoiMTg1IiwibG9naW4iOiJJeHp4WGhWaEZXIiwic3ViIjoiIiwidG9rZW4iOiJmZDdiYzZmOS0yMTZlLTRkZDMtOTY5NC03MzY4MjlkOTQzYTQifQ.VUwqWB2dI8HUn_QQo3F2zNOUY5W3jsPVnexr-6TfgvM
+                Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk1NjQxNzYsImlkIjoiMTciLCJsb2dpbiI6IllBTmoxOTY3aCIsInN1YiI6IiIsInRva2VuIjoiYWUzNWVmZDMtYWFhMy00NjM1LWI2ZjItZWI0NzkyYjk4ZGJmIn0.ftu6qcevUM-XMFFFnk5XALjWisKh5V6SuavBtOU0EHk
                 User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
                 
                 
-                531640
+                42237820817169
                 
     gophermart_suite_test.go:105: останавливаем процесс gophermart
     gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
     gophermart_suite_test.go:108: останавливаем процесс accrual
-    gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
---- FAIL: TestAccrual (1.14s)
-    --- FAIL: TestAccrual/TestEndToEnd (1.02s)
-        --- FAIL: TestAccrual/TestEndToEnd/register_mechanics (0.00s)
-            accrual_suite_test.go:359: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\accrual_suite_test.go:359
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Not equal: 
-                	            	expected: 200
-                	            	actual  : 409
-                	Test:       	TestAccrual/TestEndToEnd/register_mechanics
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8081/api/goods'
-            accrual_suite_test.go:365: Оригинальный запрос:
-                
-                POST /api/goods HTTP/1.1
-                Host: localhost:8081
-                Accept: application/json
-                Content-Type: application/json
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-                
-                {"match": "Pringles", "reward": 10, "reward_type": "%"}
-                
-            accrual_suite_test.go:359: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\accrual_suite_test.go:359
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Not equal: 
-                	            	expected: 200
-                	            	actual  : 409
-                	Test:       	TestAccrual/TestEndToEnd/register_mechanics
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8081/api/goods'
-            accrual_suite_test.go:365: Оригинальный запрос:
-                
-                POST /api/goods HTTP/1.1
-                Host: localhost:8081
-                Accept: application/json
-                Content-Type: application/json
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-                
-                {"match": "Coca-Cola", "reward": 12.5, "reward_type": "pt"}
-                
-    --- FAIL: TestAccrual/TestRegisterMechanic (0.00s)
-        --- FAIL: TestAccrual/TestRegisterMechanic/successful_register (0.00s)
-            accrual_suite_test.go:198: 
-                	Error Trace:	C:\golang\yandex\go-loyalty-system\accrual_suite_test.go:198
-                	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-                	Error:      	Not equal: 
-                	            	expected: 200
-                	            	actual  : 409
-                	Test:       	TestAccrual/TestRegisterMechanic/successful_register
-                	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8081/api/goods'
-            accrual_suite_test.go:204: Оригинальный запрос:
-                
-                POST /api/goods HTTP/1.1
-                Host: localhost:8081
-                Accept: application/json
-                Content-Type: application/json
-                User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
-                
-                
-                
-                			{
-                				"match": "Milka",
-                				"reward": 11.5,
-                				"reward_type": "%"
-                			}
-                		
-                
-    accrual_suite_test.go:77: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
+    gophermart_suite_test.go:127: Процесс завершился с не нулевым статусом 1
+    gophermart_suite_test.go:140: Получен STDOUT лог процесса:
+        
+        {"level":"info","ts":1739560556.1431794,"caller":"accrual/main.go:52","msg":"starting HTTP server","addr":"localhost:8081"}
 FAIL

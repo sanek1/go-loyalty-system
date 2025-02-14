@@ -28,9 +28,6 @@ func Run(cfg *config.Config) {
 
 	// init db
 	initPostgres()
-
-	// init redis
-	redis := initRedis(ctx, l)
 	a := middleware.NewAuthorizer(l)
 
 	// Repository
@@ -42,11 +39,11 @@ func Run(cfg *config.Config) {
 
 	// Use case
 	gophermartUseCase := usecase.NewGopherMart(
-		repo.NewUserRepo(pg, redis, l),
+		repo.NewUserRepo(pg, l, pg.Pool),
 	)
 
 	// middleware
-	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase, redis)
+	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase)
 
 	// HTTP Server
 	handler := gin.New()
