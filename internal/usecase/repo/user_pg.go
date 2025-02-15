@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"go-loyalty-system/internal/entity"
-	"math/rand"
 
 	"go.uber.org/zap"
 )
@@ -101,7 +100,7 @@ func (g *GopherMartRepo) SetBalance(ctx context.Context, u entity.User) error {
 	sql, args, err := g.pg.Builder.
 		Insert("balance").
 		Columns("user_id, current_balance, withdrawn").
-		Values(user.ID, rand.Float64()*100, 0).
+		Values(user.ID, 10000, 0).
 		ToSql()
 	if err != nil {
 		return g.logAndReturnError(ctx, "SetBalance", err)

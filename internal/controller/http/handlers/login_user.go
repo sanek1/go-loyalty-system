@@ -30,6 +30,11 @@ func (g *GopherMartRoutes) LoginUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err})
 		return
 	}
+
+	c.Set("Accept", "application/json")
+	c.Set("Content-Type", "application/json")
+	c.Header("Content-Type", "application/json")
+	c.SetCookie("token", token, 3600, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 

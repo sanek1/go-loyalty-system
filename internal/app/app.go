@@ -40,6 +40,7 @@ func Run(cfg *config.Config) {
 	// Use case
 	gophermartUseCase := usecase.NewGopherMart(
 		repo.NewUserRepo(pg, l, pg.Pool),
+		l,
 	)
 
 	// middleware

@@ -4,16 +4,22 @@ import (
 	"context"
 	"fmt"
 	"go-loyalty-system/internal/entity"
+	"go-loyalty-system/pkg/logging"
+	"time"
+
+	"go.uber.org/zap"
 )
 
 type UserUseCase struct {
-	repo GopherMartRepo
+	repo   GopherMartRepo
+	Logger *logging.ZapLogger
 }
 
 // New -.
-func NewGopherMart(r GopherMartRepo) *UserUseCase {
+func NewGopherMart(r GopherMartRepo, l *logging.ZapLogger) *UserUseCase {
 	return &UserUseCase{
-		repo: r,
+		repo:   r,
+		Logger: l,
 	}
 }
 
@@ -53,12 +59,13 @@ func (uc *UserUseCase) RegisterUser(ctx context.Context, u entity.User) error {
 
 func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
 	if err := uc.repo.ValidateOrder(o); err != nil {
-		return fmt.Errorf("order validation failed: %w", err)
+		uc.Logger.ErrorCtx(ctx, "Order validation failed: %w", zap.Error(err))
+		return err
 	}
 
-	// Проверка существования заказа
 	exists, existingUserID, err := uc.repo.CheckOrderExistence(ctx, o.Number, userID)
 	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "Failed to check order: %w", zap.Error(err))
 		return fmt.Errorf("failed to check order: %w", err)
 	}
 
@@ -68,9 +75,11 @@ func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Orde
 		}
 		return entity.ErrOrderExistsOtherUser
 	}
-
-	// Создание нового заказа
+	o.StatusID = entity.OrderStatusNewID
+	o.CreatedAt = time.Now()
+	o.UploadedAt = time.Now()
 	if err := uc.repo.SetOrders(ctx, userID, o); err != nil {
+		uc.Logger.ErrorCtx(ctx, "Failed to create order: %w", zap.Error(err))
 		return fmt.Errorf("failed to create order: %w", err)
 	}
 
@@ -89,7 +98,16 @@ func (uc *UserUseCase) GetUserBalance(ctx context.Context, userID string) (*enti
 }
 
 func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
-	return uc.repo.GetUserOrders(ctx, userID)
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	orders, err := uc.repo.GetUserOrders(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("GetUserOrders: %w", err)
+	}
+
+	return orders, nil
 }
 
 func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Withdrawal) error {
@@ -98,16 +116,6 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
 	defer tx.Rollback(ctx)
-
-	// Проверяем баланс
-	balance, err := uc.repo.GetBalanceTx(ctx, tx, withdrawal.UserID)
-	if err != nil {
-		return fmt.Errorf("failed to get balance: %w", err)
-	}
-
-	if balance.Current < withdrawal.Amount {
-		return entity.ErrInsufficientFunds
-	}
 
 	order, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
 	if err != nil {
@@ -120,7 +128,7 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 	//}
 
 	// Создаем запись о списании
-	if err := uc.repo.CreateWithdrawalTx(ctx, tx, withdrawal, order); err != nil {
+	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, order); err != nil {
 		return fmt.Errorf("failed to create withdrawal: %w", err)
 	}
 
@@ -135,4 +143,13 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 	}
 
 	return nil
+}
+
+func (uc *UserUseCase) GetUserWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
+	withdrawals, err := uc.repo.GetWithdrawals(ctx, userID)
+	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "GetUserWithdrawals: %w", zap.Error(err))
+		return nil, fmt.Errorf("GetUserWithdrawals: %w", err)
+	}
+	return withdrawals, nil
 }

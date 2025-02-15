@@ -32,9 +32,10 @@ type BalanceUseCase interface {
 	GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error)
 	GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uint) (*entity.Balance, error)
 	//GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uint) (*entity.Balance, error)
-	CreateWithdrawalTx(ctx context.Context, tx pgx.Tx, w entity.Withdrawal, order *entity.OrderResponse) error
+	CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error
+	GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error)
 	BeginTx(ctx context.Context) (pgx.Tx, error)
-	UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float64) error
+	UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error
 }
 
 type AuthUseCase interface {

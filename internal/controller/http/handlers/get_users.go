@@ -13,5 +13,6 @@ func (g *GopherMartRoutes) GetUsers(c *gin.Context) {
 		g.ErrorResponse(c, http.StatusInternalServerError, "database problems", err)
 		return
 	}
+	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, userResponse{Users: u})
 }

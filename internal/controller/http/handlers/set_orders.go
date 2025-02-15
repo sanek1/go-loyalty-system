@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
@@ -31,24 +30,24 @@ func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
 		g.ErrorResponse(c, http.StatusInternalServerError, "failed to parse userID", err)
 		return
 	}
+	c.Header("Content-Type", "application/json")
 
 	// Сохраняем заказ
 	err = g.u.SetOrders(c.Request.Context(), uint(userID), entity.Order{Number: request.OrderNumber})
 	if err != nil {
 		switch {
 		case errors.Is(err, entity.ErrInvalidOrder):
-			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number format", err)
+			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number format", err) // 422
 		case errors.Is(err, entity.ErrOrderExistsThisUser):
-			g.ErrorResponse(c, http.StatusOK, "order already uploaded by this user", err)
+			c.Status(http.StatusOK) // 200
 		case errors.Is(err, entity.ErrOrderExistsOtherUser):
-			g.ErrorResponse(c, http.StatusConflict, "order already uploaded by another user", err)
+			g.ErrorResponse(c, http.StatusConflict, "order already uploaded by another user", err) // 409
 		default:
-			g.l.ErrorCtx(c.Request.Context(), "failed to process order", zap.Error(err))
-			g.ErrorResponse(c, http.StatusInternalServerError, "internal server error", err)
+			g.ErrorResponse(c, http.StatusInternalServerError, "failed to process order", err) // 500
 		}
 		return
 	}
-	c.JSON(http.StatusAccepted, request)
+	c.Status(http.StatusAccepted)
 }
 
 func (g *GopherMartRoutes) SetOrdersHandler() gin.HandlerFunc {

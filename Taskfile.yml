@@ -78,7 +78,7 @@ tasks:
     desc: Run tests
     deps: [build]
     cmds:
-      - gophermarttest.exe  -gophermart-binary-path=./.runtime/gophermart.exe -gophermart-host=localhost -gophermart-port=8080 -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" -accrual-binary-path=./cmd/accrual/accrual_windows_amd64  -accrual-host=localhost -accrual-port=8081 -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" >> logs/test1.log
+      - gophermarttest -test.v -test.run=^TestGophermart$ -gophermart-binary-path=./.runtime/gophermart.exe -gophermart-host=localhost -gophermart-port=8080 -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" -accrual-binary-path=./cmd/accrual/accrual_windows_amd64  -accrual-host=localhost -accrual-port=8081 -accrual-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" >> logs/test1.log
 
 
 

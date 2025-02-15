@@ -2,20 +2,19 @@ package entity
 
 import (
 	"time"
-
-	"github.com/Azure/go-autorest/autorest/date"
 )
 
 type OrderStatus string
 type OrderStatusID int
 
 type Order struct {
-	ID           uint      `json:"ID"`
-	UserID       int       `json:"USER_ID"`
-	StatusID     string    `json:"Status"`
-	CreationDate string    `json:"CreationDate"`
-	Number       string    `json:"Number"`
-	UploadedAt   date.Time `json:"Uploaded"`
+	ID           uint          `json:"ID"`
+	UserID       int           `json:"USER_ID"`
+	StatusID     OrderStatusID `json:"StatusId"`
+	CreationDate string        `json:"CreationDate"`
+	Number       string        `json:"Number"`
+	CreatedAt    time.Time     `json:"CreatedAt"`
+	UploadedAt   time.Time     `json:"Uploaded"`
 }
 
 const (
@@ -34,7 +33,7 @@ const (
 
 type OrderResponse struct {
 	ID         uint      `json:"id"`
-	Number     int       `json:"number"`
+	Number     string    `json:"number"`
 	Status     string    `json:"status"`
 	Accrual    *float64  `json:"accrual"`
 	UploadedAt time.Time `json:"uploaded_at"`

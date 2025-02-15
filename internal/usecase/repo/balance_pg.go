@@ -7,25 +7,26 @@ import (
 	"go-loyalty-system/internal/entity"
 
 	"github.com/jackc/pgx/v5"
+	"go.uber.org/zap"
 )
 
 func (g *GopherMartRepo) GetBalance(ctx context.Context, userID string) (*entity.Balance, error) {
 	var balance entity.Balance
 
 	query := `
+        
         SELECT 
-             current_balance,
-            withdrawn
-        FROM balance 
-        WHERE user_id = $1
+            current_balance as current,
+            withdrawn as withdrawn
+        FROM balance
     `
-	rows, err := g.pg.Pool.Query(ctx, query, userID)
+	rows, err := g.pg.Pool.Query(ctx, query)
 	if err != nil {
-		return nil, g.logAndReturnError(ctx, "GetUserOrders - Query", err)
+		return nil, g.logAndReturnError(ctx, "GetBalance - Query", err)
 	}
 	defer rows.Close()
 	if !rows.Next() {
-		return nil, entity.UserDoesNotExist
+		return nil, entity.ErrUserDoesNotExist
 	}
 
 	err = rows.Scan(&balance.Current, &balance.Withdrawn)
@@ -48,7 +49,7 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 	_, err := g.GetUserByID(ctx, entity.User{ID: userID})
 	if err != nil {
 		g.logAndReturnError(ctx, "GetBalanceTx - GetUser", err)
-		return nil, entity.UserDoesNotExist
+		return nil, entity.ErrUserDoesNotExist
 	}
 
 	const query = `
@@ -73,30 +74,67 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 }
 
 // CreateWithdrawalTx создает запись о списании в рамках транзакции
-func (r *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, tx pgx.Tx, w entity.Withdrawal, order *entity.OrderResponse) error {
-	const query = `
-        INSERT INTO withdrawals (user_id, orders_id, amount, created_at)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id
+func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error {
+	tx, err := g.pg.Pool.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("WithdrawBalance - begin transaction: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	// Проверяем текущий баланс
+	var currentBalance float32
+	// balanceQuery := `
+	//     SELECT COALESCE(SUM(a.accrual), 0) - COALESCE(
+	//         (SELECT SUM(w.amount) FROM withdrawals WHERE user_id = $1),
+	//         0
+	//     )
+	//     FROM orders o
+	// 	left join withdrawals as w ON o.id = w.orders_id
+	// 	left join accrual as a ON w.id = a.withdrawals_id
+	//     WHERE o.user_id = $1 AND o.status_id = $2
+	// `
+	balanceQuery := `
+        SELECT 
+             current_balance
+           -- withdrawn
+        FROM balance 
+        WHERE user_id = $1
     `
 
-	var id uint
-	err := tx.QueryRow(ctx, query,
-		w.UserID,
-		order.ID,
-		w.Amount,
-		w.CreatedAt,
-	).Scan(&id)
-
+	err = tx.QueryRow(ctx, balanceQuery, withdrawal.UserID).Scan(&currentBalance)
 	if err != nil {
-		return fmt.Errorf("failed to create withdrawal: %w", err)
+		return fmt.Errorf("WithdrawBalance - check balance: %w", err)
+	}
+
+	if currentBalance < withdrawal.Amount {
+		return entity.ErrInsufficientFunds
+	}
+
+	// Создаем запись о списании
+	withdrawQuery := `
+        INSERT INTO withdrawals (user_id, orders_id, amount, created_at)
+        VALUES ($1, $2, $3, $4)
+    `
+
+	_, err = tx.Exec(ctx, withdrawQuery,
+		withdrawal.UserID,
+		order.ID,
+		withdrawal.Amount,
+		withdrawal.CreatedAt,
+	)
+	if err != nil {
+		return fmt.Errorf("WithdrawBalance - insert withdrawal: %w", err)
+	}
+
+	if err = tx.Commit(ctx); err != nil {
+		return fmt.Errorf("WithdrawBalance - commit transaction: %w", err)
 	}
 
 	return nil
 }
 
 // UpdateBalanceTx обновляет баланс пользователя в рамках транзакции
-func (r *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float64) error {
+func (r *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error {
 	const query = `
         UPDATE balance
         SET 
@@ -143,16 +181,18 @@ func (r *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID 
 // }
 
 // GetWithdrawals получает историю списаний пользователя
-func (r *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
+func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
 	const query = `
-        SELECT id, user_id, order_number, amount, created_at
-        FROM withdrawals
-        WHERE user_id = $1
-        ORDER BY created_at DESC
+        SELECT w.id, w.user_id, o.number, w.amount, w.created_at
+        FROM withdrawals as w
+		left join orders as o on o.id = w.orders_id
+        WHERE w.user_id = $1
+        ORDER BY w.created_at DESC
     `
 
-	rows, err := r.pool.Query(ctx, query, userID)
+	rows, err := g.pool.Query(ctx, query, userID)
 	if err != nil {
+		g.Logger.ErrorCtx(ctx, "GopherMartRepo - GetWithdrawals - Query", zap.Error(err))
 		return nil, fmt.Errorf("failed to query withdrawals: %w", err)
 	}
 	defer rows.Close()
