@@ -49,14 +49,21 @@ type (
 
 func NewConfig() (*Config, error) {
 	cfg := &Config{}
-	flag.StringVar(&cfg.HTTP.Address, "a", ":8081", "RUN_ADDRESS")
+	flag.StringVar(&cfg.HTTP.Address, "a", ":8080", "RUN_ADDRESS")
 	flag.StringVar(&cfg.PG.URL, "d", "", "Database URI")
-	flag.StringVar(&cfg.Accrual.Accrual, "r", ":8080", "Accrual address")
+	flag.StringVar(&cfg.Accrual.Accrual, "r", ":8081", "Accrual address")
 	flag.StringVar(&cfg.Jwt.EncryptionKey, "k", "", "Auth key")
 	flag.Parse()
 
-	if err := cleanenv.ReadConfig("config.yaml", cfg); err != nil {
+	//get cuurent path
+	path, err := os.Getwd()
+	if err != nil {
 		return nil, fmt.Errorf("config error: %w", err)
+	}
+
+	if err := cleanenv.ReadConfig("../config/config.yaml", cfg); err != nil {
+
+		return nil, fmt.Errorf("config error: %w"+path, err)
 	}
 
 	if err := cleanenv.ReadEnv(cfg); err != nil {

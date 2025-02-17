@@ -47,6 +47,7 @@ func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
 		}
 		return
 	}
+	g.accrual.AddOrder(request.OrderNumber)
 	c.Status(http.StatusAccepted)
 }
 

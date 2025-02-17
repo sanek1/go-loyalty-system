@@ -44,10 +44,12 @@ func (g *GopherMartRepo) BeginTx(ctx context.Context) (pgx.Tx, error) {
 // GetBalanceTx получает баланс пользователя в рамках транзакции
 func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uint) (*entity.Balance, error) {
 	if userID == 0 {
+		g.Logger.ErrorCtx(ctx, "GetBalanceTx - userID is zero", zap.Uint("userID", userID))
 		return nil, errors.New("user does not exist")
 	}
 	_, err := g.GetUserByID(ctx, entity.User{ID: userID})
 	if err != nil {
+
 		g.logAndReturnError(ctx, "GetBalanceTx - GetUser", err)
 		return nil, entity.ErrUserDoesNotExist
 	}
@@ -77,7 +79,8 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error {
 	tx, err := g.pg.Pool.Begin(ctx)
 	if err != nil {
-		return fmt.Errorf("WithdrawBalance - begin transaction: %w", err)
+		g.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction", zap.Error(err))
+		return err
 	}
 	defer tx.Rollback(ctx)
 
@@ -95,15 +98,15 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 	// `
 	balanceQuery := `
         SELECT 
-             current_balance
-           -- withdrawn
+             current_balance -	withdrawn
         FROM balance 
         WHERE user_id = $1
     `
 
 	err = tx.QueryRow(ctx, balanceQuery, withdrawal.UserID).Scan(&currentBalance)
 	if err != nil {
-		return fmt.Errorf("WithdrawBalance - check balance: %w", err)
+		g.Logger.ErrorCtx(ctx, "WithdrawBalance - check balance", zap.Error(err))
+		return err
 	}
 
 	if currentBalance < withdrawal.Amount {
@@ -112,7 +115,7 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 
 	// Создаем запись о списании
 	withdrawQuery := `
-        INSERT INTO withdrawals (user_id, orders_id, amount, created_at)
+        INSERT INTO withdrawals (user_id, order_id, amount, created_at)
         VALUES ($1, $2, $3, $4)
     `
 
@@ -123,11 +126,13 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 		withdrawal.CreatedAt,
 	)
 	if err != nil {
-		return fmt.Errorf("WithdrawBalance - insert withdrawal: %w", err)
+		g.Logger.ErrorCtx(ctx, "WithdrawBalance - insert withdrawal", zap.Error(err))
+		return err
 	}
 
 	if err = tx.Commit(ctx); err != nil {
-		return fmt.Errorf("WithdrawBalance - commit transaction: %w", err)
+		g.Logger.ErrorCtx(ctx, "WithdrawBalance - commit transaction", zap.Error(err))
+		return err
 	}
 
 	return nil
@@ -185,7 +190,7 @@ func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]ent
 	const query = `
         SELECT w.id, w.user_id, o.number, w.amount, w.created_at
         FROM withdrawals as w
-		left join orders as o on o.id = w.orders_id
+		left join orders as o on o.id = w.order_id
         WHERE w.user_id = $1
         ORDER BY w.created_at DESC
     `

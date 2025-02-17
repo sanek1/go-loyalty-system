@@ -38,8 +38,7 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
             o.uploaded_at
         FROM orders as o
 		left join statuses as s ON o.status_id = s.id 
-		left join withdrawals as w ON o.id = w.orders_id 
-		left join accrual as a ON w.id = a.withdrawals_id 
+		left join accrual as a ON o.id = a.order_id 
 		WHERE o.user_id = $1
         ORDER BY uploaded_at DESC
     `
@@ -52,6 +51,11 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 
 	var orders []entity.OrderResponse
 	for rows.Next() {
+
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+
 		var order entity.OrderResponse
 		err := rows.Scan(
 			&order.Number,
@@ -102,8 +106,7 @@ func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber strin
             o.uploaded_at
 		FROM orders as o
 		left join statuses as s ON o.status_id = s.id 
-		left join withdrawals as w ON o.id = w.orders_id 
-		left join accrual as a ON w.id = a.withdrawals_id 
+		left join accrual as a ON o.id = a.order_id 
 		WHERE o.number = $1
 	`
 
@@ -205,24 +208,3 @@ func (r *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (b
 
 	return exists, nil
 }
-
-// func (g *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (bool, *entity.Order, error) {
-// 	order := entity.Order{}
-// 	query := `
-//          SELECT user_id, number
-//             FROM orders
-//             WHERE number = $1
-//     `
-
-// 	err := g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&order.UserID, &order.Number)
-// 	if err != nil {
-// 		if errors.Is(err, pgx.ErrNoRows) {
-// 			g.Logger.InfoCtx(ctx, "GopherMartRepo - OrderExists - QueryRow: %w")
-// 			return false, nil, nil
-// 		}
-// 		g.Logger.InfoCtx(ctx, "GopherMartRepo - OrderExists - QueryRow: %w")
-// 		return false, nil, fmt.Errorf("GopherMartRepo - OrderExists - QueryRow: %w", err)
-// 	}
-
-// 	return true, &order, nil
-// }

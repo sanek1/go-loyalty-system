@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"go-loyalty-system/config"
+	"go-loyalty-system/internal/controller/accrual"
 	"go-loyalty-system/internal/controller/http/security"
 	"go-loyalty-system/internal/entity"
 	"go-loyalty-system/internal/usecase"
@@ -16,6 +17,7 @@ type GopherMartRoutes struct {
 	handler *gin.Engine
 	token   *security.TokenModel
 	l       *logging.ZapLogger
+	accrual *accrual.OrderAccrual
 }
 
 type userResponse struct {
@@ -38,12 +40,14 @@ type orderRequest struct {
 // 	User  entity.Order   `json:"Order"`
 // }
 
-func NewHandler(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel, l *logging.ZapLogger) *GopherMartRoutes {
+func NewHandler(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel, OrderAccrual *accrual.OrderAccrual, l *logging.ZapLogger) *GopherMartRoutes {
 	return &GopherMartRoutes{
 		handler: handler,
 		u:       u,
 		cfg:     config,
 		token:   token,
 		l:       l,
+
+		accrual: OrderAccrual,
 	}
 }

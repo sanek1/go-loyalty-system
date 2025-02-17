@@ -1,10 +1,543 @@
 === RUN   TestGophermart
+    gophermart_suite_test.go:95: Не удалось дождаться пока порт 8080 станет доступен для запроса: context deadline exceeded
 === RUN   TestGophermart/TestEndToEnd
 === RUN   TestGophermart/TestEndToEnd/register_accrual_mechanic
 === RUN   TestGophermart/TestEndToEnd/register_order_for_accrual
 === RUN   TestGophermart/TestEndToEnd/register_user
+    gophermart_e2e_test.go:115: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:115
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/register": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/register_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию пользователя в системе лояльности
+    gophermart_e2e_test.go:116: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:116
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestEndToEnd/register_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/register'
+    gophermart_e2e_test.go:122: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:122
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Should be true
+        	Test:       	TestGophermart/TestEndToEnd/register_user
+        	Messages:   	Не удалось обнаружить авторизационные данные в ответе
+    gophermart_e2e_test.go:127: Оригинальный запрос:
+        
+        POST /api/user/register HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        {"login": "fy3F5CS8eL","password": "tAqUcFUfPjDABp3NTWemJAbYwzoJ"}
+        
 === RUN   TestGophermart/TestEndToEnd/order_upload
+    gophermart_e2e_test.go:145: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:145
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/order_upload
+        	Messages:   	Ошибка при попытке сделать запрос на загрузку заказа в систему лояльности
+    gophermart_e2e_test.go:146: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:146
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 202
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestEndToEnd/order_upload
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:152: Оригинальный запрос:
+        
+        POST /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        Content-Type: text/plain
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        725721369
+        
 === RUN   TestGophermart/TestEndToEnd/await_order_processed
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+    gophermart_e2e_test.go:180: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Ошибка при попытке сделать запрос на получение статуса расчета начисления в системе лояльности
+    gophermart_e2e_test.go:181: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:181
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_e2e_test.go:184: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:184
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/await_order_processed
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_e2e_test.go:190: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
     gophermart_e2e_test.go:180: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:180
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
@@ -28,17 +561,35 @@
         
         GET /api/user/orders HTTP/1.1
         Host: localhost:8080
-        Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk2MzI4NjksImlkIjoiNTgiLCJsb2dpbiI6Imt2aHROSDEySjhtTiIsInN1YiI6IiIsInRva2VuIjoiMWVlNDc0NzYtNGEwNy00OWQ5LTljNjYtY2I3NTdhYmQ3MmE1In0.8GcGrjLTgP8oEHMWUkaNYcJcyJ0ULvj03xY-3J5Unog
         User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
         
     gophermart_e2e_test.go:166: Не удалось дождаться окончания расчета начисления
 === RUN   TestGophermart/TestEndToEnd/check_balance
+    gophermart_e2e_test.go:218: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:218
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/balance": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/check_balance
+        	Messages:   	Ошибка при попытке сделать запрос на проверку баланса пользователя в системе лояльности
+    gophermart_e2e_test.go:219: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:219
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	[]int{200, 204} does not contain 0
+        	Test:       	TestGophermart/TestEndToEnd/check_balance
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/balance'
+    gophermart_e2e_test.go:222: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:222
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/check_balance
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
     gophermart_e2e_test.go:231: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:231
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
         	Error:      	Not equal: 
         	            	expected: main.userBalance{Current:729.98, Withdrawn:0}
-        	            	actual  : main.userBalance{Current:10000, Withdrawn:0}
+        	            	actual  : main.userBalance{Current:0, Withdrawn:0}
         	            	
         	            	Diff:
         	            	--- Expected
@@ -46,7 +597,7 @@
         	            	@@ -1,3 +1,3 @@
         	            	 (main.userBalance) {
         	            	- Current: (float32) 729.98,
-        	            	+ Current: (float32) 10000,
+        	            	+ Current: (float32) 0,
         	            	  Withdrawn: (float32) 0
         	Test:       	TestGophermart/TestEndToEnd/check_balance
         	Messages:   	Баланс пользователя не соответствует ожидаемому
@@ -54,16 +605,22 @@
         
         GET /api/user/balance HTTP/1.1
         Host: localhost:8080
-        Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk2MzI4NjksImlkIjoiNTgiLCJsb2dpbiI6Imt2aHROSDEySjhtTiIsInN1YiI6IiIsInRva2VuIjoiMWVlNDc0NzYtNGEwNy00OWQ5LTljNjYtY2I3NTdhYmQ3MmE1In0.8GcGrjLTgP8oEHMWUkaNYcJcyJ0ULvj03xY-3J5Unog
         User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
         
 === RUN   TestGophermart/TestEndToEnd/withdraw_balance
+    gophermart_e2e_test.go:259: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:259
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/balance/withdraw": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/withdraw_balance
+        	Messages:   	Ошибка при попытке сделать запрос на списание средств с баланса пользователя в системе лояльности
     gophermart_e2e_test.go:260: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:260
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
         	Error:      	Not equal: 
         	            	expected: 200
-        	            	actual  : 500
+        	            	actual  : 0
         	Test:       	TestGophermart/TestEndToEnd/withdraw_balance
         	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/balance/withdraw'
     gophermart_e2e_test.go:266: Оригинальный запрос:
@@ -72,59 +629,395 @@
         Host: localhost:8080
         Accept: application/json
         Content-Type: application/json
-        Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk2MzI4NjksImlkIjoiNTgiLCJsb2dpbiI6Imt2aHROSDEySjhtTiIsInN1YiI6IiIsInRva2VuIjoiMWVlNDc0NzYtNGEwNy00OWQ5LTljNjYtY2I3NTdhYmQ3MmE1In0.8GcGrjLTgP8oEHMWUkaNYcJcyJ0ULvj03xY-3J5Unog
         User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
         
         
         {
-        			"order": "862001160145",
-            		"sum": 406.10
+        			"order": "862125315013",
+            		"sum": 263.12
         		}
         
 === RUN   TestGophermart/TestEndToEnd/recheck_balance
+    gophermart_e2e_test.go:279: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:279
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/balance": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestEndToEnd/recheck_balance
+        	Messages:   	Ошибка при попытке сделать запрос на перепроверку баланса пользователя в системе лояльности
+    gophermart_e2e_test.go:280: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:280
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestEndToEnd/recheck_balance
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/balance'
+    gophermart_e2e_test.go:283: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:283
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestEndToEnd/recheck_balance
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
     gophermart_e2e_test.go:289: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:289
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-        	Error:      	Max difference between 323.87503 and 10000 allowed is 0.01, but difference was -9676.124969482422
+        	Error:      	Max difference between 466.8554 and 0 allowed is 0.01, but difference was 466.85540771484375
         	Test:       	TestGophermart/TestEndToEnd/recheck_balance
         	Messages:   	Баланс пользователя не соответствует ожидаемому
     gophermart_e2e_test.go:290: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:290
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-        	Error:      	Max difference between 406.10495 and 0 allowed is 0.01, but difference was 406.1049499511719
+        	Error:      	Max difference between 263.12457 and 0 allowed is 0.01, but difference was 263.12457275390625
         	Test:       	TestGophermart/TestEndToEnd/recheck_balance
         	Messages:   	Списанная сумма не соответствует ожидаемой
     gophermart_e2e_test.go:294: Оригинальный запрос:
         
         GET /api/user/balance HTTP/1.1
         Host: localhost:8080
-        Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk2MzI4NjksImlkIjoiNTgiLCJsb2dpbiI6Imt2aHROSDEySjhtTiIsInN1YiI6IiIsInRva2VuIjoiMWVlNDc0NzYtNGEwNy00OWQ5LTljNjYtY2I3NTdhYmQ3MmE1In0.8GcGrjLTgP8oEHMWUkaNYcJcyJ0ULvj03xY-3J5Unog
         User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
         
 === RUN   TestGophermart/TestEndToEnd/check_withdrawals
-    gophermart_e2e_test.go:319: 
-        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:319
+    gophermart_e2e_test.go:308: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:308
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
-        	Error:      	Should NOT be empty, but was []
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/withdrawals": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
         	Test:       	TestGophermart/TestEndToEnd/check_withdrawals
+        	Messages:   	Ошибка при попытке сделать запрос на получение списаний пользователя в системе лояльности
+    gophermart_e2e_test.go:309: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_e2e_test.go:309
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestEndToEnd/check_withdrawals
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/withdrawals'
+    gophermart_e2e_test.go:315: Оригинальный запрос:
+        
+        GET /api/user/withdrawals HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
 === RUN   TestGophermart/TestUserAuth
 === RUN   TestGophermart/TestUserAuth/register_user
+    gophermart_auth_test.go:33: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:33
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/register": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserAuth/register_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_auth_test.go:34: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:34
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserAuth/register_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/register'
+    gophermart_auth_test.go:40: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:40
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Should be true
+        	Test:       	TestGophermart/TestUserAuth/register_user
+        	Messages:   	Не удалось обнаружить авторизационные данные в ответе
+    gophermart_auth_test.go:45: Оригинальный запрос:
+        
+        POST /api/user/register HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        
+        			{
+        				"login": "IJVX9",
+        				"password": "Bv0KY4mnAfgwYs0BJd0yNCm"
+        			}
+        		
+        
 === RUN   TestGophermart/TestUserAuth/login_user
+    gophermart_auth_test.go:65: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:65
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/login": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserAuth/login_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_auth_test.go:66: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:66
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserAuth/login_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/login'
+    gophermart_auth_test.go:72: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_auth_test.go:72
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Should be true
+        	Test:       	TestGophermart/TestUserAuth/login_user
+        	Messages:   	Не удалось обнаружить авторизационные данные в ответе
+    gophermart_auth_test.go:77: Оригинальный запрос:
+        
+        POST /api/user/login HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        
+        			{
+        				"login": "IJVX9",
+        				"password": "Bv0KY4mnAfgwYs0BJd0yNCm"
+        			}
+        		
+        
 === RUN   TestGophermart/TestUserOrders
 === RUN   TestGophermart/TestUserOrders/unauthorized_order_upload
+    gophermart_orders_test.go:40: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:40
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/unauthorized_order_upload
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:41: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:41
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 401
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/unauthorized_order_upload
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:47: Оригинальный запрос:
+        
+        POST /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        Content-Type: text/plain
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        536645004006
+        
 === RUN   TestGophermart/TestUserOrders/unauthorized_orders_list
+    gophermart_orders_test.go:55: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:55
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/unauthorized_orders_list
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:56: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:56
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 401
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/unauthorized_orders_list
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:62: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
 === RUN   TestGophermart/TestUserOrders/register_user
+    gophermart_orders_test.go:75: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:75
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/register": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/register_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:76: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:76
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/register_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/register'
+    gophermart_orders_test.go:82: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:82
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Should be true
+        	Test:       	TestGophermart/TestUserOrders/register_user
+        	Messages:   	Не удалось обнаружить авторизационные данные в ответе
+    gophermart_orders_test.go:87: Оригинальный запрос:
+        
+        POST /api/user/register HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        {"login": "Mc5WYdK","password": "f0jMs11TTk2ORRoXl4FTXR"}
+        
 === RUN   TestGophermart/TestUserOrders/bad_order_upload
+    gophermart_orders_test.go:105: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:105
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/bad_order_upload
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:106: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:106
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 422
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/bad_order_upload
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:112: Оригинальный запрос:
+        
+        POST /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        Content-Type: text/plain
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        12345678902
+        
 === RUN   TestGophermart/TestUserOrders/order_upload
+    gophermart_orders_test.go:125: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:125
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/order_upload
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:126: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:126
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 202
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/order_upload
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:132: Оригинальный запрос:
+        
+        POST /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        Content-Type: text/plain
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        76032606
+        
 === RUN   TestGophermart/TestUserOrders/duplicate_order_upload_same_user
+    gophermart_orders_test.go:145: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:145
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_same_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:146: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:146
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_same_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:152: Оригинальный запрос:
+        
+        POST /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        Content-Type: text/plain
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        76032606
+        
 === RUN   TestGophermart/TestUserOrders/orders_list
+    gophermart_orders_test.go:164: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:164
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Get "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/orders_list
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:165: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:165
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/orders_list
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'GET http://localhost:8080/api/user/orders'
+    gophermart_orders_test.go:168: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:168
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"" does not contain "application/json"
+        	Test:       	TestGophermart/TestUserOrders/orders_list
+        	Messages:   	Заголовок ответа Content-Type содержит несоответствующее значение
+    gophermart_orders_test.go:172: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:172
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	"[]" should have 1 item(s), but has 0
+        	Test:       	TestGophermart/TestUserOrders/orders_list
+        	Messages:   	Ожидаем отличное от полученного кол-во заказов
+    gophermart_orders_test.go:181: Оригинальный запрос:
+        
+        GET /api/user/orders HTTP/1.1
+        Host: localhost:8080
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
 === RUN   TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+    gophermart_orders_test.go:205: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:205
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/register": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
+    gophermart_orders_test.go:206: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:206
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Not equal: 
+        	            	expected: 200
+        	            	actual  : 0
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+        	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/register'
+    gophermart_orders_test.go:212: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:212
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Should be true
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+        	Messages:   	Не удалось обнаружить авторизационные данные в ответе
+    gophermart_orders_test.go:217: Оригинальный запрос:
+        
+        POST /api/user/register HTTP/1.1
+        Host: localhost:8080
+        Accept: application/json
+        Content-Type: application/json
+        User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
+        
+        
+        {"login": "MUovnCv8D0o1h","password": "nRpaqTbU3pas4Mi1VJu4Va5a2VcCIn"}
+        
+    gophermart_orders_test.go:235: 
+        	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:235
+        	            				C:\golang\yandex\go-loyalty-system\suite.go:91
+        	Error:      	Received unexpected error:
+        	            	Post "http://localhost:8080/api/user/orders": dial tcp 127.0.0.1:8080: connectex: No connection could be made because the target machine actively refused it.
+        	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+        	Messages:   	Ошибка при попытке сделать запрос на регистрацию механики
     gophermart_orders_test.go:236: 
         	Error Trace:	C:\golang\yandex\go-loyalty-system\gophermart_orders_test.go:236
         	            				C:\golang\yandex\go-loyalty-system\suite.go:91
         	Error:      	Not equal: 
         	            	expected: 409
-        	            	actual  : 200
+        	            	actual  : 0
         	Test:       	TestGophermart/TestUserOrders/duplicate_order_upload_other_user
         	Messages:   	Несоответствие статус кода ответа ожидаемому в хендлере 'POST http://localhost:8080/api/user/orders'
     gophermart_orders_test.go:242: Оригинальный запрос:
@@ -132,38 +1025,36 @@
         POST /api/user/orders HTTP/1.1
         Host: localhost:8080
         Content-Type: text/plain
-        Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiIiLCJleHAiOjE3Mzk2MzI4ODksImlkIjoiNjEiLCJsb2dpbiI6IldGeThndU5UVE9DMCIsInN1YiI6IiIsInRva2VuIjoiMWM0ZTg0ZmQtYjJlZS00ZWI1LWI5NWQtMzQ5YzE0NTNiMjYwIn0.YfY-CWI4gGsAasDJgDaYGDzwNn42Bk95flKBD1VFVk8
         User-Agent: go-resty/2.7.0 (https://github.com/go-resty/resty)
         
         
-        104052275044408
+        76032606
         
 === NAME  TestGophermart
     gophermart_suite_test.go:105: останавливаем процесс gophermart
-    gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
     gophermart_suite_test.go:108: останавливаем процесс accrual
     gophermart_suite_test.go:122: Не удалось остановить процесс с помощью сигнала ОС: error sending signal to process: TerminateProcess: Access is denied.
---- FAIL: TestGophermart (20.42s)
-    --- FAIL: TestGophermart/TestEndToEnd (20.09s)
+--- FAIL: TestGophermart (40.24s)
+    --- FAIL: TestGophermart/TestEndToEnd (20.05s)
         --- PASS: TestGophermart/TestEndToEnd/register_accrual_mechanic (0.01s)
         --- PASS: TestGophermart/TestEndToEnd/register_order_for_accrual (0.00s)
-        --- PASS: TestGophermart/TestEndToEnd/register_user (0.01s)
-        --- PASS: TestGophermart/TestEndToEnd/order_upload (0.01s)
-        --- FAIL: TestGophermart/TestEndToEnd/await_order_processed (20.00s)
-        --- FAIL: TestGophermart/TestEndToEnd/check_balance (0.00s)
-        --- FAIL: TestGophermart/TestEndToEnd/withdraw_balance (0.05s)
-        --- FAIL: TestGophermart/TestEndToEnd/recheck_balance (0.00s)
+        --- FAIL: TestGophermart/TestEndToEnd/register_user (0.00s)
+        --- FAIL: TestGophermart/TestEndToEnd/order_upload (0.00s)
+        --- FAIL: TestGophermart/TestEndToEnd/await_order_processed (20.01s)
+        --- FAIL: TestGophermart/TestEndToEnd/check_balance (0.01s)
+        --- FAIL: TestGophermart/TestEndToEnd/withdraw_balance (0.00s)
+        --- FAIL: TestGophermart/TestEndToEnd/recheck_balance (0.01s)
         --- FAIL: TestGophermart/TestEndToEnd/check_withdrawals (0.00s)
-    --- PASS: TestGophermart/TestUserAuth (0.01s)
-        --- PASS: TestGophermart/TestUserAuth/register_user (0.00s)
-        --- PASS: TestGophermart/TestUserAuth/login_user (0.00s)
-    --- FAIL: TestGophermart/TestUserOrders (0.01s)
-        --- PASS: TestGophermart/TestUserOrders/unauthorized_order_upload (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/unauthorized_orders_list (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/register_user (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/bad_order_upload (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/order_upload (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/duplicate_order_upload_same_user (0.00s)
-        --- PASS: TestGophermart/TestUserOrders/orders_list (0.00s)
-        --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.00s)
+    --- FAIL: TestGophermart/TestUserAuth (0.01s)
+        --- FAIL: TestGophermart/TestUserAuth/register_user (0.01s)
+        --- FAIL: TestGophermart/TestUserAuth/login_user (0.01s)
+    --- FAIL: TestGophermart/TestUserOrders (0.05s)
+        --- FAIL: TestGophermart/TestUserOrders/unauthorized_order_upload (0.00s)
+        --- FAIL: TestGophermart/TestUserOrders/unauthorized_orders_list (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/register_user (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/bad_order_upload (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/order_upload (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_same_user (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/orders_list (0.01s)
+        --- FAIL: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.01s)
 FAIL

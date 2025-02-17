@@ -46,9 +46,14 @@ func Run(cfg *config.Config) {
 	// middleware
 	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase)
 
+	// init pool
+	//order := accrual.NewOrderProcessor(cfg.Accrual.Accrual, 5, *gophermartUseCase, l)
+	accrual := NewPoolController(*gophermartUseCase, l)
+	startPool(accrual)
+
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler, *gophermartUseCase, cfg, j, a, l)
+	v1.NewRouter(handler, *gophermartUseCase, cfg, j, accrual, a, l)
 	httpServer := httpserver.NewServer(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal
@@ -66,4 +71,5 @@ func Run(cfg *config.Config) {
 	if err = httpServer.Shutdown(); err != nil {
 		l.ErrorCtx(ctx, "app - Run - httpServer.Shutdown: %w", zap.Error(err))
 	}
+
 }

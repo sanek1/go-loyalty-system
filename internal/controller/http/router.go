@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	_ "go-loyalty-system/cmd/gophermart/docs"
+	"go-loyalty-system/internal/controller/accrual"
 	"go-loyalty-system/internal/controller/http/handlers"
 	"go-loyalty-system/internal/controller/http/middleware"
 	"go-loyalty-system/internal/controller/http/security"
@@ -29,7 +30,7 @@ type GopherMartRoutes struct {
 	a       *middleware.Authorizer
 }
 
-func NewRouter(handler *gin.Engine, usecase usecase.UserUseCase, config *config.Config, token *security.TokenModel, a *middleware.Authorizer, l *logging.ZapLogger) {
+func NewRouter(handler *gin.Engine, usecase usecase.UserUseCase, config *config.Config, token *security.TokenModel, accrual *accrual.OrderAccrual, a *middleware.Authorizer, l *logging.ZapLogger) {
 	g := &GopherMartRoutes{
 		handler: handler,
 		cfg:     config,
@@ -37,7 +38,7 @@ func NewRouter(handler *gin.Engine, usecase usecase.UserUseCase, config *config.
 		l:       l,
 		a:       a,
 	}
-	h := handlers.NewHandler(handler, usecase, config, token, l)
+	h := handlers.NewHandler(handler, usecase, config, token, accrual, l)
 	g.InitRouting(*h)
 }
 

@@ -52,19 +52,18 @@ CREATE TABLE accrual_statuses (
 
 INSERT INTO accrual_statuses (status) VALUES ('REGISTERED'), ('INVALID'), ('PROCESSING'), ('PROCESSED'); 
 
-
+CREATE TABLE accrual (
+  id SERIAL PRIMARY KEY,
+  order_id INTEGER  NOT NULL REFERENCES orders(id),
+  status_id INTEGER NOT NULL REFERENCES accrual_statuses(id),
+  accrual DECIMAL  NULL
+);
 
 CREATE table withdrawals (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
-  orders_id INTEGER NOT NULL REFERENCES orders(id),
+  order_id INTEGER NOT NULL REFERENCES orders(id),
   amount DECIMAL NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE accrual (
-  id SERIAL PRIMARY KEY,
-  withdrawals_id INTEGER NOT NULL REFERENCES withdrawals(id),
-  accrual_statuses_id INTEGER NOT NULL REFERENCES accrual_statuses(id),
-  accrual DECIMAL  NULL
-);

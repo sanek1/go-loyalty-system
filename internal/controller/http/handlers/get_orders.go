@@ -5,7 +5,6 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,16 +20,17 @@ import (
 // @Failure 500 {object} ErrorResponse
 // @Router /api/user/orders [get]
 func (g *GopherMartRoutes) GetOrders(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
 	userID, err := strconv.ParseUint(c.MustGet("userID").(string), 10, 64)
 	if err != nil {
 		g.ErrorResponse(c, http.StatusInternalServerError, "failed to parse userID", err)
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)
-	defer cancel()
+	//ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)
+	//defer cancel()
 
-	orders, err := g.u.GetUserOrders(ctx, uint(userID))
+	orders, err := g.u.GetUserOrders(c.Request.Context(), uint(userID))
 	if err != nil {
 		if errors.Is(err, context.DeadlineExceeded) {
 			g.ErrorResponse(c, http.StatusGatewayTimeout, "request timeout", err)
@@ -39,8 +39,6 @@ func (g *GopherMartRoutes) GetOrders(c *gin.Context) {
 		g.ErrorResponse(c, http.StatusInternalServerError, "failed to get orders", err)
 		return
 	}
-
-	c.Header("Content-Type", "application/json")
 
 	if len(orders) == 0 {
 		c.Status(http.StatusNoContent)

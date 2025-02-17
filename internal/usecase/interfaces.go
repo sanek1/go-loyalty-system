@@ -14,6 +14,7 @@ type (
 		OrderUseCase
 		BalanceUseCase
 		AuthUseCase
+		Repository
 	}
 )
 
@@ -43,4 +44,9 @@ type AuthUseCase interface {
 	CreateToken(ctx context.Context, u *entity.Token) error
 	GetUsers(context.Context) ([]entity.User, error)
 	GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
+}
+
+type Repository interface {
+	SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error
+	GetUnprocessedOrders(ctx context.Context) ([]string, error)
 }

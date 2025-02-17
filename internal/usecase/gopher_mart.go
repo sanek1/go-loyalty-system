@@ -98,8 +98,10 @@ func (uc *UserUseCase) GetUserBalance(ctx context.Context, userID string) (*enti
 }
 
 func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
-	if err := ctx.Err(); err != nil {
-		return nil, err
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
 	}
 
 	orders, err := uc.repo.GetUserOrders(ctx, userID)
@@ -113,12 +115,20 @@ func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity
 func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Withdrawal) error {
 	tx, err := uc.repo.BeginTx(ctx)
 	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction: %w", zap.Error(err))
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
 	defer tx.Rollback(ctx)
+	// createOrder
+	err = uc.repo.SetOrders(ctx, withdrawal.UserID, entity.Order{Number: withdrawal.OrderNumber, StatusID: entity.OrderStatusNewID, CreatedAt: time.Now(), UploadedAt: time.Now()})
+	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create order: %w", zap.Error(err))
+		return fmt.Errorf("failed to create order: %w", err)
+	}
 
 	order, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
 	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - get order: %w", zap.Error(err))
 		return fmt.Errorf("failed to get order: %w", err)
 	}
 
@@ -129,6 +139,7 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 
 	// Создаем запись о списании
 	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, order); err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create withdrawal: %w", zap.Error(err))
 		return fmt.Errorf("failed to create withdrawal: %w", err)
 	}
 
@@ -152,4 +163,21 @@ func (uc *UserUseCase) GetUserWithdrawals(ctx context.Context, userID uint) ([]e
 		return nil, fmt.Errorf("GetUserWithdrawals: %w", err)
 	}
 	return withdrawals, nil
+}
+
+func (uc *UserUseCase) GetUnprocessedOrders(ctx context.Context) ([]string, error) {
+	orders, err := uc.repo.GetUnprocessedOrders(ctx)
+	if err != nil {
+		uc.Logger.ErrorCtx(ctx, "GetUnprocessedOrders: %w", zap.Error(err))
+		return nil, fmt.Errorf("GetUnprocessedOrders: %w", err)
+	}
+	return orders, nil
+}
+
+func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error {
+	if err := uc.repo.SaveAccrual(ctx, orderNumber, status, accrual); err != nil {
+		uc.Logger.ErrorCtx(ctx, "SetOrderStatus: %w", zap.Error(err))
+		return fmt.Errorf("SetOrderStatus: %w", err)
+	}
+	return nil
 }
