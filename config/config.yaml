@@ -4,6 +4,7 @@ app:
 
 http:
   port: '8080'
+  address: ':8080'
 
 logger:
   log_level: 'debug'
@@ -11,5 +12,8 @@ logger:
 
 
 postgres:
-   pool_max: 10
+  pool_max: 10
+  
+accrual:
+  address: ':8081' 
 

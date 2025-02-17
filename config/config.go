@@ -1,11 +1,17 @@
 package config
 
 import (
+	"context"
 	"flag"
 	"fmt"
+
 	"os"
+	"path/filepath"
+
+	"go-loyalty-system/pkg/logging"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	"go.uber.org/zap"
 )
 
 type (
@@ -48,37 +54,71 @@ type (
 )
 
 func NewConfig() (*Config, error) {
+	logger, _ := logging.NewZapLogger(0)
+	//defer logger.Sync()
 	cfg := &Config{}
-	flag.StringVar(&cfg.HTTP.Address, "a", ":8080", "RUN_ADDRESS")
+
+	flag.StringVar(&cfg.HTTP.Address, "a", "", "RUN_ADDRESS")
 	flag.StringVar(&cfg.PG.URL, "d", "", "Database URI")
-	flag.StringVar(&cfg.Accrual.Accrual, "r", ":8081", "Accrual address")
+	flag.StringVar(&cfg.Accrual.Accrual, "r", "", "Accrual address")
 	flag.StringVar(&cfg.Jwt.EncryptionKey, "k", "", "Auth key")
 	flag.Parse()
 
-	//get cuurent path
-	path, err := os.Getwd()
+	executable, err := os.Executable()
 	if err != nil {
-		return nil, fmt.Errorf("config error: %w", err)
+		logger.ErrorCtx(context.Background(), "Failed to get executable path: %w", zap.Error(err))
+		return nil, fmt.Errorf("failed to get executable path: %w", err)
 	}
 
-	if err := cleanenv.ReadConfig("../config/config.yaml", cfg); err != nil {
+	configPath := filepath.Join(filepath.Dir(executable), "../config", "config.yaml")
 
-		return nil, fmt.Errorf("config error: %w"+path, err)
+	err = cleanenv.ReadConfig(configPath, cfg)
+	if err != nil {
+		logger.ErrorCtx(context.Background(), "Failed to read config file: %w"+configPath, zap.Error(err))
+		cfg.HTTP.Port = "8080"
+		cfg.PG.PoolMax = 10
+		cfg.Log.Level = "debug"
 	}
 
-	if err := cleanenv.ReadEnv(cfg); err != nil {
-		return nil, err
+	// Приоритет значений:
+	// 1. Параметры командной строки
+	// 2. Переменные окружения
+	// 3. Значения из конфига
+	// 4. Значения по умолчанию
+
+	// Обработка переменных окружения
+	if dbURI := os.Getenv("DATABASE_URI"); dbURI != "" {
+		cfg.PG.URL = dbURI
 	}
 
-	if key := os.Getenv("DATABASE_URI"); key != "" {
-		cfg.URL = key
+	if address := os.Getenv("RUN_ADDRESS"); address != "" {
+		cfg.HTTP.Address = address
 	}
 
-	cfg.Jwt.EncryptionKey = os.Getenv("JWT_ENCRYPTION_KEY")
-
-	if key := os.Getenv("RUN_ADDRESS"); key != "" {
-		cfg.HTTP.Address = key
+	if key := os.Getenv("JWT_ENCRYPTION_KEY"); key != "" {
+		cfg.Jwt.EncryptionKey = key
 	}
+
+	if accrual := os.Getenv("ACCRUAL_SYSTEM_ADDRESS"); accrual != "" {
+		cfg.Accrual.Accrual = accrual
+	}
+
+	if cfg.HTTP.Address == "" {
+		cfg.HTTP.Address = ":8080"
+	}
+
+	if cfg.PG.PoolMax == 0 {
+		cfg.PG.PoolMax = 10
+	}
+
+	if cfg.Log.Level == "" {
+		cfg.Log.Level = "debug"
+	}
+
+	logger.InfoCtx(context.Background(), "Starting server with parameters",
+		zap.String("address", cfg.HTTP.Address),
+		zap.String("database", cfg.PG.URL),
+		zap.String("accrual", cfg.Accrual.Accrual))
 
 	return cfg, nil
 }
