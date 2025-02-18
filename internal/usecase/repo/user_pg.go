@@ -88,7 +88,7 @@ func (g *GopherMartRepo) RegisterUser(ctx context.Context, u entity.User) error 
 	if err != nil {
 		return g.logAndReturnError(ctx, "RegisterUser", err)
 	}
-	_ = g.SetBalance(ctx, u)
+	//_ = g.SetBalance(ctx, u)
 	return nil
 }
 

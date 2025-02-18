@@ -25,7 +25,7 @@ type OrderUseCase interface {
 	GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error)
 	GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error)
 	CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (exists bool, existingUserID uint, err error)
-	ValidateOrder(order entity.Order) error
+	ValidateOrder(order entity.Order, userID uint) error
 }
 type BalanceUseCase interface {
 	//получение текущего баланса счёта баллов лояльности пользователя
@@ -49,4 +49,5 @@ type AuthUseCase interface {
 type Repository interface {
 	SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error
 	GetUnprocessedOrders(ctx context.Context) ([]string, error)
+	ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error)
 }

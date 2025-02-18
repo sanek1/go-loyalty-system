@@ -186,6 +186,7 @@ func (op *OrderAccrual) processOrder(orderNumber string) {
 		op.handleProcessError(ctx, "save accrual", err, orderNumber)
 		return
 	}
+	op.logger.InfoCtx(ctx, "processing result"+orderNumber+" "+accrualResp.Status+" "+fmt.Sprintf("%.2f", accrualResp.Accrual), zap.String("order", orderNumber))
 
 	op.logger.InfoCtx(ctx, "order processed successfully",
 		zap.String("order", orderNumber),
@@ -240,6 +241,7 @@ func (op *OrderAccrual) getAccrualResult(ctx context.Context, orderNumber string
 }
 
 func (op *OrderAccrual) createRequest(ctx context.Context, method, path string, body []byte) (*http.Request, error) {
+	op.logger.InfoCtx(ctx, "creating request"+op.baseURL+path)
 	req, err := http.NewRequestWithContext(ctx, method, op.baseURL+path, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("create request error: %w", err)
@@ -251,13 +253,24 @@ func (op *OrderAccrual) createRequest(ctx context.Context, method, path string, 
 }
 
 func (op *OrderAccrual) sendOrderData(ctx context.Context, orderNumber string) error {
-	orderData := entity.AccrualOrder{Order: orderNumber}
+	orderData := entity.AccrualOrder{Order: orderNumber, Goods: []entity.Product{
+		{
+			Description: "test",
+			Price:       100,
+		},
+		{
+			Description: "test2",
+			Price:       200,
+		},
+	}}
 	jsonData, err := json.Marshal(orderData)
 	if err != nil {
 		return fmt.Errorf("marshal error: %w", err)
 	}
 
 	//url := fmt.Sprintf("%s/api/orders", op.baseURL)
+	op.logger.InfoCtx(ctx, "sending order data "+orderNumber, zap.String("order", orderNumber))
+	op.logger.InfoCtx(ctx, "order data", zap.String("order", string(jsonData)))
 	req, err := op.createRequest(ctx, "POST", "/api/orders", jsonData)
 	if err != nil {
 		return err

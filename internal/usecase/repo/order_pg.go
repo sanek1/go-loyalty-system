@@ -7,6 +7,7 @@ import (
 	"go-loyalty-system/internal/entity"
 
 	"github.com/jackc/pgx"
+	"go.uber.org/zap"
 )
 
 func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
@@ -131,7 +132,7 @@ func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber strin
 	return order, nil
 }
 
-func (g *GopherMartRepo) ValidateOrder(order entity.Order) error {
+func (g *GopherMartRepo) ValidateOrder(order entity.Order, userID uint) error {
 	ctx := context.Background()
 	if len(order.Number) < 5 || len(order.Number) > 20 {
 		g.Logger.ErrorCtx(ctx, "order number length must be between 5 and 20")
@@ -148,15 +149,28 @@ func (g *GopherMartRepo) ValidateOrder(order entity.Order) error {
 		}
 	}
 
-	exists, err := g.OrderExists(ctx, order.Number)
+	exists, existingUserID, err := g.CheckOrderExistence(ctx, order.Number, userID)
 	if err != nil {
-		g.Logger.ErrorCtx(ctx, "GopherMartRepo - ValidateOrder - FailedToCheckOrder")
-		return entity.ErrFailedToCheckOrder
+		g.Logger.ErrorCtx(ctx, "Failed to check order: %w", zap.Error(err))
+		return fmt.Errorf("failed to check order: %w", err)
 	}
-	if exists { //user_id && order.UserID {
-		g.Logger.ErrorCtx(ctx, order.Number+" order number already exists")
-		return entity.ErrOrderExistsThisUser
+
+	if exists {
+		if existingUserID == userID {
+			return entity.ErrOrderExistsThisUser
+		}
+		return entity.ErrOrderExistsOtherUser
 	}
+
+	// exists, err := g.OrderExists(ctx, order.Number)
+	// if err != nil {
+	// 	g.Logger.ErrorCtx(ctx, "GopherMartRepo - ValidateOrder - FailedToCheckOrder")
+	// 	return entity.ErrFailedToCheckOrder
+	// }
+	// if exists { //user_id && order.UserID {
+	// 	g.Logger.ErrorCtx(ctx, order.Number+" order number already exists")
+	// 	return entity.ErrOrderExistsThisUser
+	// }
 	// if exists && order.UserID != user_id {
 	// 	g.Logger.ErrorCtx(ctx, order.Number+" order number already exists for other user")
 	// 	return entity.ErrOrderExistsOtherUser
@@ -188,7 +202,7 @@ func validateLuhn(number string) bool {
 	return sum%10 == 0
 }
 
-func (r *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (bool, error) {
+func (g *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (bool, error) {
 	query := `
         SELECT EXISTS (
             SELECT 1 
@@ -198,7 +212,7 @@ func (r *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (b
     `
 	var exists bool
 
-	err := r.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&exists)
+	err := g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&exists)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return false, nil

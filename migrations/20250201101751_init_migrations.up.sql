@@ -3,7 +3,8 @@ CREATE TABLE users (
     login VARCHAR(100) NOT NULL,
     password VARCHAR(60) NOT NULL, 
     email VARCHAR(150) NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated VARCHAR(150) NULL
 );
 
 CREATE INDEX idx_users_login ON users(login);
@@ -32,7 +33,8 @@ CREATE TABLE orders (
   --accrual_id INTEGER NOT NULL REFERENCES accrual(id),
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   number BIGINT NOT NULL,
-  uploaded_at TIMESTAMP
+  uploaded_at TIMESTAMP,
+  updated VARCHAR(150) NULL
 );
 
 CREATE INDEX idx_orders_user_id ON orders(user_id);
@@ -42,7 +44,8 @@ CREATE TABLE balance (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
   current_balance DECIMAL NOT NULL,
-  withdrawn DECIMAL NULL
+  withdrawn DECIMAL NULL,
+  updated VARCHAR(150) NULL
 );
 
 CREATE TABLE accrual_statuses (
@@ -56,7 +59,8 @@ CREATE TABLE accrual (
   id SERIAL PRIMARY KEY,
   order_id INTEGER  NOT NULL REFERENCES orders(id),
   status_id INTEGER NOT NULL REFERENCES accrual_statuses(id),
-  accrual DECIMAL  NULL
+  accrual DECIMAL  NULL,
+  updated VARCHAR(150) NULL
 );
 
 CREATE table withdrawals (
@@ -64,6 +68,7 @@ CREATE table withdrawals (
   user_id INTEGER NOT NULL REFERENCES users(id),
   order_id INTEGER NOT NULL REFERENCES orders(id),
   amount DECIMAL NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated VARCHAR(150) NULL
 );
 

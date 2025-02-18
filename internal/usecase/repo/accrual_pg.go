@@ -2,7 +2,32 @@ package repo
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
+	"github.com/jackc/pgx/v5"
+	"go.uber.org/zap"
 )
+
+func (g *GopherMartRepo) ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error) {
+	query := `
+		SELECT EXISTS (
+			SELECT 1 
+			FROM accrual 
+			WHERE order_id = (SELECT id FROM orders WHERE number = $1)
+		)
+	`
+	var exists bool
+
+	err := g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&exists)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return false, nil
+		}
+		return false, fmt.Errorf("GopherMartRepo - OrderExists - QueryRow: %w", err)
+	}
+	return exists, nil
+}
 
 func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error {
 	// get order data by order number
@@ -28,8 +53,38 @@ func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber string, st
 	if err != nil {
 		return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  SaveAccrual", err)
 	}
+	g.Logger.InfoCtx(ctx, "SaveAccrual", zap.String("orderNumber", orderNumber), zap.String("status", status), zap.Float32("accrual", accrual))
 
-	//time.Sleep(20 * time.Second)
+	query = `
+        update orders
+		set status_id = (select id from statuses where status = $2)
+		where number = $1  
+    `
+	_, err = g.pg.Pool.Exec(ctx, query, orderNumber, status)
+	if err != nil {
+		return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  update orders", err)
+	}
+
+	// query = `
+	//     update balance
+	// 	set current_balance = current_balance + $2
+	// 	where user_id = (select user_id from orders where number = $1)
+	// `
+	// _, err = g.pg.Pool.Exec(ctx, query, orderNumber, accrual)
+	// if err != nil {
+	// 	return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  update balance", err)
+	// }
+
+	query = `
+        INSERT INTO balance (user_id, current_balance, withdrawn)
+        VALUES ((select user_id from orders where number = $1), $2, 0)
+        
+    `
+
+	_, err = g.pool.Exec(ctx, query, orderNumber, accrual)
+	if err != nil {
+		return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  update balance", err)
+	}
 
 	return nil
 }

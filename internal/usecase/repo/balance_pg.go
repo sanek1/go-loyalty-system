@@ -19,8 +19,9 @@ func (g *GopherMartRepo) GetBalance(ctx context.Context, userID string) (*entity
             current_balance as current,
             withdrawn as withdrawn
         FROM balance
+		WHERE user_id = $1
     `
-	rows, err := g.pg.Pool.Query(ctx, query)
+	rows, err := g.pg.Pool.Query(ctx, query, userID)
 	if err != nil {
 		return nil, g.logAndReturnError(ctx, "GetBalance - Query", err)
 	}
@@ -139,21 +140,16 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 }
 
 // UpdateBalanceTx обновляет баланс пользователя в рамках транзакции
-func (r *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error {
+func (g *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error {
 	const query = `
         UPDATE balance
         SET 
-            current_balance = current_balance + $1,
-            withdrawn = CASE 
-                WHEN $1 < 0 THEN withdrawn - $1
-                ELSE withdrawn
-            END
+			current_balance = current_balance - $1,
+            withdrawn =withdrawn+  $1,
+            updated = ' UpdateBalanceTx'
         WHERE user_id = $2
-        RETURNING id
     `
-
-	var id uint
-	err := tx.QueryRow(ctx, query, amount, userID).Scan(&id)
+	_, err := g.pg.Pool.Exec(ctx, query, amount, userID)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return fmt.Errorf("balance not found for user %d: %w", userID, err)
@@ -225,14 +221,14 @@ func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]ent
 }
 
 // CreateBalance создает новый баланс для пользователя
-func (r *GopherMartRepo) CreateBalance(ctx context.Context, userID uint) error {
+func (g *GopherMartRepo) CreateBalance(ctx context.Context, userID uint) error {
 	const query = `
         INSERT INTO balance (user_id, current_balance, withdrawn)
         VALUES ($1, 0, 0)
         ON CONFLICT (user_id) DO NOTHING
     `
 
-	_, err := r.pool.Exec(ctx, query, userID)
+	_, err := g.pool.Exec(ctx, query, userID)
 	if err != nil {
 		return fmt.Errorf("failed to create balance: %w", err)
 	}
@@ -244,7 +240,9 @@ func (r *GopherMartRepo) CreateBalance(ctx context.Context, userID uint) error {
 func (r *GopherMartRepo) UpdateBalance(ctx context.Context, userID uint, amount float64) error {
 	const query = `
         UPDATE balance
-        SET current_balance = current_balance + $1
+        SET 
+		current_balance = current_balance + $1,
+		updated = 'UpdateBalance'
         WHERE user_id = $2
         RETURNING id
     `
