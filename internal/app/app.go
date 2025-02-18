@@ -48,7 +48,7 @@ func Run(cfg *config.Config) {
 
 	// init pool
 	//order := accrual.NewOrderProcessor(cfg.Accrual.Accrual, 5, *gophermartUseCase, l)
-	accrual := NewPoolController(*gophermartUseCase, l)
+	accrual := NewPoolController(*gophermartUseCase,cfg.Accrual.Accrual, l)
 	startPool(accrual)
 
 	// HTTP Server

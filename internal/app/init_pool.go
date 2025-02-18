@@ -9,9 +9,9 @@ import (
 	"syscall"
 )
 
-func NewPoolController(repo usecase.UserUseCase, l *logging.ZapLogger) *accrual.OrderAccrual {
+func NewPoolController(repo usecase.UserUseCase, address string, l *logging.ZapLogger) *accrual.OrderAccrual {
 	orderProcessor := accrual.NewOrderProcessor(
-		"http://localhost:8081",
+		address,//"http://localhost:8081",
 		3, // количество воркеров
 		repo,
 		l,
