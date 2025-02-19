@@ -30,7 +30,7 @@ func NewAuthorizer(l *logging.ZapLogger) *Authorizer {
 	}
 }
 
-func (a Authorizer) Authorize(config *config.Config) gin.HandlerFunc {
+func (a Authorizer) Authorize(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var tokenString string
 		ctx := context.Background()
@@ -58,7 +58,7 @@ func (a Authorizer) Authorize(config *config.Config) gin.HandlerFunc {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			return []byte(config.Jwt.EncryptionKey), nil
+			return []byte(cfg.Jwt.EncryptionKey), nil
 		})
 
 		if err != nil {

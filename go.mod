@@ -3,7 +3,6 @@ module go-loyalty-system
 go 1.23.0
 
 require (
-	github.com/Azure/go-autorest/autorest/date v0.3.1
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
@@ -22,7 +21,6 @@ require (
 )
 
 require (
-	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect

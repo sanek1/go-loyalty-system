@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    login VARCHAR(100) NOT NULL,
+    login VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL, 
     email VARCHAR(150) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -30,7 +30,6 @@ CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
   status_id INTEGER NOT NULL REFERENCES statuses(id),
-  --accrual_id INTEGER NOT NULL REFERENCES accrual(id),
   creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   number BIGINT NOT NULL,
   uploaded_at TIMESTAMP,

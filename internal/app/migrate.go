@@ -15,14 +15,10 @@ import (
 const (
 	_defaultAttempts = 20
 	_defaultTimeout  = time.Second
+	_countIterations = 15
 )
 
-func initPostgres() {
-	databaseURL, ok := os.LookupEnv("DATABASE_URI")
-	if !ok || databaseURL == "" {
-		log.Fatalf("migrate: environment variable not declared: DATABASE_URI")
-	}
-
+func initPostgres(databaseURL string) {
 	var (
 		attempts = _defaultAttempts
 		err      error
@@ -32,7 +28,6 @@ func initPostgres() {
 	if err != nil {
 		return
 	}
-	//migrationsPath := filepath.Join(currentDir, "migrations")
 	migrationsPath := filepath.Join(currentDir, "../../migrations")
 
 	log.Printf("Migrations path: %s", migrationsPath)
@@ -42,7 +37,7 @@ func initPostgres() {
 		if err == nil {
 			break
 		}
-		if attempts < 15 {
+		if attempts < _countIterations {
 			migrationsPath = filepath.Join(currentDir, "migrations")
 		}
 

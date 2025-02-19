@@ -26,28 +26,27 @@ type userResponse struct {
 }
 
 type userRequest struct {
-	Login string `json:"login"  binding:"required" `
-	// Email    string `json:"email"`
+	Login    string `json:"login"  binding:"required" `
 	Password string `json:"password" binding:"required,min=8"`
 }
 
-type orderRequest struct {
-	OrderNumber string `json:"OrderNumber"  `
-}
+const (
+	_time = 3600
+)
 
-// type orderResponse struct {
-// 	Users []entity.Order `json:"Orders"`
-// 	User  entity.Order   `json:"Order"`
-// }
-
-func NewHandler(handler *gin.Engine, u usecase.UserUseCase, config *config.Config, token *security.TokenModel, OrderAccrual *accrual.OrderAccrual, l *logging.ZapLogger) *GopherMartRoutes {
+func NewHandler(handler *gin.Engine,
+	u usecase.UserUseCase,
+	c *config.Config,
+	token *security.TokenModel,
+	oa *accrual.OrderAccrual,
+	l *logging.ZapLogger) *GopherMartRoutes {
 	return &GopherMartRoutes{
 		handler: handler,
 		u:       u,
-		cfg:     config,
+		cfg:     c,
 		token:   token,
 		l:       l,
 
-		accrual: OrderAccrual,
+		accrual: oa,
 	}
 }

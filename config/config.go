@@ -15,7 +15,6 @@ import (
 )
 
 type (
-	// Config
 	Config struct {
 		App     `yaml:"app"`
 		HTTP    `yaml:"http"`
@@ -55,7 +54,7 @@ type (
 
 func NewConfig() (*Config, error) {
 	logger, _ := logging.NewZapLogger(0)
-	//defer logger.Sync()
+	defer logger.Sync()
 	cfg := &Config{}
 
 	flag.StringVar(&cfg.HTTP.Address, "a", "", "RUN_ADDRESS")
@@ -70,7 +69,7 @@ func NewConfig() (*Config, error) {
 		return nil, fmt.Errorf("failed to get executable path: %w", err)
 	}
 
-	configPath := filepath.Join(filepath.Dir(executable), "../config", "config.yaml")
+	configPath := filepath.Join(filepath.Dir(executable), "../config/config.yaml")
 
 	err = cleanenv.ReadConfig(configPath, cfg)
 	if err != nil {
@@ -80,13 +79,6 @@ func NewConfig() (*Config, error) {
 		cfg.Log.Level = "debug"
 	}
 
-	// Приоритет значений:
-	// 1. Параметры командной строки
-	// 2. Переменные окружения
-	// 3. Значения из конфига
-	// 4. Значения по умолчанию
-
-	// Обработка переменных окружения
 	if dbURI := os.Getenv("DATABASE_URI"); dbURI != "" {
 		cfg.PG.URL = dbURI
 	}

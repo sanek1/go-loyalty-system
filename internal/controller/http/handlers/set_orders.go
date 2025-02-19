@@ -11,16 +11,15 @@ import (
 )
 
 func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
-	var request orderRequest
 	body, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		g.ErrorResponse(c, http.StatusBadRequest, "invalid userId", err)
 		return
 	}
-	request.OrderNumber = string(body)
 	defer c.Request.Body.Close()
 
-	if request.OrderNumber == "" {
+	orderNumber := string(body)
+	if orderNumber == "" {
 		g.ErrorResponse(c, http.StatusBadRequest, "empty order number", nil)
 		return
 	}
@@ -30,24 +29,26 @@ func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
 		g.ErrorResponse(c, http.StatusInternalServerError, "failed to parse userID", err)
 		return
 	}
-	c.Header("Content-Type", "application/json")
 
-	// Сохраняем заказ
-	err = g.u.SetOrders(c.Request.Context(), uint(userID), entity.Order{Number: request.OrderNumber})
+	err = g.u.SetOrders(c.Request.Context(), uint(userID), entity.Order{Number: orderNumber})
 	if err != nil {
+		status := http.StatusInternalServerError
+		errMsg := "failed to process order"
 		switch {
 		case errors.Is(err, entity.ErrInvalidOrder):
-			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number format", err) // 422
+			status = http.StatusUnprocessableEntity
+			errMsg = "invalid order number format"
 		case errors.Is(err, entity.ErrOrderExistsThisUser):
-			c.Status(http.StatusOK) // 200
+			status = http.StatusOK
+			errMsg = "order already uploaded by this user"
 		case errors.Is(err, entity.ErrOrderExistsOtherUser):
-			g.ErrorResponse(c, http.StatusConflict, "order already uploaded by another user", err) // 409
-		default:
-			g.ErrorResponse(c, http.StatusInternalServerError, "failed to process order", err) // 500
+			status = http.StatusConflict
+			errMsg = "order already uploaded by another user"
 		}
+		g.ErrorResponse(c, status, errMsg, err)
 		return
 	}
-	g.accrual.AddOrder(request.OrderNumber)
+	g.accrual.AddOrder(orderNumber)
 	c.Status(http.StatusAccepted)
 }
 

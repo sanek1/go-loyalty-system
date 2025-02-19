@@ -27,9 +27,6 @@ func (g *GopherMartRoutes) GetOrders(c *gin.Context) {
 		return
 	}
 
-	//ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)
-	//defer cancel()
-
 	orders, err := g.u.GetUserOrders(c.Request.Context(), uint(userID))
 	if err != nil {
 		if errors.Is(err, context.DeadlineExceeded) {

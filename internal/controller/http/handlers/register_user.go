@@ -7,10 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	_time = 3600
-)
-
 func (g *GopherMartRoutes) RegisterUser(c *gin.Context) {
 	var request userRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -20,8 +16,7 @@ func (g *GopherMartRoutes) RegisterUser(c *gin.Context) {
 	err := g.u.RegisterUser(
 		c.Request.Context(),
 		entity.User{
-			Login: request.Login,
-			//Email:    request.Email,
+			Login:    request.Login,
 			Password: request.Password,
 		},
 	)
@@ -37,7 +32,6 @@ func (g *GopherMartRoutes) RegisterUser(c *gin.Context) {
 		Password: request.Password,
 	})
 	token, err := g.token.GenerateToken(user)
-
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err})
 		return

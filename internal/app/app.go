@@ -27,7 +27,7 @@ func Run(cfg *config.Config) {
 	}
 
 	// init db
-	initPostgres()
+	initPostgres(cfg.PG.URL)
 	a := middleware.NewAuthorizer(l)
 
 	// Repository
@@ -47,8 +47,7 @@ func Run(cfg *config.Config) {
 	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *gophermartUseCase)
 
 	// init pool
-	//order := accrual.NewOrderProcessor(cfg.Accrual.Accrual, 5, *gophermartUseCase, l)
-	accrual := NewPoolController(*gophermartUseCase,cfg.Accrual.Accrual, l)
+	accrual := NewPoolController(*gophermartUseCase, cfg.Accrual.Accrual, l)
 	startPool(accrual)
 
 	// HTTP Server
@@ -71,5 +70,4 @@ func Run(cfg *config.Config) {
 	if err = httpServer.Shutdown(); err != nil {
 		l.ErrorCtx(ctx, "app - Run - httpServer.Shutdown: %w", zap.Error(err))
 	}
-
 }

@@ -32,7 +32,7 @@ func (g *GopherMartRoutes) GetWithdrawals(c *gin.Context) {
 
 	userID, err := strconv.ParseUint(userIDStr, 10, 64)
 	if err != nil {
-		g.ErrorResponse(c, http.StatusInternalServerError, "ifailed to parse userID", err)
+		g.ErrorResponse(c, http.StatusInternalServerError, "failed to parse userID", err)
 		return
 	}
 
@@ -41,12 +41,6 @@ func (g *GopherMartRoutes) GetWithdrawals(c *gin.Context) {
 		g.ErrorResponse(c, http.StatusInternalServerError, "failed to get withdrawals", err)
 		return
 	}
-
-	// if len(withdrawals) == 0 {
-	// 	c.Header("Content-Type", "application/json")
-	// 	c.Status(http.StatusNoContent)
-	// 	return
-	// }
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, withdrawals)

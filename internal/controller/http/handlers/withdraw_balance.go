@@ -46,20 +46,17 @@ func (g *GopherMartRoutes) WithdrawBalance(c *gin.Context) {
 		CreatedAt:   time.Now(),
 	}
 
-	// Выполняем списание
 	err = g.u.WithdrawBalance(c.Request.Context(), withdrawal)
 	if err != nil {
 		switch {
-		// case errors.Is(err, entity.ErrUserDoesNotExist):
-		// 	r.ErrorResponse(c, http.StatusUnauthorized, "user does not exist", err) // 401 — пользователь не авторизован;
 		case errors.Is(err, entity.ErrInsufficientFunds):
-			g.ErrorResponse(c, http.StatusPaymentRequired, "insufficient funds", err) // 402 — на счету недостаточно средств;
+			g.ErrorResponse(c, http.StatusPaymentRequired, "insufficient funds", err)
 		case errors.Is(err, entity.ErrInvalidOrder):
-			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number", err) //422 — неверный номер заказа;
+			g.ErrorResponse(c, http.StatusUnprocessableEntity, "invalid order number", err)
 		case errors.Is(err, entity.ErrOrderExists):
-			g.ErrorResponse(c, http.StatusConflict, "order number already exists", err) //409 — заказ с таким номером уже существует;
+			g.ErrorResponse(c, http.StatusConflict, "order number already exists", err)
 		default:
-			g.ErrorResponse(c, http.StatusInternalServerError, "failed to withdraw balance", err) //500 — внутренняя ошибка сервера.
+			g.ErrorResponse(c, http.StatusInternalServerError, "failed to withdraw balance", err)
 		}
 		return
 	}
@@ -67,16 +64,14 @@ func (g *GopherMartRoutes) WithdrawBalance(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (r *GopherMartRoutes) isValidOrderNumber(number string) bool {
+func (g *GopherMartRoutes) isValidOrderNumber(number string) bool {
 	if len(number) < 5 || len(number) > 20 {
 		return false
 	}
-
 	for _, r := range number {
 		if r < '0' || r > '9' {
 			return false
 		}
 	}
-
 	return true
 }

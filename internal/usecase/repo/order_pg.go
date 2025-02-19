@@ -18,7 +18,6 @@ func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Or
 		ToSql()
 
 	if err != nil {
-
 		return g.logAndReturnError(ctx, "SetOrders - r.Builder", err)
 	}
 
@@ -52,7 +51,6 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 
 	var orders []entity.OrderResponse
 	for rows.Next() {
-
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
@@ -78,7 +76,7 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 	return orders, nil
 }
 
-func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (exists bool, existingUserID uint, err error) {
+func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (bool, uint, error) {
 	query := `
         SELECT user_id 
         FROM orders 
@@ -86,15 +84,15 @@ func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber st
         LIMIT 1
     `
 
-	err = g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&existingUserID)
+	var existingUserID uint
+	err := g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&existingUserID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return false, 0, g.logAndReturnError(ctx, "Order does not exist", err)
 		}
 		return false, 0, nil
 	}
-	exists = true
-	return exists, existingUserID, nil
+	return true, existingUserID, nil
 }
 
 func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error) {
@@ -121,10 +119,6 @@ func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber strin
 		&order.Accrual,
 		&order.UploadedAt,
 	)
-
-	// if errors.Is(err, pgx.ErrNoRows) {
-	// 	return order, nil
-	// }
 	if err != nil {
 		return nil, g.logAndReturnError(ctx, "GopherMartRepo - GetOrderByNumber - QueryRow", err)
 	}
@@ -162,19 +156,6 @@ func (g *GopherMartRepo) ValidateOrder(order entity.Order, userID uint) error {
 		return entity.ErrOrderExistsOtherUser
 	}
 
-	// exists, err := g.OrderExists(ctx, order.Number)
-	// if err != nil {
-	// 	g.Logger.ErrorCtx(ctx, "GopherMartRepo - ValidateOrder - FailedToCheckOrder")
-	// 	return entity.ErrFailedToCheckOrder
-	// }
-	// if exists { //user_id && order.UserID {
-	// 	g.Logger.ErrorCtx(ctx, order.Number+" order number already exists")
-	// 	return entity.ErrOrderExistsThisUser
-	// }
-	// if exists && order.UserID != user_id {
-	// 	g.Logger.ErrorCtx(ctx, order.Number+" order number already exists for other user")
-	// 	return entity.ErrOrderExistsOtherUser
-	// }
 	if !validateLuhn(order.Number) {
 		return entity.ErrInvalidOrder
 	}
@@ -182,6 +163,7 @@ func (g *GopherMartRepo) ValidateOrder(order entity.Order, userID uint) error {
 }
 
 func validateLuhn(number string) bool {
+	maxlen := 9
 	sum := 0
 	isSecond := false
 
@@ -190,8 +172,8 @@ func validateLuhn(number string) bool {
 
 		if isSecond {
 			d *= 2
-			if d > 9 {
-				d -= 9
+			if d > maxlen {
+				d -= maxlen
 			}
 		}
 

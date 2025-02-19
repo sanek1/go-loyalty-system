@@ -58,23 +58,10 @@ func (uc *UserUseCase) RegisterUser(ctx context.Context, u entity.User) error {
 }
 
 func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
-	if err := uc.repo.ValidateOrder(o,userID); err != nil {
+	if err := uc.repo.ValidateOrder(o, userID); err != nil {
 		uc.Logger.ErrorCtx(ctx, "Order validation failed: %w", zap.Error(err))
 		return err
 	}
-
-	// exists, existingUserID, err := uc.repo.CheckOrderExistence(ctx, o.Number, userID)
-	// if err != nil {
-	// 	uc.Logger.ErrorCtx(ctx, "Failed to check order: %w", zap.Error(err))
-	// 	return fmt.Errorf("failed to check order: %w", err)
-	// }
-
-	// if exists {
-	// 	if existingUserID == userID {
-	// 		return entity.ErrOrderExistsThisUser
-	// 	}
-	// 	return entity.ErrOrderExistsOtherUser
-	// }
 	o.StatusID = entity.OrderStatusNewID
 	o.CreatedAt = time.Now()
 	o.UploadedAt = time.Now()
@@ -82,7 +69,6 @@ func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Orde
 		uc.Logger.ErrorCtx(ctx, "Failed to create order: %w", zap.Error(err))
 		return fmt.Errorf("failed to create order: %w", err)
 	}
-
 	return nil
 }
 
@@ -115,41 +101,43 @@ func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity
 func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Withdrawal) error {
 	tx, err := uc.repo.BeginTx(ctx)
 	if err != nil {
-		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction: %w", zap.Error(err))
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction", zap.Error(err))
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
-	defer tx.Rollback(ctx)
-	// createOrder
-	err = uc.repo.SetOrders(ctx, withdrawal.UserID, entity.Order{Number: withdrawal.OrderNumber, StatusID: entity.OrderStatusNewID, CreatedAt: time.Now(), UploadedAt: time.Now()})
-	if err != nil {
-		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create order: %w", zap.Error(err))
+	defer func() {
+		_ = tx.Rollback(ctx)
+	}()
+
+	order := entity.Order{
+		Number:     withdrawal.OrderNumber,
+		StatusID:   entity.OrderStatusNewID,
+		CreatedAt:  time.Now(),
+		UploadedAt: time.Now(),
+	}
+
+	if err := uc.repo.SetOrders(ctx, withdrawal.UserID, order); err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create order", zap.Error(err))
 		return fmt.Errorf("failed to create order: %w", err)
 	}
 
-	order, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
+	newOrder, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
 	if err != nil {
-		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - get order: %w", zap.Error(err))
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - get order", zap.Error(err))
 		return fmt.Errorf("failed to get order: %w", err)
 	}
 
-	// создаем accrual
-	//if err := uc.repo.CreateAccrualTx(ctx, tx, order); err != nil {
-	//	return fmt.Errorf("failed to create accrual: %w", err)
-	//}
-
-	// Создаем запись о списании
-	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, order); err != nil {
-		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create withdrawal: %w", zap.Error(err))
+	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, newOrder); err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create withdrawal", zap.Error(err))
 		return fmt.Errorf("failed to create withdrawal: %w", err)
 	}
 
-	// Обновляем баланс
 	if err := uc.repo.UpdateBalanceTx(ctx, tx, withdrawal.UserID, withdrawal.Amount); err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - update balance", zap.Error(err))
 		return fmt.Errorf("failed to update balance: %w", err)
 	}
 
-	// Подтверждаем транзакцию
 	if err := tx.Commit(ctx); err != nil {
+		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - commit transaction", zap.Error(err))
 		return fmt.Errorf("failed to commit transaction: %w", err)
 	}
 
@@ -174,8 +162,7 @@ func (uc *UserUseCase) GetUnprocessedOrders(ctx context.Context) ([]string, erro
 	return orders, nil
 }
 
-func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error {
-	//get the order
+func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber, status string, accrual float32) error {
 	exist, err := uc.repo.ExistOrderAccrual(ctx, orderNumber)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "SetOrderStatus: %w", zap.Error(err))
@@ -189,5 +176,6 @@ func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber string, stat
 		uc.Logger.ErrorCtx(ctx, "SetOrderStatus: %w", zap.Error(err))
 		return fmt.Errorf("SetOrderStatus: %w", err)
 	}
+
 	return nil
 }

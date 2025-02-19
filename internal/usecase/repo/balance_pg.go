@@ -48,10 +48,9 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 		g.Logger.ErrorCtx(ctx, "GetBalanceTx - userID is zero", zap.Uint("userID", userID))
 		return nil, errors.New("user does not exist")
 	}
-	_, err := g.GetUserByID(ctx, entity.User{ID: userID})
+	_, err := g.GetUserByID(ctx, userID)
 	if err != nil {
-
-		g.logAndReturnError(ctx, "GetBalanceTx - GetUser", err)
+		_ = g.logAndReturnError(ctx, "GetBalanceTx - GetUser", err)
 		return nil, entity.ErrUserDoesNotExist
 	}
 
@@ -67,7 +66,7 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 	var balance entity.Balance
 	if err := row.Scan(&balance.Current, &balance.Withdrawn); err != nil {
 		if err == pgx.ErrNoRows {
-			g.logAndReturnError(ctx, "GopherMartRepo -GetBalance - QueryRow", err)
+			_ = g.logAndReturnError(ctx, "GopherMartRepo -GetBalance - QueryRow", err)
 			return nil, entity.ErrInsufficientFunds
 		}
 		return nil, fmt.Errorf("failed to scan balance: %w", err)
@@ -76,7 +75,6 @@ func (g *GopherMartRepo) GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uin
 	return &balance, nil
 }
 
-// CreateWithdrawalTx создает запись о списании в рамках транзакции
 func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error {
 	tx, err := g.pg.Pool.Begin(ctx)
 	if err != nil {
@@ -84,19 +82,8 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 		return err
 	}
 	defer tx.Rollback(ctx)
-
-	// Проверяем текущий баланс
 	var currentBalance float32
-	// balanceQuery := `
-	//     SELECT COALESCE(SUM(a.accrual), 0) - COALESCE(
-	//         (SELECT SUM(w.amount) FROM withdrawals WHERE user_id = $1),
-	//         0
-	//     )
-	//     FROM orders o
-	// 	left join withdrawals as w ON o.id = w.orders_id
-	// 	left join accrual as a ON w.id = a.withdrawals_id
-	//     WHERE o.user_id = $1 AND o.status_id = $2
-	// `
+
 	balanceQuery := `
         SELECT 
              current_balance -	withdrawn
@@ -114,7 +101,6 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 		return entity.ErrInsufficientFunds
 	}
 
-	// Создаем запись о списании
 	withdrawQuery := `
         INSERT INTO withdrawals (user_id, order_id, amount, created_at)
         VALUES ($1, $2, $3, $4)
@@ -160,28 +146,7 @@ func (g *GopherMartRepo) UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID 
 	return nil
 }
 
-// GetBalance получает баланс пользователя без транзакции
-// func (r *GopherMartRepo) GetBalance(ctx context.Context, userID uint) (*entity.Balance, error) {
-// 	const query = `
-//         SELECT current_balance, withdrawn
-//         FROM balance
-//         WHERE user_id = $1
-//     `
-
-// 	row := r.pool.QueryRow(ctx, query, userID)
-
-// 	var balance entity.Balance
-// 	if err := row.Scan(&balance.Current, &balance.Withdrawn); err != nil {
-// 		if err == pgx.ErrNoRows {
-// 			return nil, fmt.Errorf("balance not found for user %d: %w", userID, err)
-// 		}
-// 		return nil, fmt.Errorf("failed to scan balance: %w", err)
-// 	}
-
-// 	return &balance, nil
-// }
-
-// GetWithdrawals получает историю списаний пользователя
+// GetWithdrawals get history of withdrawals
 func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
 	const query = `
         SELECT w.id, w.user_id, o.number, w.amount, w.created_at
@@ -220,7 +185,7 @@ func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]ent
 	return withdrawals, nil
 }
 
-// CreateBalance создает новый баланс для пользователя
+// CreateBalance creates a new balance for the user
 func (g *GopherMartRepo) CreateBalance(ctx context.Context, userID uint) error {
 	const query = `
         INSERT INTO balance (user_id, current_balance, withdrawn)
@@ -236,8 +201,8 @@ func (g *GopherMartRepo) CreateBalance(ctx context.Context, userID uint) error {
 	return nil
 }
 
-// UpdateBalance обновляет баланс пользователя без транзакции
-func (r *GopherMartRepo) UpdateBalance(ctx context.Context, userID uint, amount float64) error {
+// UpdateBalance updated balance for the user
+func (g *GopherMartRepo) UpdateBalance(ctx context.Context, userID uint, amount float64) error {
 	const query = `
         UPDATE balance
         SET 
@@ -248,7 +213,7 @@ func (r *GopherMartRepo) UpdateBalance(ctx context.Context, userID uint, amount 
     `
 
 	var id uint
-	err := r.pool.QueryRow(ctx, query, amount, userID).Scan(&id)
+	err := g.pool.QueryRow(ctx, query, amount, userID).Scan(&id)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return fmt.Errorf("balance not found for user %d: %w", userID, err)

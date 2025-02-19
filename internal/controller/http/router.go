@@ -17,11 +17,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-//POST /api/user/register регистрация пользователя;
-//POST /api/user/login аутентификация пользователя
-//POST /api/user/orders загрузка пользователем номера заказа для расчёта
-//GET /api/user/orders получение списка загруженных пользователем номеров заказов, статусов их обработки и информации о начислениях
-
 type GopherMartRoutes struct {
 	cfg     *config.Config
 	handler *gin.Engine
@@ -30,24 +25,26 @@ type GopherMartRoutes struct {
 	a       *middleware.Authorizer
 }
 
-func NewRouter(handler *gin.Engine, usecase usecase.UserUseCase, config *config.Config, token *security.TokenModel, accrual *accrual.OrderAccrual, a *middleware.Authorizer, l *logging.ZapLogger) {
+func NewRouter(handler *gin.Engine, 
+	u usecase.UserUseCase, 
+	c *config.Config, 
+	token *security.TokenModel, 
+	ac *accrual.OrderAccrual, 
+	a *middleware.Authorizer, l *logging.ZapLogger) {
 	g := &GopherMartRoutes{
 		handler: handler,
-		cfg:     config,
+		cfg:     c,
 		token:   token,
 		l:       l,
 		a:       a,
 	}
-	h := handlers.NewHandler(handler, usecase, config, token, accrual, l)
+	h := handlers.NewHandler(handler, u, c, token, ac, l)
 	g.InitRouting(*h)
 }
 
 func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.Use(gin.Logger())
 	g.handler.Use(gin.Recovery())
-	//g.handler.Use(middleware.Authorize(g.cfg))
-	//g.handler.Use(middleware.Authenticate(g.u))
-
 	// Swagger
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
 	g.handler.GET("/swagger/*any", swaggerHandler)

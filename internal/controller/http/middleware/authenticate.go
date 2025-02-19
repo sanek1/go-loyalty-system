@@ -25,7 +25,6 @@ func Authenticate(u usecase.UserUseCase) gin.HandlerFunc {
 			Login:    username,
 			Password: password,
 		})
-
 		if err != nil || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
@@ -33,7 +32,6 @@ func Authenticate(u usecase.UserUseCase) gin.HandlerFunc {
 		}
 
 		c.Set("username", username)
-
 		c.Next()
 	}
 }

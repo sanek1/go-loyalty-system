@@ -29,23 +29,6 @@ type OrderAccrual struct {
 	mu         sync.Mutex
 }
 
-func NewOrderProcessor(baseURL string, numWorkers int, repo usecase.UserUseCase, l *logging.ZapLogger) *OrderAccrual {
-	ctx, cancel := context.WithCancel(context.Background())
-	return &OrderAccrual{
-		client: &http.Client{
-			Timeout: 10 * time.Second,
-		},
-		baseURL:    baseURL,
-		numWorkers: numWorkers,
-		ordersChan: make(chan string, 100),
-		logger:     l,
-		repo:       repo,
-		ctx:        ctx,
-		cancel:     cancel,
-		running:    false,
-	}
-}
-
 const (
 	defaultBufferSize = 100
 	defaultTimeout    = 10 * time.Second
@@ -55,6 +38,23 @@ const (
 	initialBackoff    = time.Second
 	maxBackoff        = 30 * time.Second
 )
+
+func NewOrderProcessor(baseURL string, numWorkers int, repo usecase.UserUseCase, l *logging.ZapLogger) *OrderAccrual {
+	ctx, cancel := context.WithCancel(context.Background())
+	return &OrderAccrual{
+		client: &http.Client{
+			Timeout: 10 * time.Second,
+		},
+		baseURL:    baseURL,
+		numWorkers: numWorkers,
+		ordersChan: make(chan string, defaultBufferSize),
+		logger:     l,
+		repo:       repo,
+		ctx:        ctx,
+		cancel:     cancel,
+		running:    false,
+	}
+}
 
 func (op *OrderAccrual) Start() {
 	op.mu.Lock()
@@ -146,7 +146,7 @@ func (op *OrderAccrual) worker(id int) {
 			}
 			op.processOrder(orderNumber)
 		case <-op.ctx.Done():
-			op.logger.InfoCtx(context.Background(), "worker stopped (context cancelled)", zap.Int("worker_id", id))
+			op.logger.InfoCtx(context.Background(), "worker stopped (context canceled)", zap.Int("worker_id", id))
 			return
 		}
 	}
@@ -161,7 +161,7 @@ func (op *OrderAccrual) handleProcessError(ctx context.Context, stage string, er
 }
 
 func (op *OrderAccrual) processOrder(orderNumber string) {
-	ctx, cancel := context.WithTimeout(op.ctx, 30*time.Second)
+	ctx, cancel := context.WithTimeout(op.ctx, processTimeout)
 	defer cancel()
 	op.logger.InfoCtx(ctx, "processing order", zap.String("order", orderNumber))
 
@@ -172,7 +172,7 @@ func (op *OrderAccrual) processOrder(orderNumber string) {
 	}
 
 	// Ждем некоторое время перед запросом результата
-	time.Sleep(time.Second * 10)
+	time.Sleep(defaultTimeout)
 
 	// Получаем результат обработки
 	accrualResp, err := op.getAccrualResult(ctx, orderNumber)
@@ -186,8 +186,7 @@ func (op *OrderAccrual) processOrder(orderNumber string) {
 		op.handleProcessError(ctx, "save accrual", err, orderNumber)
 		return
 	}
-	op.logger.InfoCtx(ctx, "processing result"+orderNumber+" "+accrualResp.Status+" "+fmt.Sprintf("%.2f", accrualResp.Accrual), zap.String("order", orderNumber))
-
+	op.logger.InfoCtx(ctx, "processing result", zap.String("order", orderNumber))
 	op.logger.InfoCtx(ctx, "order processed successfully",
 		zap.String("order", orderNumber),
 		zap.String("status", accrualResp.Status))
@@ -215,7 +214,7 @@ func (op *OrderAccrual) checkResponse(resp *http.Response) error {
 
 func (op *OrderAccrual) getAccrualResult(ctx context.Context, orderNumber string) (*entity.AccrualResponse, error) {
 	url := fmt.Sprintf("%s/api/orders/%s", op.baseURL, orderNumber)
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, http.NoBody)
 	if err != nil {
 		return nil, op.logAndReturnError(ctx, "failed to create request", err)
 	}
@@ -267,8 +266,6 @@ func (op *OrderAccrual) sendOrderData(ctx context.Context, orderNumber string) e
 	if err != nil {
 		return fmt.Errorf("marshal error: %w", err)
 	}
-
-	//url := fmt.Sprintf("%s/api/orders", op.baseURL)
 	op.logger.InfoCtx(ctx, "sending order data "+orderNumber, zap.String("order", orderNumber))
 	op.logger.InfoCtx(ctx, "order data", zap.String("order", string(jsonData)))
 	req, err := op.createRequest(ctx, "POST", "/api/orders", jsonData)
@@ -276,9 +273,6 @@ func (op *OrderAccrual) sendOrderData(ctx context.Context, orderNumber string) e
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-
-	//return op.doRequest(ctx, req, orderNumber)
-
 	resp, err := op.client.Do(req)
 	if err != nil {
 		return op.logAndReturnError(ctx, "sendOrderData - failed to send request", err)
@@ -286,33 +280,25 @@ func (op *OrderAccrual) sendOrderData(ctx context.Context, orderNumber string) e
 	defer resp.Body.Close()
 
 	switch resp.StatusCode {
-	//429
 	case http.StatusTooManyRequests:
 		return op.logAndReturnError(ctx, "sendOrderData - rate limit exceeded", nil)
-	//204
 	case http.StatusNoContent:
 		op.logger.InfoCtx(ctx, "order already registered")
 		return nil
-	//202
 	case http.StatusAccepted:
 		op.logger.InfoCtx(ctx, "The order has been successfully accepted for processing")
 		return nil
-	//409
 	case http.StatusConflict:
 		op.logger.InfoCtx(ctx, "The order is already processed")
 		return nil
-	//400
 	case http.StatusBadRequest:
 		return op.logAndReturnError(ctx, "sendOrderData - bad request", nil)
-	//500
 	case http.StatusInternalServerError:
 		return op.logAndReturnError(ctx, "sendOrderData - internal server error", nil)
 	}
-
 	if resp.StatusCode != http.StatusOK {
 		return op.logAndReturnError(ctx, "sendOrderData - unexpected status code -"+resp.Status, nil)
 	}
-
 	return nil
 }
 
@@ -353,7 +339,6 @@ func (op *OrderAccrual) collectUnprocessedOrders() {
 
 			op.checkUnprocessedOrders()
 			op.logger.InfoCtx(ctx, "⌛ No orders found...")
-
 		}
 	}
 }

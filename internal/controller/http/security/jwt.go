@@ -24,14 +24,6 @@ func NewJwtToken(key string, u usecase.UserUseCase) *TokenModel {
 	}
 }
 
-//	type Claims struct {
-//	    UserID uint   `json:"user_id"`
-//	    jwt.StandardClaims
-//	}
-const (
-	sessionTimeRedis = 5
-)
-
 func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 	tokenID := uuid.New()
 	claims := jwt.MapClaims{
@@ -44,7 +36,6 @@ func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
 	tokenString, err := token.SignedString([]byte(j.EncryptionKey))
 	if err != nil {
 		return "", err
@@ -54,12 +45,6 @@ func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	// Сохранение сессии в Redis
-	// ctx := context.Background()
-	// data, _ := json.Marshal(user)
-	// j.redis.Set(ctx, strconv.FormatUint(uint64(user.ID), 10), data, sessionTimeRedis*time.Minute)
-
 	return tokenString, nil
 }
 
@@ -70,7 +55,6 @@ func (j TokenModel) persistToken(user *entity.User, tokenID uuid.UUID) error {
 		ID:           tokenID,
 		UserID:       user.ID,
 	}
-
 	err := j.u.CreateToken(ctx, &tokenStruct)
 	return err
 }

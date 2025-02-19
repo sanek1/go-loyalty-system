@@ -29,14 +29,7 @@ func (g *GopherMartRepo) ExistOrderAccrual(ctx context.Context, orderNumber stri
 	return exists, nil
 }
 
-func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error {
-	// get order data by order number
-	// order,err:=g.GetOrderByNumber(ctx, orderNumber)
-	// if err != nil {
-	// 	g.Logger.ErrorCtx(ctx, "SaveAccrual: %w", zap.Error(err))
-	// 	return fmt.Errorf("SaveAccrual: %w", err)
-	// }
-
+func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber, status string, accrual float32) error {
 	query := `
         INSERT INTO accrual (order_id, status_id, accrual)
         VALUES (
@@ -64,16 +57,6 @@ func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber string, st
 	if err != nil {
 		return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  update orders", err)
 	}
-
-	// query = `
-	//     update balance
-	// 	set current_balance = current_balance + $2
-	// 	where user_id = (select user_id from orders where number = $1)
-	// `
-	// _, err = g.pg.Pool.Exec(ctx, query, orderNumber, accrual)
-	// if err != nil {
-	// 	return g.logAndReturnError(ctx, "GopherMartRepo -SaveAccrual -  update balance", err)
-	// }
 
 	query = `
         INSERT INTO balance (user_id, current_balance, withdrawn)

@@ -11,8 +11,8 @@ import (
 
 func NewPoolController(repo usecase.UserUseCase, address string, l *logging.ZapLogger) *accrual.OrderAccrual {
 	orderProcessor := accrual.NewOrderProcessor(
-		address,//"http://localhost:8081",
-		3, // количество воркеров
+		address,
+		3,
 		repo,
 		l,
 	)
