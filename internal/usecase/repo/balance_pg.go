@@ -81,7 +81,12 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 		g.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction", zap.Error(err))
 		return err
 	}
-	defer tx.Rollback(ctx)
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			g.Logger.ErrorCtx(ctx, "WithdrawBalance - rollback transaction", zap.Error(err))
+		}
+	}()
 	var currentBalance float32
 
 	balanceQuery := `

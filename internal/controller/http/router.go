@@ -25,11 +25,11 @@ type GopherMartRoutes struct {
 	a       *middleware.Authorizer
 }
 
-func NewRouter(handler *gin.Engine, 
-	u usecase.UserUseCase, 
-	c *config.Config, 
-	token *security.TokenModel, 
-	ac *accrual.OrderAccrual, 
+func NewRouter(handler *gin.Engine,
+	u usecase.UserUseCase,
+	c *config.Config,
+	token *security.TokenModel,
+	ac *accrual.OrderAccrual,
 	a *middleware.Authorizer, l *logging.ZapLogger) {
 	g := &GopherMartRoutes{
 		handler: handler,
@@ -45,7 +45,6 @@ func NewRouter(handler *gin.Engine,
 func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.Use(gin.Logger())
 	g.handler.Use(gin.Recovery())
-	// Swagger
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
 	g.handler.GET("/swagger/*any", swaggerHandler)
 	g.handler.GET("/ping", func(c *gin.Context) {
@@ -56,16 +55,15 @@ func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.GET("/api/GetUser", g.a.Authorize(g.cfg), h.GetUsers)
 
 	api := g.handler.Group("/api/user")
-	{
-		api.POST("/login", h.LoginUserHandler())
-		api.POST("/register", h.RegisterUser)
+	api.Use(g.a.Authorize(g.cfg))
+	api.POST("/login", h.LoginUserHandler())
+	api.POST("/register", h.RegisterUser)
 
-		api.POST("/orders", g.a.Authorize(g.cfg), h.SetOrdersHandler())
-		api.GET("/orders", g.a.Authorize(g.cfg), h.GetOrders)
+	api.POST("/orders", h.SetOrdersHandler())
+	api.GET("/orders", h.GetOrders)
 
-		api.GET("/balance", g.a.Authorize(g.cfg), h.GetUserBalance)
-		api.POST("/balance/withdraw", g.a.Authorize(g.cfg), h.WithdrawBalance)
+	api.GET("/balance", h.GetUserBalance)
+	api.POST("/balance/withdraw", h.WithdrawBalance)
 
-		api.GET("/withdrawals", g.a.Authorize(g.cfg), h.GetWithdrawalsHandler())
-	}
+	api.GET("/withdrawals", h.GetWithdrawalsHandler())
 }

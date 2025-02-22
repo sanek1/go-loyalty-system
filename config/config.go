@@ -3,10 +3,8 @@ package config
 import (
 	"context"
 	"flag"
-	"fmt"
 
 	"os"
-	"path/filepath"
 
 	"go-loyalty-system/pkg/logging"
 
@@ -63,20 +61,18 @@ func NewConfig() (*Config, error) {
 	flag.StringVar(&cfg.Jwt.EncryptionKey, "k", "", "Auth key")
 	flag.Parse()
 
-	executable, err := os.Executable()
+	currentDir, err := os.Getwd()
 	if err != nil {
-		logger.ErrorCtx(context.Background(), "Failed to get executable path: %w", zap.Error(err))
-		return nil, fmt.Errorf("failed to get executable path: %w", err)
+		logger.ErrorCtx(context.Background(), "Failed to get current directory: %w", zap.Error(err))
 	}
 
-	configPath := filepath.Join(filepath.Dir(executable), "../config/config.yaml")
-
-	err = cleanenv.ReadConfig(configPath, cfg)
+	err = cleanenv.ReadConfig(currentDir+"/config/config.yaml", cfg)
 	if err != nil {
-		logger.ErrorCtx(context.Background(), "Failed to read config file: %w"+configPath, zap.Error(err))
+		logger.ErrorCtx(context.Background(), "Failed to read config file: %w"+currentDir, zap.Error(err))
 		cfg.HTTP.Port = "8080"
 		cfg.PG.PoolMax = 10
 		cfg.Log.Level = "debug"
+		cfg.Accrual.Accrual = "http://localhost:8081"
 	}
 
 	if dbURI := os.Getenv("DATABASE_URI"); dbURI != "" {

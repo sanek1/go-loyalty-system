@@ -3,7 +3,7 @@ package handlers
 import (
 	"errors"
 	"go-loyalty-system/internal/entity"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -11,7 +11,7 @@ import (
 )
 
 func (g *GopherMartRoutes) SetOrders(c *gin.Context) {
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		g.ErrorResponse(c, http.StatusBadRequest, "invalid userId", err)
 		return

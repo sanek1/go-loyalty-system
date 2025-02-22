@@ -76,7 +76,9 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 	return orders, nil
 }
 
-func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (bool, uint, error) {
+func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context,
+	orderNumber string,
+	userID uint) (orderExists bool, existingUserID uint, err error) {
 	query := `
         SELECT user_id 
         FROM orders 
@@ -84,8 +86,7 @@ func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context, orderNumber st
         LIMIT 1
     `
 
-	var existingUserID uint
-	err := g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&existingUserID)
+	err = g.pg.Pool.QueryRow(ctx, query, orderNumber).Scan(&existingUserID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return false, 0, g.logAndReturnError(ctx, "Order does not exist", err)

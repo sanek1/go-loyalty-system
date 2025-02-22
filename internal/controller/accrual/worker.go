@@ -32,7 +32,7 @@ type OrderAccrual struct {
 const (
 	defaultBufferSize = 100
 	defaultTimeout    = 10 * time.Second
-	processTimeout    = 30 * time.Second
+	processTimeout    = 60 * time.Second
 	collectorInterval = 20 * time.Second
 	maxRetries        = 5
 	initialBackoff    = time.Second
