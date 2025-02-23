@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"flag"
+	"path/filepath"
 
 	"os"
 
@@ -65,8 +66,9 @@ func NewConfig() (*Config, error) {
 	if err != nil {
 		logger.ErrorCtx(context.Background(), "Failed to get current directory: %w", zap.Error(err))
 	}
+	dir1 := "/config.yaml"
 
-	err = cleanenv.ReadConfig(currentDir+"/config/config.yaml", cfg)
+	err = cleanenv.ReadConfig(filepath.Join(currentDir, dir1), cfg)
 	if err != nil {
 		logger.ErrorCtx(context.Background(), "Failed to read config file: %w"+currentDir, zap.Error(err))
 		cfg.HTTP.Port = "8080"
@@ -93,6 +95,9 @@ func NewConfig() (*Config, error) {
 
 	if cfg.HTTP.Address == "" {
 		cfg.HTTP.Address = ":8080"
+	}
+	if cfg.Accrual.Accrual == "" {
+		cfg.Accrual.Accrual = "http://accrual:8081"
 	}
 
 	if cfg.PG.PoolMax == 0 {

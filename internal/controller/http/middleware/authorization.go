@@ -47,7 +47,7 @@ func (a Authorizer) Authorize(cfg *config.Config) gin.HandlerFunc {
 		} else {
 			cookie, err := c.Cookie("token")
 			if err != nil {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "No authentication token provided"})
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "No authentication token provided" + err.Error()})
 				c.Abort()
 				return
 			}

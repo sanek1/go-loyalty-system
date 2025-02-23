@@ -57,6 +57,8 @@ func NewOrderProcessor(baseURL string, numWorkers int, repo usecase.UserUseCase,
 }
 
 func (op *OrderAccrual) Start() {
+	op.logger.InfoCtx(op.ctx, "service started")
+	op.logger.InfoCtx(op.ctx, "baseURL -> "+op.baseURL)
 	op.mu.Lock()
 	defer op.mu.Unlock()
 
@@ -167,7 +169,7 @@ func (op *OrderAccrual) processOrder(orderNumber string) {
 
 	// Сначала отправляем данные о заказе
 	if err := op.sendOrderData(ctx, orderNumber); err != nil {
-		op.handleProcessError(ctx, "send data", err, orderNumber)
+		op.handleProcessError(ctx, "send data ->"+err.Error(), err, orderNumber)
 		return
 	}
 
@@ -240,10 +242,12 @@ func (op *OrderAccrual) getAccrualResult(ctx context.Context, orderNumber string
 }
 
 func (op *OrderAccrual) createRequest(ctx context.Context, method, path string, body []byte) (*http.Request, error) {
+	op.logger.InfoCtx(ctx, "path->"+path)
 	op.logger.InfoCtx(ctx, "creating request"+op.baseURL+path)
 	req, err := http.NewRequestWithContext(ctx, method, op.baseURL+path, bytes.NewBuffer(body))
 	if err != nil {
-		return nil, fmt.Errorf("create request error: %w", err)
+		op.logger.ErrorCtx(ctx, "create request error", zap.Error(err))
+		return nil, err
 	}
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
@@ -264,12 +268,14 @@ func (op *OrderAccrual) sendOrderData(ctx context.Context, orderNumber string) e
 	}}
 	jsonData, err := json.Marshal(orderData)
 	if err != nil {
-		return fmt.Errorf("marshal error: %w", err)
+		op.logger.ErrorCtx(ctx, "marshal error", zap.Error(err))
+		return err
 	}
 	op.logger.InfoCtx(ctx, "sending order data "+orderNumber, zap.String("order", orderNumber))
 	op.logger.InfoCtx(ctx, "order data", zap.String("order", string(jsonData)))
 	req, err := op.createRequest(ctx, "POST", "/api/orders", jsonData)
 	if err != nil {
+		op.logger.ErrorCtx(ctx, "create request error ->"+err.Error(), zap.Error(err))
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")

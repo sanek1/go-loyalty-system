@@ -20,13 +20,9 @@ func NewPoolController(repo usecase.UserUseCase, address string, l *logging.ZapL
 }
 
 func startPool(orderProcessor *accrual.OrderAccrual) {
-	// Запускаем процессор
 	orderProcessor.Start()
-
-	// При завершении приложения
 	gracefulShutdown := make(chan os.Signal, 1)
 	signal.Notify(gracefulShutdown, syscall.SIGINT, syscall.SIGTERM)
-
 	go func() {
 		<-gracefulShutdown
 		orderProcessor.Stop()

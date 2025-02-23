@@ -9,7 +9,7 @@ type OrderStatusID int
 
 type Order struct {
 	ID           uint          `json:"ID"`
-	UserID       int           `json:"USER_ID"`
+	UserID       uint          `json:"USER_ID"`
 	StatusID     OrderStatusID `json:"StatusId"`
 	CreationDate string        `json:"CreationDate"`
 	Number       string        `json:"Number"`

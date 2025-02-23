@@ -102,7 +102,7 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 	tx, err := uc.repo.BeginTx(ctx)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction", zap.Error(err))
-		return fmt.Errorf("failed to begin transaction: %w", err)
+		return err
 	}
 	defer func() {
 		_ = tx.Rollback(ctx)
@@ -117,28 +117,28 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 
 	if err := uc.repo.SetOrders(ctx, withdrawal.UserID, order); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create order", zap.Error(err))
-		return fmt.Errorf("failed to create order: %w", err)
+		return err
 	}
 
 	newOrder, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - get order", zap.Error(err))
-		return fmt.Errorf("failed to get order: %w", err)
+		return err
 	}
 
 	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, newOrder); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create withdrawal", zap.Error(err))
-		return fmt.Errorf("failed to create withdrawal: %w", err)
+		return err
 	}
 
 	if err := uc.repo.UpdateBalanceTx(ctx, tx, withdrawal.UserID, withdrawal.Amount); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - update balance", zap.Error(err))
-		return fmt.Errorf("failed to update balance: %w", err)
+		return err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - commit transaction", zap.Error(err))
-		return fmt.Errorf("failed to commit transaction: %w", err)
+		return err
 	}
 
 	return nil

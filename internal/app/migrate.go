@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -28,16 +29,19 @@ func initPostgres(databaseURL string) {
 		return
 	}
 
-	log.Printf("Migrations path: %s", currentDir+"/migrations")
+	log.Printf("Migrations path: %s", currentDir)
+	dir1 := "../../migrations"
+	dir2 := "migrations"
 
 	for attempts > 0 {
-		m, err = migrate.New("file:"+currentDir, databaseURL)
+		m, err = migrate.New("file:"+filepath.Join(currentDir, dir1), databaseURL)
 		if err == nil {
 			break
 		}
 		if attempts < _countIterations {
-			currentDir = "/migrations"
+			currentDir = filepath.Join(currentDir, dir2)
 		}
+		log.Printf("Migrations path: %s", currentDir)
 
 		log.Printf("Migrate: postgres is trying to connect, attempts left: %d"+err.Error(), attempts)
 		time.Sleep(_defaultTimeout)
