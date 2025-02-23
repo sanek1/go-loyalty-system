@@ -4,7 +4,6 @@ import (
 	"errors"
 	"log"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -37,7 +36,7 @@ func initPostgres(databaseURL string) {
 			break
 		}
 		if attempts < _countIterations {
-			currentDir = filepath.Join(currentDir, "migrations")
+			currentDir = "/migrations"
 		}
 
 		log.Printf("Migrate: postgres is trying to connect, attempts left: %d"+err.Error(), attempts)
