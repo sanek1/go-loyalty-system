@@ -28,3 +28,4 @@ vendor/
 /internal/usecase/repo/accrual_pg_test.go
 /internal/usecase/repo/balance_pg_test.go
 /internal/usecase/repo/order_pg_test.go
+/dst1
