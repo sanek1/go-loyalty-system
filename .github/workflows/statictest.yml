@@ -1,28 +1,28 @@
 name: go vet test
 
 on:
-  workflow_dispatch:
   pull_request:
   push:
     branches:
+      - master
       - main
 
 jobs:
-
   statictest:
     runs-on: ubuntu-latest
-    container: golang:1.17
+    container: golang:1.22
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Download statictest binary
-        uses: robinraju/release-downloader@v1
+        uses: robinraju/release-downloader@v1.8
         with:
-          repository: Yandex-Practicum/go-autotests-bin
+          repository: Yandex-Practicum/go-autotests
           latest: true
           fileName: statictest
           out-file-path: .tools
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup autotest binary
         run: |
@@ -32,3 +32,7 @@ jobs:
       - name: Run statictest
         run: |
           go vet -vettool=$(which statictest) ./...
+
+      - name: Run test
+        run: |
+          go test ./... 
