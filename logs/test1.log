@@ -1,0 +1,83 @@
+=== RUN   TestGophermart
+=== RUN   TestGophermart/TestEndToEnd
+=== RUN   TestGophermart/TestEndToEnd/register_accrual_mechanic
+=== RUN   TestGophermart/TestEndToEnd/register_order_for_accrual
+=== RUN   TestGophermart/TestEndToEnd/register_user
+=== RUN   TestGophermart/TestEndToEnd/order_upload
+=== RUN   TestGophermart/TestEndToEnd/await_order_processed
+=== RUN   TestGophermart/TestEndToEnd/check_balance
+=== RUN   TestGophermart/TestEndToEnd/withdraw_balance
+=== RUN   TestGophermart/TestEndToEnd/recheck_balance
+=== RUN   TestGophermart/TestEndToEnd/check_withdrawals
+=== RUN   TestGophermart/TestUserAuth
+=== RUN   TestGophermart/TestUserAuth/register_user
+=== RUN   TestGophermart/TestUserAuth/login_user
+=== RUN   TestGophermart/TestUserOrders
+=== RUN   TestGophermart/TestUserOrders/unauthorized_order_upload
+=== RUN   TestGophermart/TestUserOrders/unauthorized_orders_list
+=== RUN   TestGophermart/TestUserOrders/register_user
+=== RUN   TestGophermart/TestUserOrders/bad_order_upload
+=== RUN   TestGophermart/TestUserOrders/order_upload
+=== RUN   TestGophermart/TestUserOrders/duplicate_order_upload_same_user
+=== RUN   TestGophermart/TestUserOrders/orders_list
+=== RUN   TestGophermart/TestUserOrders/duplicate_order_upload_other_user
+=== NAME  TestGophermart
+    gophermart_suite_test.go:105: останавливаем процесс gophermart
+    gophermart_suite_test.go:127: Процесс завершился с не нулевым статусом 1
+    gophermart_suite_test.go:140: Получен STDOUT лог процесса:
+        
+        {"level":"INFO","@timestamp":"23:27:33.150","caller":"config/config.go:111","message":"Starting server with parameters"}
+        2025/02/23 23:27:33 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:33 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:33 Migrate: postgres is trying to connect, attempts left: 20failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:34 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:34 Migrate: postgres is trying to connect, attempts left: 19failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:35 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:35 Migrate: postgres is trying to connect, attempts left: 18failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:36 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:36 Migrate: postgres is trying to connect, attempts left: 17failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:37 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:37 Migrate: postgres is trying to connect, attempts left: 16failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:38 Migrations path: C:\golang\yandex\go-loyalty-system
+        2025/02/23 23:27:38 Migrate: postgres is trying to connect, attempts left: 15failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:39 Migrations path: C:\golang\yandex\go-loyalty-system\migrations
+        2025/02/23 23:27:39 Migrate: postgres is trying to connect, attempts left: 14failed to open source, "file:C:\\golang\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:40 Migrations path: C:\golang\yandex\go-loyalty-system\migrations\migrations
+        2025/02/23 23:27:40 Migrate: postgres is trying to connect, attempts left: 13failed to open source, "file:C:\\golang\\yandex\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:41 Migrations path: C:\golang\yandex\go-loyalty-system\migrations\migrations\migrations
+        2025/02/23 23:27:41 Migrate: postgres is trying to connect, attempts left: 12failed to open database: pq: SSL is not enabled on the server
+        2025/02/23 23:27:42 Migrations path: C:\golang\yandex\go-loyalty-system\migrations\migrations\migrations\migrations
+        2025/02/23 23:27:42 Migrate: postgres is trying to connect, attempts left: 11failed to open source, "file:C:\\golang\\yandex\\go-loyalty-system\\migrations\\migrations": open .: The system cannot find the file specified.
+        2025/02/23 23:27:43 Migrations path: C:\golang\yandex\go-loyalty-system\migrations\migrations\migrations\migrations\migrations
+        2025/02/23 23:27:43 Migrate: postgres is trying to connect, attempts left: 10failed to open source, "file:C:\\golang\\yandex\\go-loyalty-system\\migrations\\migrations\\migrations": open .: The system cannot find the path specified.
+        2025/02/23 23:27:44 Migrations path: C:\golang\yandex\go-loyalty-system\migrations\migrations\migrations\migrations\migrations\migrations
+        2025/02/23 23:27:44 Migrate: postgres is trying to connect, attempts left: 9failed to open source, "file:C:\\golang\\yandex\\go-loyalty-system\\migrations\\migrations\\migrations\\migrations": open .: The system cannot find the path specified.
+    gophermart_suite_test.go:108: останавливаем процесс accrual
+    gophermart_suite_test.go:127: Процесс завершился с не нулевым статусом 1
+    gophermart_suite_test.go:140: Получен STDOUT лог процесса:
+        
+        {"level":"info","ts":1740342453.0464742,"caller":"accrual/main.go:52","msg":"starting HTTP server","addr":"localhost:8081"}
+--- PASS: TestGophermart (11.43s)
+    --- PASS: TestGophermart/TestEndToEnd (11.17s)
+        --- PASS: TestGophermart/TestEndToEnd/register_accrual_mechanic (0.02s)
+        --- PASS: TestGophermart/TestEndToEnd/register_order_for_accrual (0.00s)
+        --- PASS: TestGophermart/TestEndToEnd/register_user (0.07s)
+        --- PASS: TestGophermart/TestEndToEnd/order_upload (0.01s)
+        --- PASS: TestGophermart/TestEndToEnd/await_order_processed (11.00s)
+        --- PASS: TestGophermart/TestEndToEnd/check_balance (0.00s)
+        --- PASS: TestGophermart/TestEndToEnd/withdraw_balance (0.06s)
+        --- PASS: TestGophermart/TestEndToEnd/recheck_balance (0.00s)
+        --- PASS: TestGophermart/TestEndToEnd/check_withdrawals (0.00s)
+    --- PASS: TestGophermart/TestUserAuth (0.01s)
+        --- PASS: TestGophermart/TestUserAuth/register_user (0.01s)
+        --- PASS: TestGophermart/TestUserAuth/login_user (0.00s)
+    --- PASS: TestGophermart/TestUserOrders (0.02s)
+        --- PASS: TestGophermart/TestUserOrders/unauthorized_order_upload (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/unauthorized_orders_list (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/register_user (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/bad_order_upload (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/order_upload (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/duplicate_order_upload_same_user (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/orders_list (0.00s)
+        --- PASS: TestGophermart/TestUserOrders/duplicate_order_upload_other_user (0.00s)
+PASS
