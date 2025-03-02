@@ -15,7 +15,6 @@ type UserUseCase struct {
 	Logger *logging.ZapLogger
 }
 
-// New -.
 func NewGopherMart(r GopherMartRepo, l *logging.ZapLogger) *UserUseCase {
 	return &UserUseCase{
 		repo:   r,

@@ -31,8 +31,8 @@ func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 		"login":  user.Login,
 		"access": user.Access,
 		"id":     strconv.FormatUint(uint64(user.ID), 10),
-		"token":  tokenID,                          // PK utilized to query table 'tokens'
-		"exp":    time.Now().Add(time.Hour).Unix(), // Token expires in 1 hour
+		"token":  tokenID,
+		"exp":    time.Now().Add(time.Hour).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

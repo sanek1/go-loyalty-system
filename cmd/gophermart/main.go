@@ -21,5 +21,4 @@ func main() {
 	if err != nil {
 		log.Fatalf("Run error: %s", err)
 	}
-	
 }
