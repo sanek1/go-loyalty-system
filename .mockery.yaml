@@ -1,0 +1,15 @@
+with:
+  all: true
+  with-expecter: true
+packages:
+  go-loyalty-system/internal/usecase/repo:
+    config:
+      all: true
+      with-expecter: true
+    interfaces:
+      PgxPool:
+        config:
+          with-expecter: true
+      Postgres:
+        config:
+          with-expecter: true 

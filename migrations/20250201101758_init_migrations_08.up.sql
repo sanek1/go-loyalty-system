@@ -1,0 +1,9 @@
+
+CREATE table withdrawals (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  order_id INTEGER NOT NULL REFERENCES orders(id),
+  amount DECIMAL NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated VARCHAR(150) NULL
+);
