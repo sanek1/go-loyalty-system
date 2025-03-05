@@ -9,10 +9,14 @@ import (
 	"syscall"
 )
 
+const (
+	numWorkers = 5
+)
+
 func NewPoolController(repo usecase.UserUseCase, address string, l *logging.ZapLogger) *accrual.OrderAccrual {
 	orderProcessor := accrual.NewOrderProcessor(
 		address,
-		3,
+		numWorkers,
 		repo,
 		l,
 	)

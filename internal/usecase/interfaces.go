@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-loyalty-system/internal/entity"
 
+	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -46,4 +47,25 @@ type Repository interface {
 	SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error
 	GetUnprocessedOrders(ctx context.Context) ([]string, error)
 	ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error)
+}
+
+// PgxPool интерфейс для работы с пулом соединений PostgreSQL
+type PgxPool interface {
+	Exec(ctx context.Context, sql string, arguments ...interface{}) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...interface{}) pgx.Row
+	Close()
+}
+
+// Postgres интерфейс для работы с PostgreSQL
+type Postgres interface {
+	Close()
+	GetPool() PgxPool
+}
+
+// Rows интерфейс для работы с результатами запроса
+type Rows interface {
+	Next() bool
+	Scan(dest ...interface{}) error
+	Close()
 }

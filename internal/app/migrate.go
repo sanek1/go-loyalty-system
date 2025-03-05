@@ -31,19 +31,20 @@ func initPostgres(databaseURL string) {
 
 	log.Printf("Migrations path: %s", currentDir)
 	dir1 := "../../migrations"
-	dir2 := "migrations"
+	dir2 := "../migrations"
 
 	for attempts > 0 {
-		m, err = migrate.New("file:"+filepath.Join(currentDir, dir1), databaseURL)
+		currentDir = filepath.Join(currentDir, dir1)
+		m, err = migrate.New("file:"+currentDir, databaseURL)
 		if err == nil {
 			break
 		}
 		if attempts < _countIterations {
-			currentDir = filepath.Join(currentDir, dir2)
+			currentDir = dir2
 		}
 		log.Printf("Migrations path: %s", currentDir)
 
-		log.Printf("Migrate: postgres is trying to connect, attempts left: %d"+err.Error(), attempts)
+		log.Printf("Migrate: postgres is trying to connect, attempts left: %d", attempts)
 		time.Sleep(_defaultTimeout)
 		attempts--
 	}

@@ -19,7 +19,7 @@ services:
       - loyalty_network
 
   accrual:
-    image: ubuntu
+    image: ubuntu-latest
     container_name: accrual
     volumes:
       - .:/go/src/go-with-compose

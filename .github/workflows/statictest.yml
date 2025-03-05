@@ -6,6 +6,10 @@ on:
     branches:
       - master
       - main
+lint:
+  desc: Run linters using golangci-lint
+  cmds:
+    - golangci-lint run --config .golangci.yml
 
 jobs:
   statictest:
@@ -35,4 +39,5 @@ jobs:
 
       - name: Run test
         run: |
-          go test ./... 
+          go test -cover ./...  -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" 
+

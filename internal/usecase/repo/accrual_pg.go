@@ -9,53 +9,15 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	queryExistOrderAccrual = `
-        SELECT EXISTS (
-            SELECT 1 
-            FROM accrual a
-            JOIN orders o ON o.id = a.order_id 
-            WHERE o.number = $1
-        )`
-
-	queryInsertAccrual = `
-        WITH order_data AS (
-            SELECT id, user_id 
-            FROM orders 
-            WHERE number = $1
-        )
-        INSERT INTO accrual (order_id, status_id, accrual)
-        SELECT 
-            od.id,
-            (SELECT id FROM accrual_statuses WHERE status = $2),
-            $3
-        FROM order_data od
-        RETURNING order_id`
-
-	queryUpdateOrderStatus = `
-        UPDATE orders
-        SET status_id = (SELECT id FROM statuses WHERE status = $2)
-        WHERE number = $1`
-
-	queryInsertBalance = `
-        INSERT INTO balance (user_id, current_balance, withdrawn)
-        SELECT user_id, $2, 0
-        FROM orders
-        WHERE number = $1`
-
-	queryUnprocessedOrders = `
-        SELECT o.number
-        FROM orders o
-        LEFT JOIN accrual a ON a.order_id = o.id
-        LEFT JOIN accrual_statuses s ON a.status_id = s.id
-        WHERE a.id IS NULL
-           OR s.status NOT IN ('PROCESSED', 'INVALID')
-        ORDER BY o.uploaded_at ASC`
-)
-
 // ExistOrderAccrual проверяет существование начисления для заказа
 func (g *GopherMartRepo) ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error) {
 	var exists bool
+	const queryExistOrderAccrual = `
+	SELECT EXISTS (
+		SELECT 1 
+		FROM accrual a
+		JOIN orders o ON o.id = a.order_id 
+		WHERE o.number = $1 )`
 	err := g.pg.Pool.QueryRow(ctx, queryExistOrderAccrual, orderNumber).Scan(&exists)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -78,17 +40,39 @@ func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber, status st
 
 	// Вставляем начисление
 	var orderID int
+	const queryInsertAccrual = `
+	WITH order_data AS (
+		SELECT id, user_id 
+		FROM orders 
+		WHERE number = $1
+	)
+	INSERT INTO accrual (order_id, status_id, accrual)
+	SELECT 
+		od.id,
+		(SELECT id FROM accrual_statuses WHERE status = $2),
+		$3
+	FROM order_data od
+	RETURNING order_id`
 	err = tx.QueryRow(ctx, queryInsertAccrual, orderNumber, status, accrual).Scan(&orderID)
 	if err != nil {
 		return g.logAndReturnError(ctx, "SaveAccrual - insert accrual", err)
 	}
 
+	const queryUpdateOrderStatus = `
+	UPDATE orders
+	SET status_id = (SELECT id FROM statuses WHERE status = $2)
+	WHERE number = $1`
 	// Обновляем статус заказа
 	_, err = tx.Exec(ctx, queryUpdateOrderStatus, orderNumber, status)
 	if err != nil {
 		return g.logAndReturnError(ctx, "SaveAccrual - update order status", err)
 	}
 
+	const queryInsertBalance = `
+	INSERT INTO balance (user_id, current_balance, withdrawn)
+	SELECT user_id, $2, 0
+	FROM orders
+	WHERE number = $1`
 	// Обновляем баланс пользователя
 	_, err = tx.Exec(ctx, queryInsertBalance, orderNumber, accrual)
 	if err != nil {
@@ -109,6 +93,14 @@ func (g *GopherMartRepo) SaveAccrual(ctx context.Context, orderNumber, status st
 
 // GetUnprocessedOrders возвращает список необработанных заказов
 func (g *GopherMartRepo) GetUnprocessedOrders(ctx context.Context) ([]string, error) {
+	const queryUnprocessedOrders = `
+        SELECT o.number
+        FROM orders o
+        LEFT JOIN accrual a ON a.order_id = o.id
+        LEFT JOIN accrual_statuses s ON a.status_id = s.id
+        WHERE a.id IS NULL
+           OR s.status NOT IN ('PROCESSED', 'INVALID')
+        ORDER BY o.uploaded_at ASC`
 	rows, err := g.pg.Pool.Query(ctx, queryUnprocessedOrders)
 	if err != nil {
 		return nil, g.logAndReturnError(ctx, "GetUnprocessedOrders - query unprocessed orders", err)

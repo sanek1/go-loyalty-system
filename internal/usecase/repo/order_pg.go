@@ -9,8 +9,20 @@ import (
 	"github.com/jackc/pgx"
 )
 
-const (
-	queryUserOrders = `
+func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
+	const querySetOrders = `
+	INSERT INTO orders (user_id, status_id, creation_date, uploaded_at, number) 
+	VALUES ($1, $2, $3, $4, $5)
+	`
+	_, err := g.pool.Exec(ctx, querySetOrders, userID, entity.OrderStatusNewID, o.CreatedAt, o.UploadedAt, o.Number)
+	if err != nil {
+		return g.logAndReturnError(ctx, "SetOrders - Exec", err)
+	}
+	return nil
+}
+
+func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
+	const queryUserOrders = `
 	SELECT 
 		CAST(o.number AS TEXT) as number,
 		s.status,
@@ -22,46 +34,6 @@ const (
 	WHERE o.user_id = $1
 	ORDER BY uploaded_at DESC
 	`
-	queryCheckOrderExist = `
-		SELECT user_id 
-		FROM orders 
-		WHERE number = $1 
-		LIMIT 1
-	`
-	queryGetOrderByNumber = `
-	SELECT 
-		o.id,
-		CAST(o.number AS TEXT) as number,
-		s.status,
-		COALESCE(a.accrual, 0) as accrual,
-		o.uploaded_at
-	FROM orders as o
-	left join statuses as s ON o.status_id = s.id 
-	left join accrual as a ON o.id = a.order_id 
-	WHERE o.number = $1
-	`
-	queryOrderExists = `
-	SELECT EXISTS (
-	SELECT 1 
-	FROM orders 
-	WHERE number = $1
-	)
-	`
-	querySetOrders = `
-	INSERT INTO orders (user_id, status_id, creation_date, uploaded_at, number) 
-	VALUES ($1, $2, $3, $4, $5)
-	`
-)
-
-func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
-	_, err := g.pool.Exec(ctx, querySetOrders, userID, entity.OrderStatusNewID, o.CreatedAt, o.UploadedAt, o.Number)
-	if err != nil {
-		return g.logAndReturnError(ctx, "SetOrders - Exec", err)
-	}
-	return nil
-}
-
-func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
 	rows, err := g.pg.Pool.Query(ctx, queryUserOrders, userID)
 	if err != nil {
 		return nil, g.logAndReturnError(ctx, "GetUserOrders - Query", err)
@@ -97,6 +69,12 @@ func (g *GopherMartRepo) GetUserOrders(ctx context.Context, userID uint) ([]enti
 func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context,
 	orderNumber string,
 	userID uint) (orderExists bool, existingUserID uint, err error) {
+	const queryCheckOrderExist = `
+		SELECT user_id 
+		FROM orders 
+		WHERE number = $1 
+		LIMIT 1
+	`
 	err = g.pg.Pool.QueryRow(ctx, queryCheckOrderExist, orderNumber).Scan(&existingUserID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
@@ -108,6 +86,18 @@ func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context,
 }
 
 func (g *GopherMartRepo) GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error) {
+	const queryGetOrderByNumber = `
+	SELECT 
+		o.id,
+		CAST(o.number AS TEXT) as number,
+		s.status,
+		COALESCE(a.accrual, 0) as accrual,
+		o.uploaded_at
+	FROM orders as o
+	left join statuses as s ON o.status_id = s.id 
+	left join accrual as a ON o.id = a.order_id 
+	WHERE o.number = $1
+	`
 	row := g.pg.Pool.QueryRow(ctx, queryGetOrderByNumber, orderNumber)
 	order := &entity.OrderResponse{}
 	err := row.Scan(
@@ -183,6 +173,11 @@ func validateLuhn(number string) bool {
 
 func (g *GopherMartRepo) OrderExists(ctx context.Context, orderNumber string) (bool, error) {
 	var exists bool
+	const queryOrderExists = `
+	SELECT EXISTS (
+	SELECT 1 
+	FROM orders 
+	WHERE number = $1)`
 	err := g.pg.Pool.QueryRow(ctx, queryOrderExists, orderNumber).Scan(&exists)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
