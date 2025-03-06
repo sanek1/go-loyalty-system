@@ -6,7 +6,7 @@ import (
 	"go-loyalty-system/pkg/logging"
 	"net/http"
 
-	_ "go-loyalty-system/cmd/gophermart/docs"
+	_ "go-loyalty-system/docs"
 	"go-loyalty-system/internal/controller/accrual"
 	"go-loyalty-system/internal/controller/http/handlers"
 	"go-loyalty-system/internal/controller/http/middleware"
@@ -42,6 +42,25 @@ func NewRouter(handler *gin.Engine,
 	g.InitRouting(*h)
 }
 
+// @title           Swagger Example API
+// @version         1.0
+// @description     This is a sample server celler server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/api
+
+// @securityDefinitions.basic  BasicAuth
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func (g GopherMartRoutes) InitRouting(h handlers.GopherMartRoutes) {
 	g.handler.Use(gin.Logger())
 	g.handler.Use(gin.Recovery())

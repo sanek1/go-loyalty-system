@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"go-loyalty-system/config"
+	_ "go-loyalty-system/docs"
 	"go-loyalty-system/internal/app"
 	"log"
 )

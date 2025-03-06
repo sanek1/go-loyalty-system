@@ -1,0 +1,233 @@
+basePath: /api/api
+definitions:
+  entity.Balance:
+    properties:
+      current:
+        type: number
+      withdrawn:
+        type: number
+    type: object
+  entity.OrderResponse:
+    properties:
+      accrual:
+        type: number
+      id:
+        type: integer
+      number:
+        type: string
+      status:
+        type: string
+      uploaded_at:
+        type: string
+    type: object
+  entity.WithdrawalRequest:
+    properties:
+      order:
+        type: string
+      sum:
+        type: number
+    type: object
+  entity.WithdrawalResponse:
+    properties:
+      order:
+        type: string
+      processed_at:
+        type: string
+      sum:
+        type: number
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      error:
+        example: invalid request format
+        type: string
+    type: object
+  handlers.UserRegistrationRequest:
+    properties:
+      login:
+        example: user123
+        type: string
+      password:
+        example: securepassword
+        type: string
+    type: object
+  handlers.UserResponse:
+    properties:
+      error:
+        example: invalid request format
+        type: string
+    type: object
+  handlers.response:
+    properties:
+      error:
+        example: message
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /api/user/balance:
+    get:
+      consumes:
+      - application/json
+      description: Get current balance and total withdrawn amount for authorized user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Balance'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.response'
+      summary: Get user balance
+      tags:
+      - balance
+  /api/user/balance/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw points from user balance
+      parameters:
+      - description: Withdrawal request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/entity.WithdrawalRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful withdrawal
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "402":
+          description: Insufficient funds
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "422":
+          description: Invalid order number
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Withdraw balance
+      tags:
+      - balance
+  /api/user/orders:
+    get:
+      consumes:
+      - application/json
+      description: Get list of user orders sorted by upload time
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.OrderResponse'
+            type: array
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get user orders
+      tags:
+      - orders
+  /api/user/withdrawals:
+    get:
+      consumes:
+      - application/json
+      description: Get list of user withdrawals sorted by processed time
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.WithdrawalResponse'
+            type: array
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Get user withdrawals
+      tags:
+      - withdrawals
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Регистрирует нового пользователя в системе
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserRegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно зарегистрирован
+          schema:
+            $ref: '#/definitions/handlers.UserResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "409":
+          description: Пользователь уже существует
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      summary: Регистрация пользователя
+      tags:
+      - users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

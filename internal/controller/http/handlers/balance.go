@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUserBalance godoc
 // @Summary Get user balance
 // @Description Get current balance and total withdrawn amount for authorized user
 // @Tags balance

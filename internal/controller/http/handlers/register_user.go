@@ -6,7 +6,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
+// @Summary Регистрация пользователя
+// @Description Регистрирует нового пользователя в системе
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param request body UserRegistrationRequest true "Данные для регистрации"
+// @Success 200 {object} UserResponse "Пользователь успешно зарегистрирован"
+// @Failure 400 {object} ErrorResponse "Неверный формат запроса"
+// @Failure 409 {object} ErrorResponse "Пользователь уже существует"
+// @Failure 500 {object} ErrorResponse "Внутренняя ошибка сервера"
+// @Router /user/register [post]
 func (g *GopherMartRoutes) RegisterUser(c *gin.Context) {
 	var request userRequest
 	if err := c.ShouldBindJSON(&request); err != nil {

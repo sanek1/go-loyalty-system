@@ -216,7 +216,6 @@ func (op *OrderAccrual) processOrderResult(orderNumber string) {
 				return
 			}
 		} else {
-			// Другая ошибка, не связанная с обработкой
 			op.handleProcessError(ctx, "get result failed", err, orderNumber)
 			return
 		}
@@ -237,34 +236,6 @@ func (op *OrderAccrual) processOrderResult(orderNumber string) {
 		zap.String("order", orderNumber),
 		zap.String("status", accrualResp.Status))
 }
-
-// func (op *OrderAccrual) processOrder(orderNumber string) {
-// 	ctx, cancel := context.WithTimeout(op.ctx, processTimeout)
-// 	defer cancel()
-// 	op.logger.InfoCtx(ctx, "processing order", zap.String("order", orderNumber))
-
-// 	// Сначала отправляем данные о заказе
-// 	if err := op.sendOrderData(ctx, orderNumber); err != nil {
-// 		op.handleProcessError(ctx, "send data ->"+err.Error(), err, orderNumber)
-// 		return
-// 	}
-// 	// Получаем результат обработки
-// 	accrualResp, err := op.getAccrualResult(ctx, orderNumber)
-// 	if err != nil {
-// 		op.handleProcessError(ctx, "get result", err, orderNumber)
-// 		return
-// 	}
-
-// 	// Сохраняем результат в базу
-// 	if err := op.repo.SaveAccrual(ctx, orderNumber, accrualResp.Status, accrualResp.Accrual); err != nil {
-// 		op.handleProcessError(ctx, "save accrual", err, orderNumber)
-// 		return
-// 	}
-// 	op.logger.InfoCtx(ctx, "processing result", zap.String("order", orderNumber))
-// 	op.logger.InfoCtx(ctx, "order processed successfully",
-// 		zap.String("order", orderNumber),
-// 		zap.String("status", accrualResp.Status))
-// }
 
 func (op *OrderAccrual) checkResponse(resp *http.Response) error {
 	ctx := context.Background()

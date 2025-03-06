@@ -50,3 +50,18 @@ func NewHandler(handler *gin.Engine,
 		accrual: oa,
 	}
 }
+
+// UserRegistrationRequest модель запроса регистрации пользователя
+type UserRegistrationRequest struct {
+	Login    string `json:"login" example:"user123"`
+	Password string `json:"password" example:"securepassword"`
+}
+
+// ErrorResponse модель ответа с ошибкой
+type ErrorResponse struct {
+	Error string `json:"error" example:"invalid request format"`
+}
+
+type UserResponse struct {
+	Error string `json:"error" example:"invalid request format"`
+}
