@@ -9,7 +9,7 @@ DB_PASSWORD=${POSTGRES_PASSWORD:-admin}
 DB_NAME=${POSTGRES_DB:-admin}
 
 echo "Waiting for PostgreSQL..."
-until pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -f ./migrations/20250201101751_init_migrations.up.sql; do
+until pg_isready -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}; do
     echo "PostgreSQL is unavailable - sleeping"
     sleep 1
 done
@@ -35,6 +35,6 @@ fi
 
 # Запуск основного приложения
 exec ./gophermart \
-    -a ":${GOPHERMART_PORT:-8080}" \
+    -a ":${MARKET_PORT}" \
     -d "postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable" \
-    -r "http://localhost:${ACCRUAL_PORT:-8081}"
+    -r "${ACCRUAL_SYSTEM_ADDRESS}"
