@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go-loyalty-system/internal/entity"
+	"go-loyalty-system/internal/usecase/repo"
 	"go-loyalty-system/pkg/logging"
 	"time"
 
@@ -11,19 +12,30 @@ import (
 )
 
 type UserUseCase struct {
-	repo   GopherMartRepo
-	Logger *logging.ZapLogger
+	accrual repo.Repository
+	balance repo.BalanceUseCase
+	order   repo.OrderUseCase
+	user    repo.AuthUseCase
+	Logger  *logging.ZapLogger
 }
 
-func NewGopherMart(r GopherMartRepo, l *logging.ZapLogger) *UserUseCase {
+func NewGopherMart(
+	a repo.Repository,
+	b repo.BalanceUseCase,
+	o repo.OrderUseCase,
+	u repo.AuthUseCase,
+	l *logging.ZapLogger) *UserUseCase {
 	return &UserUseCase{
-		repo:   r,
-		Logger: l,
+		balance: b,
+		user:    u,
+		order:   o,
+		accrual: a,
+		Logger:  l,
 	}
 }
 
 func (uc *UserUseCase) GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error) {
-	user, err := uc.repo.GetUserByEmail(ctx, u)
+	user, err := uc.user.GetUserByEmail(ctx, u)
 	if err != nil {
 		return nil, fmt.Errorf("GopherMartUseCase - GetUserByEmail: %w", err)
 	}
@@ -32,7 +44,7 @@ func (uc *UserUseCase) GetUserByEmail(ctx context.Context, u entity.User) (*enti
 }
 
 func (uc *UserUseCase) GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error) {
-	user, err := uc.repo.GetUserByLogin(ctx, u)
+	user, err := uc.user.GetUserByLogin(ctx, u)
 	if err != nil {
 		return nil, fmt.Errorf("GopherMartUseCase - GetUserByEmail: %w", err)
 	}
@@ -41,7 +53,7 @@ func (uc *UserUseCase) GetUserByLogin(ctx context.Context, u entity.User) (*enti
 }
 
 func (uc *UserUseCase) GetUsers(ctx context.Context) ([]entity.User, error) {
-	users, err := uc.repo.GetUsers(ctx)
+	users, err := uc.user.GetUsers(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("GopherMartUseCase - GetUsers: %w", err)
 	}
@@ -50,21 +62,21 @@ func (uc *UserUseCase) GetUsers(ctx context.Context) ([]entity.User, error) {
 }
 
 func (uc *UserUseCase) RegisterUser(ctx context.Context, u entity.User) error {
-	if err := uc.repo.RegisterUser(ctx, u); err != nil {
+	if err := uc.user.RegisterUser(ctx, u); err != nil {
 		return fmt.Errorf("GopherMartUseCase - RegisterUser: %w", err)
 	}
 	return nil
 }
 
 func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
-	if err := uc.repo.ValidateOrder(o, userID); err != nil {
-		uc.Logger.ErrorCtx(ctx, "Order validation failed: %w", zap.Error(err))
+	if err := uc.order.ValidateOrder(o, userID); err != nil {
+		uc.Logger.ErrorCtx(ctx, "Order validation failed: %w"+err.Error(), zap.Error(err))
 		return err
 	}
 	o.StatusID = entity.OrderStatusNewID
 	o.CreatedAt = time.Now()
 	o.UploadedAt = time.Now()
-	if err := uc.repo.SetOrders(ctx, userID, o); err != nil {
+	if err := uc.order.SetOrders(ctx, userID, o); err != nil {
 		uc.Logger.ErrorCtx(ctx, "Failed to create order: %w", zap.Error(err))
 		return fmt.Errorf("failed to create order: %w", err)
 	}
@@ -72,14 +84,14 @@ func (uc *UserUseCase) SetOrders(ctx context.Context, userID uint, o entity.Orde
 }
 
 func (uc *UserUseCase) CreateToken(ctx context.Context, t *entity.Token) error {
-	if err := uc.repo.CreateToken(ctx, t); err != nil {
+	if err := uc.user.CreateToken(ctx, t); err != nil {
 		return fmt.Errorf("GopherMartUseCase - CreateToken: %w", err)
 	}
 	return nil
 }
 
 func (uc *UserUseCase) GetUserBalance(ctx context.Context, userID string) (*entity.Balance, error) {
-	return uc.repo.GetBalance(ctx, userID)
+	return uc.balance.GetBalance(ctx, userID)
 }
 
 func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error) {
@@ -89,7 +101,7 @@ func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity
 	default:
 	}
 
-	orders, err := uc.repo.GetUserOrders(ctx, userID)
+	orders, err := uc.order.GetUserOrders(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("GetUserOrders: %w", err)
 	}
@@ -98,7 +110,7 @@ func (uc *UserUseCase) GetUserOrders(ctx context.Context, userID uint) ([]entity
 }
 
 func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Withdrawal) error {
-	tx, err := uc.repo.BeginTx(ctx)
+	tx, err := uc.balance.BeginTx(ctx)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - begin transaction", zap.Error(err))
 		return err
@@ -114,23 +126,23 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 		UploadedAt: time.Now(),
 	}
 
-	if err := uc.repo.SetOrders(ctx, withdrawal.UserID, order); err != nil {
+	if err := uc.order.SetOrders(ctx, withdrawal.UserID, order); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create order", zap.Error(err))
 		return err
 	}
 
-	newOrder, err := uc.repo.GetOrderByNumber(ctx, withdrawal.OrderNumber)
+	newOrder, err := uc.order.GetOrderByNumber(ctx, withdrawal.OrderNumber)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - get order", zap.Error(err))
 		return err
 	}
 
-	if err := uc.repo.CreateWithdrawalTx(ctx, withdrawal, newOrder); err != nil {
+	if err := uc.balance.CreateWithdrawalTx(ctx, withdrawal, newOrder); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - create withdrawal", zap.Error(err))
 		return err
 	}
 
-	if err := uc.repo.UpdateBalanceTx(ctx, tx, withdrawal.UserID, withdrawal.Amount); err != nil {
+	if err := uc.balance.UpdateBalanceTx(ctx, tx, withdrawal.UserID, withdrawal.Amount); err != nil {
 		uc.Logger.ErrorCtx(ctx, "WithdrawBalance - update balance", zap.Error(err))
 		return err
 	}
@@ -144,7 +156,7 @@ func (uc *UserUseCase) WithdrawBalance(ctx context.Context, withdrawal entity.Wi
 }
 
 func (uc *UserUseCase) GetUserWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
-	withdrawals, err := uc.repo.GetWithdrawals(ctx, userID)
+	withdrawals, err := uc.balance.GetUserWithdrawals(ctx, userID)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "GetUserWithdrawals: %w", zap.Error(err))
 		return nil, fmt.Errorf("GetUserWithdrawals: %w", err)
@@ -153,7 +165,7 @@ func (uc *UserUseCase) GetUserWithdrawals(ctx context.Context, userID uint) ([]e
 }
 
 func (uc *UserUseCase) GetUnprocessedOrders(ctx context.Context) ([]string, error) {
-	orders, err := uc.repo.GetUnprocessedOrders(ctx)
+	orders, err := uc.accrual.GetUnprocessedOrders(ctx)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "GetUnprocessedOrders: %w", zap.Error(err))
 		return nil, fmt.Errorf("GetUnprocessedOrders: %w", err)
@@ -162,7 +174,7 @@ func (uc *UserUseCase) GetUnprocessedOrders(ctx context.Context) ([]string, erro
 }
 
 func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber, status string, accrual float32) error {
-	exist, err := uc.repo.ExistOrderAccrual(ctx, orderNumber)
+	exist, err := uc.accrual.ExistOrderAccrual(ctx, orderNumber)
 	if err != nil {
 		uc.Logger.ErrorCtx(ctx, "SetOrderStatus: %w", zap.Error(err))
 		return fmt.Errorf("SetOrderStatus: %w", err)
@@ -171,7 +183,7 @@ func (uc *UserUseCase) SaveAccrual(ctx context.Context, orderNumber, status stri
 		return nil
 	}
 
-	if err := uc.repo.SaveAccrual(ctx, orderNumber, status, accrual); err != nil {
+	if err := uc.accrual.SaveAccrual(ctx, orderNumber, status, accrual); err != nil {
 		uc.Logger.ErrorCtx(ctx, "SetOrderStatus: %w", zap.Error(err))
 		return fmt.Errorf("SetOrderStatus: %w", err)
 	}

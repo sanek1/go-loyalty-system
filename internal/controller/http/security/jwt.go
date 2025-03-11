@@ -41,14 +41,14 @@ func (j TokenModel) GenerateToken(user *entity.User) (string, error) {
 		return "", err
 	}
 
-	err = j.persistToken(user, tokenID)
+	err = j.PersistToken(user, tokenID)
 	if err != nil {
 		return "", err
 	}
 	return tokenString, nil
 }
 
-func (j TokenModel) persistToken(user *entity.User, tokenID uuid.UUID) error {
+func (j TokenModel) PersistToken(user *entity.User, tokenID uuid.UUID) error {
 	ctx := context.Background()
 	tokenStruct := entity.Token{
 		CreationDate: time.Now(),

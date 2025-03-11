@@ -5,10 +5,32 @@ import (
 	"errors"
 	"fmt"
 	"go-loyalty-system/internal/entity"
+	"go-loyalty-system/pkg/logging"
+	"go-loyalty-system/pkg/postgres"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
+
+//go:generate mockgen -source=balance_pg.go -destination=./mocks/mock_balance.go -package=mocks
+type BalanceUseCase interface {
+	GetBalance(ctx context.Context, userID string) (*entity.Balance, error)
+	GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error)
+	GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uint) (*entity.Balance, error)
+	CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error
+	GetUserWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error)
+	BeginTx(ctx context.Context) (pgx.Tx, error)
+	UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error
+}
+
+func NewBalanceRepository(pg *postgres.Postgres, l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
+	return &GopherMartRepo{
+		pg:     pg,
+		Logger: l,
+		pool:   pool,
+	}
+}
 
 // GetBalance возвращает баланс пользователя
 func (g *GopherMartRepo) GetBalance(ctx context.Context, userID string) (*entity.Balance, error) {
@@ -79,7 +101,7 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 	WHERE user_id = $1`
 	err = tx.QueryRow(ctx, queryCheckBalance, withdrawal.UserID).Scan(&currentBalance)
 	if err != nil {
-		g.Logger.ErrorCtx(ctx, "WithdrawBalance - check balance", zap.Error(err))
+		g.Logger.ErrorCtx(ctx, "WithdrawBalance - check balance"+err.Error(), zap.Error(err))
 		return err
 	}
 
@@ -110,7 +132,7 @@ func (g *GopherMartRepo) CreateWithdrawalTx(ctx context.Context, withdrawal enti
 }
 
 // GetWithdrawals возвращает историю списаний
-func (g *GopherMartRepo) GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
+func (g *GopherMartRepo) GetUserWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error) {
 	const queryGetWithdrawals = `
 	SELECT w.id, w.user_id, o.number, w.amount, w.created_at
 	FROM withdrawals as w

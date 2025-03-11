@@ -55,10 +55,12 @@ func NewApp(cfg *config.Config) (*App, error) {
 		log.FatalCtx(ctx, "app - Run - postgres.New: %w", zap.Error(err))
 	}
 
-	uc := usecase.NewGopherMart(
-		repo.NewUserRepo(pg, log, pg.Pool),
-		log,
-	)
+	userRepo := repo.NewUserrepository(pg, log, pg.Pool)
+	balanceRepo := repo.NewBalanceRepository(pg, log, pg.Pool)
+	orderRepo := repo.NewOrderepository(pg, log, pg.Pool)
+	accrualRepo := repo.NewOrderAccrualRepository(pg, log, pg.Pool)
+	uc := usecase.NewGopherMart(accrualRepo, balanceRepo, orderRepo, userRepo, log)
+
 	j := security.NewJwtToken(cfg.Jwt.EncryptionKey, *uc)
 	a := middleware.NewAuthorizer(log)
 

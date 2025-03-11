@@ -41,3 +41,7 @@ jobs:
         run: |
           go test -cover ./...  -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" 
 
+      - name: Run linters
+        run: |
+          golangci-lint run --config .golangci.yml
+

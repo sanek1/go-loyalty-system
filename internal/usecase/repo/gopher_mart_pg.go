@@ -20,13 +20,14 @@ type GopherMartRepo struct {
 	pool   *pgxpool.Pool
 }
 
-func NewUserRepo(pg *postgres.Postgres, l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
-	return &GopherMartRepo{
-		pg:     pg,
-		Logger: l,
-		pool:   pool,
-	}
-}
+// func NewUserRepo(pg *postgres.Postgres,
+// 	l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
+// 	return &GopherMartRepo{
+// 		pg:     pg,
+// 		Logger: l,
+// 		pool:   pool,
+// 	}
+// }
 
 func (g *GopherMartRepo) logAndReturnError(ctx context.Context, method string, err error) error {
 	msg := fmt.Sprintf("%s - %s: %v", "GopherMartRepoName", method, err)

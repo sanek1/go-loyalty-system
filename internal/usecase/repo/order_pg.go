@@ -5,9 +5,29 @@ import (
 	"errors"
 	"fmt"
 	"go-loyalty-system/internal/entity"
+	"go-loyalty-system/pkg/logging"
+	"go-loyalty-system/pkg/postgres"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+//go:generate mockgen -source=order_pg.go -destination=./mocks/mock_order.go -package=mocks
+type OrderUseCase interface {
+	SetOrders(ctx context.Context, userID uint, order entity.Order) error
+	GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error)
+	GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error)
+	CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (exists bool, existingUserID uint, err error)
+	ValidateOrder(order entity.Order, userID uint) error
+}
+
+func NewOrderepository(pg *postgres.Postgres, l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
+	return &GopherMartRepo{
+		pg:     pg,
+		Logger: l,
+		pool:   pool,
+	}
+}
 
 func (g *GopherMartRepo) SetOrders(ctx context.Context, userID uint, o entity.Order) error {
 	const querySetOrders = `
@@ -77,9 +97,6 @@ func (g *GopherMartRepo) CheckOrderExistence(ctx context.Context,
 	`
 	err = g.pg.Pool.QueryRow(ctx, queryCheckOrderExist, orderNumber).Scan(&existingUserID)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return false, 0, g.logAndReturnError(ctx, "Order does not exist", err)
-		}
 		return false, 0, nil
 	}
 	return true, existingUserID, nil

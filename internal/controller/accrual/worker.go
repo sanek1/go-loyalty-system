@@ -183,7 +183,7 @@ func (op *OrderAccrual) processOrder(orderNumber string) {
 // Новый метод для асинхронной обработки результатов
 func (op *OrderAccrual) processOrderResult(orderNumber string) {
 	// Создаем новый контекст для асинхронной обработки
-	ctx, cancel := context.WithTimeout(op.ctx, 30*time.Second)
+	ctx, cancel := context.WithTimeout(op.ctx, maxBackoff)
 	defer cancel()
 
 	op.logger.InfoCtx(ctx, "async processing started", zap.String("order", orderNumber))

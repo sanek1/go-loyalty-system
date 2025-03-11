@@ -3,10 +3,29 @@ package repo
 import (
 	"context"
 	"go-loyalty-system/internal/entity"
+	"go-loyalty-system/pkg/logging"
+	"go-loyalty-system/pkg/postgres"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
 
+//go:generate mockgen -source=user_pg.go -destination=./mocks/mock_user.go -package=mocks
+type AuthUseCase interface {
+	RegisterUser(ctx context.Context, u entity.User) error
+	CreateToken(ctx context.Context, u *entity.Token) error
+	GetUsers(context.Context) ([]entity.User, error)
+	GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
+	GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error)
+}
+
+func NewUserrepository(pg *postgres.Postgres, l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
+	return &GopherMartRepo{
+		pg:     pg,
+		Logger: l,
+		pool:   pool,
+	}
+}
 func (g *GopherMartRepo) GetUserByID(ctx context.Context, id uint) (*entity.User, error) {
 	return g.getUser(ctx, "SELECT id, login, password, email FROM users WHERE id = $1", id)
 }

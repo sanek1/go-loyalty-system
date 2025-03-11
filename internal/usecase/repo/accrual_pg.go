@@ -4,10 +4,28 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"go-loyalty-system/pkg/logging"
+	"go-loyalty-system/pkg/postgres"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )
+
+//go:generate mockgen -source=accrual_pg.go -destination=./mocks/mock_accrual.go -package=mocks
+type Repository interface {
+	SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error
+	GetUnprocessedOrders(ctx context.Context) ([]string, error)
+	ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error)
+}
+
+func NewOrderAccrualRepository(pg *postgres.Postgres, l *logging.ZapLogger, pool *pgxpool.Pool) *GopherMartRepo {
+	return &GopherMartRepo{
+		pg:     pg,
+		Logger: l,
+		pool:   pool,
+	}
+}
 
 // ExistOrderAccrual проверяет существование начисления для заказа
 func (g *GopherMartRepo) ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error) {

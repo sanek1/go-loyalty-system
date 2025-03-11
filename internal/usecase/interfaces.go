@@ -4,46 +4,30 @@ import (
 	"context"
 	"go-loyalty-system/internal/entity"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/google/uuid"
 )
 
-//go:generate mockgen -source=interfaces.go -destination=./mocks_test.go -package=usecase_test
-
+//go:generate mockgen -source=interfaces.go -destination=./repo/mocks/mock_gopher_mart.go -package=mocks
 type (
-	GopherMartRepo interface {
-		OrderUseCase
-		BalanceUseCase
-		AuthUseCase
-		Repository
+	UserService interface {
+		GetUsers(ctx context.Context) ([]entity.User, error)
+		GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error)
+		GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
+		RegisterUser(ctx context.Context, u entity.User) error
+		CreateToken(ctx context.Context, t *entity.Token) error
+		GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error)
+		GetUserWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error)
+		GetUnprocessedOrders(ctx context.Context) ([]string, error)
+		SetOrders(ctx context.Context, userID uint, o entity.Order) error
+		SaveAccrual(ctx context.Context, orderNumber, status string, accrual float32) error
+		WithdrawBalance(ctx context.Context, withdrawal entity.Withdrawal) error
 	}
 )
 
-type OrderUseCase interface {
-	SetOrders(ctx context.Context, userID uint, order entity.Order) error
-	GetUserOrders(ctx context.Context, userID uint) ([]entity.OrderResponse, error)
-	GetOrderByNumber(ctx context.Context, orderNumber string) (*entity.OrderResponse, error)
-	CheckOrderExistence(ctx context.Context, orderNumber string, userID uint) (exists bool, existingUserID uint, err error)
-	ValidateOrder(order entity.Order, userID uint) error
-}
-type BalanceUseCase interface {
-	GetBalance(ctx context.Context, userID string) (*entity.Balance, error)
-	GetUserByLogin(ctx context.Context, u entity.User) (*entity.User, error)
-	GetBalanceTx(ctx context.Context, tx pgx.Tx, userID uint) (*entity.Balance, error)
-	CreateWithdrawalTx(ctx context.Context, withdrawal entity.Withdrawal, order *entity.OrderResponse) error
-	GetWithdrawals(ctx context.Context, userID uint) ([]entity.Withdrawal, error)
-	BeginTx(ctx context.Context) (pgx.Tx, error)
-	UpdateBalanceTx(ctx context.Context, tx pgx.Tx, userID uint, amount float32) error
-}
-
-type AuthUseCase interface {
-	RegisterUser(ctx context.Context, u entity.User) error
-	CreateToken(ctx context.Context, u *entity.Token) error
-	GetUsers(context.Context) ([]entity.User, error)
-	GetUserByEmail(ctx context.Context, u entity.User) (*entity.User, error)
-}
-
-type Repository interface {
-	SaveAccrual(ctx context.Context, orderNumber string, status string, accrual float32) error
-	GetUnprocessedOrders(ctx context.Context) ([]string, error)
-	ExistOrderAccrual(ctx context.Context, orderNumber string) (bool, error)
+//go:generate mockgen -source=interfaces.go -destination=./repo/mocks/mock_test_entity.go -package=mocks
+type TestEntity interface {
+	AddOrder(orderNumber string)
+	GenerateToken(user *entity.User) (string, error)
+	CreateToken(ctx context.Context, t *entity.Token) error
+	PersistToken(user *entity.User, tokenID uuid.UUID) error
 }

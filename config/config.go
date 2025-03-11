@@ -70,10 +70,11 @@ func NewConfig() (*Config, error) {
 
 	err = cleanenv.ReadConfig(filepath.Join(currentDir, dir1), cfg)
 	if err != nil {
-		logger.ErrorCtx(context.Background(), "Failed to read config file: %w"+currentDir, zap.Error(err))
+		logger.InfoCtx(context.Background(), "Failed to read config file: %w"+currentDir, zap.Error(err))
 		cfg.HTTP.Port = "8080"
 		cfg.PG.PoolMax = 10
 		cfg.Log.Level = "debug"
+		cfg.HTTP.Address = ":8080"
 		cfg.Accrual.Accrual = "http://localhost:8081"
 	}
 

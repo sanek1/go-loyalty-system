@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
 // @Summary Регистрация пользователя
 // @Description Регистрирует нового пользователя в системе
 // @Tags users
