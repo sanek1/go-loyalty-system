@@ -6,10 +6,6 @@ on:
     branches:
       - master
       - main
-lint:
-  desc: Run linters using golangci-lint
-  cmds:
-    - golangci-lint run --config .golangci.yml
 
 jobs:
   statictest:
