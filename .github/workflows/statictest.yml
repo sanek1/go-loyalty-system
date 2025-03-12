@@ -37,11 +37,8 @@ jobs:
         run: |
           go test -cover ./...
 
-      - name: Install golangci-lint Run linters
-           run: |
-             wget https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
-             chmod +x install.sh
-             sudo ./install.sh
-             golangci-lint run
+      - name: Run linters
+        run: |
+          golangci-lint run
 
 
