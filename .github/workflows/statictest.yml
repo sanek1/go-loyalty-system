@@ -36,19 +36,14 @@ jobs:
       - name: Run test
         run: |
           go test -cover ./...
-  lint:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-         
-         - name: Install golangci-lint
+
+      - name: Install golangci-lint
            run: |
              wget https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
              chmod +x install.sh
              sudo ./install.sh
 
-         - name: Run linters
+      - name: Run linters
            run: |
              golangci-lint run
 
