@@ -39,6 +39,6 @@ jobs:
 
       - name: Run linters
         run: |
-          golangci-lint run --config .golangci.yml
+          golangci-lint run
 
 
