@@ -35,7 +35,7 @@ jobs:
 
       - name: Run test
         run: |
-          go test -cover ./...  -gophermart-database-uri="postgresql://postgres:postgres@postgres/praktikum?sslmode=disable" 
+          go test -cover ./...
 
       - name: Run linters
         run: |
