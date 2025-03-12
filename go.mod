@@ -1,6 +1,13 @@
 module go-loyalty-system
 
-go 1.23.0
+go 1.22.0
+
+replace (
+	golang.org/x/sync => golang.org/x/sync v0.11.0
+	golang.org/x/sys => golang.org/x/sys v0.28.0
+	golang.org/x/text => golang.org/x/text v0.20.0
+
+)
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
@@ -17,7 +24,7 @@ require (
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.4
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.36.0
+	golang.org/x/crypto v0.31.0
 )
 
 require (

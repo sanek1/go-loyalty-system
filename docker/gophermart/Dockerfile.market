@@ -3,7 +3,7 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 # Установка необходимых зависимостей
-RUN apk add --no-cache gcc musl-dev
+RUN apk add --no-cache gcc musl-dev postgresql-client
 
 # Копирование и загрузка зависимостей
 COPY go.mod go.sum ./
