@@ -101,7 +101,7 @@ func TestMockGopherMartUseCase(t *testing.T) {
 
 	t.Run("CreateToken", func(t *testing.T) {
 		testToken := &entity.Token{
-			UserID:    1,
+			UserID: 1,
 		}
 
 		mockUC.EXPECT().
