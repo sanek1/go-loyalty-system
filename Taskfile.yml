@@ -64,7 +64,7 @@ tasks:
     desc: Clear temporary files and directories
     cmds:
       - mkdir -p ./.runtime
-      - rm -f ./.runtime/{agent,server,BACKUP,test.log}
+      - rm -f ./logs/{test1.log}
 
   build:
     desc: Build the project
@@ -72,13 +72,18 @@ tasks:
     cmds:
       - go fmt ./...
       - go vet ./...
-      - go build -o ./.runtime/gophermart cmd/gophermart/main.go
+      - go build -o ./.runtime/gophermart.exe cmd/gophermart/main.go
 
   test:
     desc: Run tests
-    deps: [build]
+    deps: [build] 
     cmds:
-      - gophermarttest -test.v -test.run=^TestIteration1$ -binary-path=cmd/server/server >> logs/test1.log
-      - metricstest -test.v -test.run=^TestIteration2[AB]*$ -source-path=. -agent-binary-path=cmd/agent/agent >> logs/test2.log
-      - gophermarttest -test.v -test.run=^TestIteration3[AB]*$ -source-path=. -agent-binary-path=cmd/agent/agent -binary-path=cmd/server/server >> logs/test3.log
-      - mv ./BACKUP ./.runtime/
+      - gophermarttest -test.v  -test.run=^TestGophermart$ -gophermart-binary-path=./.runtime/gophermart.exe -gophermart-host=localhost -gophermart-port=8080 -gophermart-database-uri="postgres://postgres:admin@localhost:5432/MetricStore?sslmode=disable" -accrual-binary-path=./cmd/accrual/accrual_windows_amd64.exe -accrual-host=localhost -accrual-port=8081 -accrual-database-uri="postgres://postgres:admin@localhost:5432/MetricStore?sslmode=disable" >> logs/test1.log
+ 
+
+
+
+
+
+
+

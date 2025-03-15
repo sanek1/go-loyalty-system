@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  market:
+    build:
+      context: .
+      dockerfile: Dockerfile.market
+    container_name: market
+    restart: unless-stopped
+    environment:
+      - DATABASE_URI=postgresql://${DB_USER:-admin}:${DB_PASSWORD:-admin}@loyalty_db:5432/${DB_NAME:-admin}?sslmode=disable
+      - ACCRUAL_SYSTEM_ADDRESS=http://accrual:8081
+    ports:
+      - "8080:8080"
+    networks:
+      - loyalty_network
+
+networks:
+  loyalty_network:
+    name: loyalty_network
+    external: true

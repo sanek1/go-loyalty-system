@@ -10,7 +10,7 @@ on:
 jobs:
   statictest:
     runs-on: ubuntu-latest
-    container: golang:1.23
+    container: golang:1.22
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,3 +32,18 @@ jobs:
       - name: Run statictest
         run: |
           go vet -vettool=$(which statictest) ./...
+
+      - name: Run test
+        run: |
+          go test -cover ./...
+      - name: Install golangci-lint
+        run: |
+             wget https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
+             chmod +x install.sh
+             ./install.sh -b "$(go env GOPATH)/bin"
+
+      - name: Run linters
+        run: |
+          golangci-lint run
+
+
